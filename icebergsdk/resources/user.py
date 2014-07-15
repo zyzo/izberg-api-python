@@ -8,10 +8,10 @@ class User(IcebergObject):
 
     @classmethod
     def me(cls):
-        if not cls.handler:
+        if not cls._handler:
             raise IcebergNoHandlerError()
 
-        data = cls.handler.request("%s/me/" % (cls.endpoint))
+        data = cls._handler.request("%s/me/" % (cls.endpoint))
         return cls.findOrCreate(data)
 
     def addresses(self):

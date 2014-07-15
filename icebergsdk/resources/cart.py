@@ -10,10 +10,10 @@ class Cart(UpdateableIcebergObject):
 
     @classmethod
     def mine(cls):
-        if not cls.handler:
+        if not cls._handler:
             raise IcebergNoHandlerError()
 
-        data = cls.handler.request("%s/mine/" % (cls.endpoint))
+        data = cls._handler.request("%s/mine/" % (cls.endpoint))
         return cls.findOrCreate(data)
 
     def form_data(self):
