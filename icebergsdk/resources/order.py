@@ -32,7 +32,8 @@ class MerchantOrder(IcebergObject):
 class Order(IcebergObject):
     endpoint = 'order'
 
-    def authorizeOrder(self, params = {}):
+    def authorizeOrder(self, params = None):
+        params = params or {}
         data = self.request("%s%s/" % (self.resource_uri, 'authorizeOrder'), method = "post", post_args = params)
         return self._load_attributes_from_response(**data)
 

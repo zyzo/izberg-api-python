@@ -23,7 +23,9 @@ class Cart(UpdateableIcebergObject):
         return self.request("%s%s/" % (self.resource_uri, 'backend_form_data'))
         
 
-    def createOrder(self, params = {}):
+    def createOrder(self, params = None):
+        params = params or {}
+
         data = self.request("%s%s/" % (self.resource_uri, 'createOrder'), method = "post", post_args = params)
         return Order.findOrCreate(data)
 
