@@ -30,7 +30,11 @@ def addProduct(id,email,first_name,last_name):
 
     #instanciate Iceberg API
     api_handler = IcebergAPI()
+ 
 
+
+
+ 
     #Identification 
     api_handler.sso(email, first_name, last_name)
 
