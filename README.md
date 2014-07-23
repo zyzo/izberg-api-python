@@ -9,6 +9,9 @@ Table of Content
 1. [Setup](#setup)
 2. [Resources](#resources)
 3. [Methods](#methods)
+
+**Resource manipulation**
+
 4. [ProductOffer](#productoffer)
 5. [Products](#products)
 6. [Cart](#cart)
