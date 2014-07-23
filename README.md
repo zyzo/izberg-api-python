@@ -88,8 +88,9 @@ print api_handler.Cart.mine().total_amount
 ```
 * * *
 
+## User
 
-#### Get user infos
+### Get user infos
 
 Retrieve specific infos about a user
 
@@ -107,6 +108,7 @@ print me.timezone
 ```
 * * *
 
+## Store
 
 #### Get store infos
 
