@@ -74,7 +74,7 @@ Methods
      * <code>find()</code> allows you to fetch a specific element within a list of elements, it can be product offers, products, orders.
      * <code>save()</code> allows you to update data about a store, offer, product etc... that has been modified.
      * <code>search()</code> returns a list of elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc...
-     * <code>to_JSON()</code> allow you to visualize the entirety of an object, JSON serialized.
+     * <code>to_JSON()</code> JSON serialized string containing the entirety of an object.
 
 For example:
 ```python
@@ -121,8 +121,27 @@ To edit an offer, you must be logged as a staff user. Simply fetch the object us
     offer.save()
 ```
 
+Products
+-------------
+
+### Search for a range of products
+
+Not every proprety of products or productOffer can be scanned with the <code>search()</code> method, but all lot can be, like name, gender, made_in, description etc...
+
+let's look for every product that contains the string "Robe". The meta variable contains info about the returned list.
+```python
+products, meta = api_handler.Product.search({"name__icontains": "Robe"})
+
+print meta
+for product in products:
+    print product.to_JSON()
+```
+
+
 Cart
 -------------
+
+Even when they are offline, users have a cart empty or containing offers awaiting to be validated or canceled. We can manipulate a user's cart easily.
 
 ### Get infos of a user's cart
 

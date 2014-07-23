@@ -114,17 +114,12 @@ def getOrder():
 def getProduct():
 
     api_handler = logIn()
+    products, meta = api_handler.Product.search({"name__icontains": "Robe"})
 
-    product = api_handler.ProductOffer.find("52")
+    print meta
+    for product in products:
+        print product.to_JSON()
 
-    print product.to_JSON()
-
-
-    # idorder = order.updateOrderPayment()
-
-    # print order.price
-    # order.price = "30,00"
-    # order.save()
 
 
 
