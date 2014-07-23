@@ -6,9 +6,9 @@ Table of Content
 -------------
 **Get started**
 
-1. [##Setup](#Setup)
-2. [##Cart](#Cart)
-3. [##Store](#Store)
+1. [Setup](##Setup)
+2. [Cart](##Cart)
+3. [Store](##Store)
 
 
 
