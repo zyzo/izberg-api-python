@@ -4,13 +4,14 @@ sys.path[0:0] = [os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 from icebergsdk.api import IcebergAPI
 
 
+def logIn():
+    api_handler = IcebergAPI()
+    api_handler.sso("lol@lol.fr","Yves","Durand")
+    return api_handler
 
 def addProduct(id,email,first_name,last_name):
 
-    api_handler = IcebergAPI()
-
-    #Identification 
-    api_handler.sso(email, first_name, last_name)
+    api_handler = identify()
 
     #Get cart
     user_cart = api_handler.Cart.mine()
@@ -101,7 +102,7 @@ def createStore(id,email, first_name, last_name):
 
 
 #storeInfos("52","lol@lol.fr","Yves","Durand")
-createStore("52","lol@lol.fr","Yves","Durand")
+LogIn("52","lol@lol.fr","Yves","Durand")
 
 
 
