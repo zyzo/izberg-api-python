@@ -9,9 +9,9 @@ Table of Content
 1. [Setup](#setup)
 2. [Resources](#Resources)
 3. [Methods](#Methods)
-4. [Methods](#Methods)
-5. [ProductOffer](#ProductOffer)
-6. [Cart](#Cart)
+4. [ProductOffer](#ProductOffer)
+5. [Cart](#Cart)
+5. [Orders](#Orders)
 
 
 
