@@ -29,9 +29,9 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 
 ### Log in 
 
-There are two ways to log in:
-    * By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
-    * By passing directly two parameters in the IcebergAPI class wich are the access token and the username
+* There are two ways to log in:
+ * By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
+ * By passing directly two parameters in the IcebergAPI class wich are the access token and the username
 
 ```python
 api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
