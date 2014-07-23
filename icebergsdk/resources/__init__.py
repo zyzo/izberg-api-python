@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from icebergsdk.resources.application import Application  # NoQA
-from icebergsdk.resources.order import Order  # NoQA
+from icebergsdk.resources.order import Order, MerchantOrder  # NoQA
 from icebergsdk.resources.cart import Cart  # NoQA
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation  # NoQA
 from icebergsdk.resources.store import Store  # NoQA

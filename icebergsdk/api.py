@@ -22,6 +22,7 @@ class IcebergAPI(object):
         self.ProductVariation = resources.ProductVariation.set_handler(self)
         self.ProductOffer = resources.ProductOffer.set_handler(self)
         self.Product = resources.Product.set_handler(self)
+        self.MerchantOrder = resources.MerchantOrder.set_handler(self)
         self.Order = resources.Order.set_handler(self)
         self.Application = resources.Application.set_handler(self)
         self.Store = resources.Store.set_handler(self)

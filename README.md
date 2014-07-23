@@ -120,6 +120,29 @@ print order.price
     
 ```
 
+## Orders
+
+### Get order infos
+
+Orders are available in your dashboard.
+* Each Order is divided into 3 parts:
+    * The Order object contains the summary of the order. It contains a certain quantity of merchant orders depending on the number of merchants linked to the ordered products. (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2)
+    * The MerchantOrder object: It contains all the infos a merchant recieves when an order is made and one or more products are his.(for example, merchant_1 recieves a list of 2 items)
+    * The OrderItem object contains the product informations and size.
+
+Orders, Merchant Orders and Items are available in the /order section of your dashboard.
+Let's display infos about the order number 11.
+
+```python
+
+merchant_order = api_handler.MerchantOrder.find(6)
+
+print merchant_order.amount
+print merchant_order.shipping_address.city
+print merchant_order.shipping_address.country
+print merchant_order.shipping_address.zipcode
+
+```
 
 ## User
 

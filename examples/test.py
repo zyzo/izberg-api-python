@@ -104,13 +104,19 @@ def getOrder():
     api_handler = logIn()
 
     #fetch offer object
-    order = api_handler.Order()
+    merchant_order = api_handler.MerchantOrder.find(6)
 
-    idorder = order.updateOrderPayment()
+    print merchant_order.amount
+    print merchant_order.shipping_address.city
+    print merchant_order.shipping_address.country
+    print merchant_order.shipping_address.zipcode
+    
 
-    print order.price
-    order.price = "30,00"
-    order.save()
+    # idorder = order.updateOrderPayment()
+
+    # print order.price
+    # order.price = "30,00"
+    # order.save()
 
 
 
