@@ -1,4 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import sys, os, json
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 sys.path[0:0] = [os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 
 from icebergsdk.api import IcebergAPI
@@ -6,10 +12,10 @@ from icebergsdk.api import IcebergAPI
 
 def logIn():
     api_handler = IcebergAPI()
-    api_handler.sso("lol@lol.fr","Yves","Durand")
+    api_handler.sso("lol@lol.fr", "Yves", "Durand")
     return api_handler
 
-def addProduct(id,email,first_name,last_name):
+def addProduct():
 
     api_handler = logIn()
 
@@ -30,7 +36,7 @@ def addProduct(id,email,first_name,last_name):
     print api_handler.Cart.mine().total_amount
 
 
-def getInfos(id,email,first_name,last_name):
+def getInfos():
 
     api_handler = logIn()
 
@@ -42,7 +48,7 @@ def getInfos(id,email,first_name,last_name):
     for variation in product.variations:
         print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
-def cartInfos(id,email,first_name,last_name):
+def cartInfos(i):
 
     api_handler = logIn()
 
@@ -53,7 +59,7 @@ def cartInfos(id,email,first_name,last_name):
     print user_cart.estimated_shipping_country
 
 
-def userInfos(id,email,first_name,last_name):
+def userInfos():
 
     api_handler = logIn()
 
@@ -66,7 +72,7 @@ def userInfos(id,email,first_name,last_name):
     print me.email
     print me.timezone
 
-def storeInfos(id,mail,fn,ln):
+def storeInfos():
 
     api_handler = logIn()
     #new_store = api_handler.Store()
@@ -81,20 +87,19 @@ def storeInfos(id,mail,fn,ln):
     print store.long_description
     print store.url
 
-def createStore(id,email, first_name, last_name):
+def createStore():
 
     api_handler = logIn()
 
     new_store = api_handler.Store()
     new_store.name = "My store"
+    new_store.application = "/v1/application/10/"
     new_store.save()
     print new_store.to_JSON()
 
-
-
-
-#storeInfos("52","lol@lol.fr","Yves","Durand")
-userInfos("52","lol@lol.fr","Yves","Durand")
+if __name__ == '__main__':
+    #storeInfos("52","lol@lol.fr","Yves","Durand")
+    createStore()
 
 
 
