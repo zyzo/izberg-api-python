@@ -5,8 +5,6 @@ from icebergsdk.api import IcebergAPI
 
 
 
-
-
 def addProduct(id,email,first_name,last_name):
 
     api_handler = IcebergAPI()
@@ -73,8 +71,37 @@ def userInfos(id,email,first_name,last_name):
     print me.email
     print me.timezone
 
+def storeInfos(id,mail,fn,ln):
 
-userInfos("52","lol@lol.fr","Yves","Durand")
+    api_handler = IcebergAPI()
+    #new_store = api_handler.Store()
+    #new_store.name = "Mon store"
+    #new_store.save()
+    #print new_store.to_JSON()
+
+    store = api_handler.Store.find(11)
+
+    print store.name
+    print store.created_on
+    print store.long_description
+    print store.url
+
+def createStore(id,email, first_name, last_name):
+
+    api_handler = IcebergAPI()
+
+    api_handler.sso(email, first_name, last_name)
+
+    new_store = api_handler.Store()
+    new_store.name = "My store"
+    new_store.save()
+    print new_store.to_JSON()
+
+
+
+
+#storeInfos("52","lol@lol.fr","Yves","Durand")
+createStore("52","lol@lol.fr","Yves","Durand")
 
 
 
