@@ -39,6 +39,28 @@ api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
 ```python
 api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
 ```
+
+##Resources
+ You have access to the following resources directly through the main IcebergAPI object:
+     * ProductVariation
+     * ProductOffer
+     * Product
+     * MerchantOrder
+     * Order
+     * Application
+     * Store
+     * User
+     * Profile
+     * Cart
+     * Country
+     * Address
+     * Payment
+
+Examples:
+api_handler.User()
+
+Methods are 
+
 ##Offer
 
 ### Get offer
