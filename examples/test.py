@@ -17,21 +17,21 @@ def logIn():
     api_handler.sso("lol@lol.fr", "Yves", "Durand")
     return api_handler
 
-def addProduct():
+def addOffer():
 
     api_handler = logIn()
     #Get cart
     user_cart = api_handler.Cart.mine()
 
     #Find product
-    product = api_handler.ProductOffer.find("52")
+    offer = api_handler.ProductOffer.find("52")
 
     #print propreties of the product you just found
-    print product.description
-    print product.price_with_vat
+    print offer.description
+    print offer.price_with_vat
    
     #Add product to cart
-    user_cart.addOffer(product)
+    user_cart.addOffer(offer)
 
     #print total amount of the cart
     print api_handler.Cart.mine().total_amount
@@ -111,6 +111,14 @@ def getOrder():
     print merchant_order.shipping_address.country
     print merchant_order.shipping_address.zipcode
     
+def getProduct():
+
+    api_handler = logIn()
+
+    product = api_handler.ProductOffer.find("52")
+
+    print product.to_JSON()
+
 
     # idorder = order.updateOrderPayment()
 
@@ -122,7 +130,7 @@ def getOrder():
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    getOrder()
+    getProduct()
 
 
 

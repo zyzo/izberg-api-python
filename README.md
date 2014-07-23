@@ -71,10 +71,10 @@ Methods
 -------------
 
  * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
-     * find()
-     * save()
-     * search()
-     * to_JSON()
+     * <code>find()</code> allows you to fetch a specific element within a list of elements, it can be product offers, products, orders.
+     * <code>save()</code> allows you to update data about a store, offer, product etc... that has been modified.
+     * <code>search()</code> returns a list of elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc...
+     * <code>to_JSON()</code> allow you to visualize the entirety of an object, JSON serialized.
 
 For example:
 ```python
