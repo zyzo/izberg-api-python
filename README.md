@@ -9,9 +9,10 @@ Table of Content
 1. [Setup](#setup)
 2. [Resources](#resources)
 3. [Methods](#methods)
-4. [ProductOffer](#productOffer)
-5. [Cart](#cart)
-5. [Orders](#orders)
+4. [ProductOffer](#productoffer)
+5. [Products](#product)
+6. [Cart](#cart)
+7. [Orders](#orders)
 
 
 
@@ -61,7 +62,7 @@ Resources
      * Address
      * Payment
 
-For examples:
+For example:
 ```python
 api_handler.User()
 api_handler.ProductOffer()
@@ -126,9 +127,8 @@ Products
 
 ### Search for a range of products
 
-Not every proprety of products or productOffer can be scanned with the <code>search()</code> method, but all lot can be, like name, gender, made_in, description etc...
-
-let's look for every product that contains the string "Robe". The meta variable contains info about the returned list.
+Not every proprety of products or productOffer can be scanned with the <code>search()</code> method, but a lot can be, like name, gender, made_in, description etc...<br>
+Let's look for every product wich name's contains the string "Robe". The meta variable contains info about the returned list.
 ```python
 products, meta = api_handler.Product.search({"name__icontains": "Robe"})
 
@@ -176,6 +176,8 @@ print api_handler.Cart.mine().total_amount
 Orders
 -------------
 
+Each Order and merchantOrder are identified with a unique id.
+
 ### Get order infos
 
 Orders are available in your dashboard.
@@ -185,7 +187,7 @@ Orders are available in your dashboard.
     * The OrderItem object contains the product informations and size.
 
 Orders, Merchant Orders and Items are available in the /order section of your dashboard.
-Let's display infos about the order number 11.
+Let's display infos about the order number 6.
 
 ```python
 
