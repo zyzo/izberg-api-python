@@ -40,7 +40,9 @@ api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
 api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
 ```
 
-##Resources
+Resources
+-------------
+
  * You have access to the following resources directly through the main IcebergAPI object:
      * ProductVariation
      * ProductOffer
@@ -62,7 +64,8 @@ api_handler.User()
 api_handler.ProductOffer()
 ```
 
-##Methods
+Methods
+-------------
 
  * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
      * find()
@@ -77,7 +80,8 @@ api_handler.ProductOffer.find("52").to_JSON()
 api_handler.ProductOffer.find("52").save()
 ```
 
-##ProductOffer
+ProductOffer
+-------------
 
 Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product.<br>
 We are here going to deal with offers, or more accurately product offers.
@@ -114,7 +118,8 @@ To edit an offer, you must be logged as a staff user. Simply fetch the object us
     offer.save()
 ```
 
-##Cart
+Cart
+-------------
 
 ### Get infos of a user's cart
 
@@ -146,7 +151,8 @@ print api_handler.Cart.mine().total_amount
     
 ```
 
-## Orders
+Orders
+-------------
 
 ### Get order infos
 
@@ -170,7 +176,8 @@ print merchant_order.shipping_address.zipcode
 
 ```
 
-## User
+User
+-------------
 
 ### Get user infos
 
@@ -190,7 +197,8 @@ print me.timezone
 ```
 
 
-## Store
+Store
+-------------
 
 ### Get store infos
 
