@@ -78,7 +78,7 @@ api_handler.ProductOffer.find("52").save()
 
 ##ProductOffer
 
-Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product.
+Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product.<br>
 We are here going to deal with offers, or more accurately product offers.
 
 ### Get productOffer
