@@ -1,16 +1,19 @@
+###Setup
+
 #### Env variables
 
 As you may have seen in the conf.py file, 3 variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables. For security purposes we're gonna load them in a seperate file. Let's create a env.sh file in the root folder containing the following lines.
 
 ```python
+
 export ICEBERG_API_PRIVATE_KEY=XXXXXX
 export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
+
 ```
 
 Theses variables must now be loaded in the environment using 
 <pre>source env_setup.sh</pre>
-* * *
 
 #### Log in 
 
@@ -18,10 +21,9 @@ For many of the API operations, we need to be logged in as a user (as a staff us
 
 ```python
 
-def logIn():
-    api_handler = IcebergAPI()
-    api_handler.sso("userEmail","userFirstName","userLastName")
-    return api_handler
+api_handler = IcebergAPI()
+api_handler.sso("userEmail","userFirstName","userLastName")
+return api_handler
 
 ```
 * * *
@@ -50,9 +52,6 @@ These few lines of code show you how to simply add a product to a specific user'
 
 ```python
 
-#Initialize the API and log in
-api_handler = logIn()
-
 #Get cart
 user_cart = api_handler.Cart.mine()
 
@@ -79,9 +78,6 @@ Let's retrieve a user's cart object and display its shipping_adress, shipping am
 
 ```python
 
-#Initialize the API and log in
-api_handler = logIn()
-
 #cart object
 user_cart = api_handler.Cart.mine()
 
@@ -99,9 +95,6 @@ print user_cart.total_amount
 Retrieve specific infos about a user
 
 ```python
-
-#Initialize the API and log in
-api_handler = logIn()
 
 me = api_handler.User.me()
 
@@ -121,8 +114,6 @@ print me.timezone
 Retrieve infos about a store in the application. We are gonna look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the get request's response on the "merchant" section.
 
 ```python
-
-api_handler = IcebergAPI()
 
 store = api_handler.Store.find(11)
 
