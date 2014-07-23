@@ -6,14 +6,15 @@ Table of Content
 -------------
 **Get started**
 
-1. [##Setup](Setup)
+1. [Setup](#setup)
 2. [Cart](##Cart)
 3. [Store](##Store)
 
 
 
 
-##Setup
+Setup
+-------------
 
 ### Env variables
 
