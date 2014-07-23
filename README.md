@@ -12,8 +12,9 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 
 ```
 
-Theses variables must now be loaded in the environment using 
-<pre>source env_setup.sh</pre>
+```python
+source env_setup.sh
+```
 
 #### Log in 
 
