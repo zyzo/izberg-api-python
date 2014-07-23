@@ -39,29 +39,12 @@ api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
 ```python
 api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
 ```
+##Offer
 
+### Get offer
 
-##Cart
+In order to fetch an offer, we need to call the <code>find</code> function within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
-### Get infos of a user's cart
-
-Let's retrieve a user's cart object and display its shipping_adress, shipping amount and total amount.
-
-```python
-
-#cart object
-user_cart = api_handler.Cart.mine()
-
-#print infos
-print user_cart.shipping_address
-print user_cart.shipping_amount
-print user_cart.total_amount
-    
-```
-
-### Get infos of a specific offer
-
-Let's fetch some specific informations about an offer, display the image url, description, and get stock, size and price for each variation. 
 
 ```python
 
@@ -74,6 +57,24 @@ print product.description
 for variation in product.variations:
     print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
+```
+
+##Cart
+
+### Get infos of a user's cart
+
+Retrieve the current logged in user's cart by calling the <code>.mine()</code> function within the class <code>Cart</code> .
+
+```python
+
+#cart object
+user_cart = api_handler.Cart.mine()
+
+#print infos
+print user_cart.shipping_address
+print user_cart.shipping_amount
+print user_cart.total_amount
+    
 ```
 
 ### Add product to cart
