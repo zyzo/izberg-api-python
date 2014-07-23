@@ -1,8 +1,21 @@
-##Iceberg Python API
+#Iceberg Python API
 
-###Setup
+Iceberg API provides an entire set of functions and class to access and edit Iceberg data.
 
-#### Env variables
+Table of Content
+-------------
+**Get started**
+
+1. [##Setup](#Setup)
+2. [##Cart](#Cart)
+3. [##Store](#Store)
+
+
+
+
+##Setup
+
+### Env variables
 
 As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
@@ -14,11 +27,11 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 
 ```
 
-#### Log in 
+### Log in 
 
-*There are two ways to log in:
-    *By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
-    *By passing directly two parameters in the IcebergAPI class wich are the access token and the username
+There are two ways to log in:
+    * By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
+    * By passing directly two parameters in the IcebergAPI class wich are the access token and the username
 
 ```python
 api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
@@ -26,7 +39,7 @@ api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
 ```python
 api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
 ```
-* * *
+
 
 ##Cart
 
@@ -63,7 +76,7 @@ for variation in product.variations:
 
 ```
 
-#### Add product to cart
+### Add product to cart
 
 These few lines of code show you how to simply add a product to a specific user's cart, don't forget to pass the 4 required arguments.
 
@@ -86,7 +99,6 @@ user_cart.addOffer(product)
 print api_handler.Cart.mine().total_amount
     
 ```
-* * *
 
 ## User
 
@@ -106,11 +118,11 @@ print me.email
 print me.timezone
 
 ```
-* * *
+
 
 ## Store
 
-#### Get store infos
+### Get store infos
 
 Retrieve infos about a store in the application. We are gonna look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the get request's response on the "merchant" section.
 
