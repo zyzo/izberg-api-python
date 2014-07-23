@@ -17,11 +17,10 @@ Table of Content
 
 ### Env variables
 
-As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceberg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
+As you may have seen in the conf.py file, 2 environment variables ar needed to use the Iceberg python API: the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
 
-export ICEBERG_API_PRIVATE_KEY=XXXXXX
 export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 
@@ -62,7 +61,7 @@ api_handler.User()
 api_handler.ProductOffer()
 ```
 
-##Resources
+##Methods
 
  * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
      * find()
