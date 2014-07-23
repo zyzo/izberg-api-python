@@ -78,9 +78,10 @@ api_handler.ProductOffer.find("52").save()
 
 ##ProductOffer
 
-Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product. Thus, when it comes do cart and prices manipulation, we're going to deal with offers, or more accurately product offers.
+Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product.
+We are here going to deal with offers, or more accurately product offers.
 
-### Get offer
+### Get productOffer
 
 In order to fetch an offer, we need to call the <code>find()</code> method within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
@@ -97,7 +98,7 @@ for variation in offer.variations:
 
 ```
 
-### Edit offer
+### Edit productOffer
 
 To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> method again, then edit the product's attributes you want to change. And finally call the <code>save()</code> method upon your product object.
 
