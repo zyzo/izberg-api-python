@@ -37,7 +37,7 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
 ```
 ```python
-api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
+api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
 ```
 ##Offer
 

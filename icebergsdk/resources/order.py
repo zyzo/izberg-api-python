@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from icebergsdk.resources.base import IcebergObject
+from icebergsdk.resources.base import UpdateableIcebergObject
 
-class OrderItem(IcebergObject):
+class OrderItem(UpdateableIcebergObject):
     endpoint = 'order_item'
 
     def cancel(self):
@@ -16,7 +16,7 @@ class OrderItem(IcebergObject):
 
 
 
-class MerchantOrder(IcebergObject):
+class MerchantOrder(UpdateableIcebergObject):
     endpoint = 'merchant_order'
 
     def cancel(self):
@@ -29,7 +29,7 @@ class MerchantOrder(IcebergObject):
         raise NotImplementedError()
 
 
-class Order(IcebergObject):
+class Order(UpdateableIcebergObject):
     endpoint = 'order'
 
     def authorizeOrder(self, params = None):

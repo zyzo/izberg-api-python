@@ -45,14 +45,10 @@ def getInfos():
     product = api_handler.ProductOffer.find("52")
 
     print product.to_JSON()
-
-    product.previous_price ="40.00"
-
-    product.save()
-    #print product.default_image_url
-    #print product.description
-    #for variation in product.variations:
-    #    print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
+    print product.default_image_url
+    print product.description
+    for variation in product.variations:
+        print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
 def cartInfos(i):
 
@@ -103,9 +99,24 @@ def createStore():
     new_store.save()
     print new_store.to_JSON()
 
+def getOrder():
+
+    api_handler = logIn()
+
+    #fetch offer object
+    order = api_handler.Order()
+
+    idorder = order.updateOrderPayment()
+
+    print order.price
+    order.price = "30,00"
+    order.save()
+
+
+
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    getInfos()
+    getOrder()
 
 
 
