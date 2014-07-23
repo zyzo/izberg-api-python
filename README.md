@@ -27,7 +27,7 @@ These few lines of code show you how to simply add a product to a specific user'
 
 <pre>
 
-def addProduct(id,email,first_name,last_name):
+def addProduct(email,first_name,last_name):
 
     #instanciate Iceberg API
     api_handler = IcebergAPI()
@@ -61,7 +61,7 @@ Let's retrieve a user's cart object and display its shipping_adress, shipping am
 
 <pre>
 
-def cartInfos():
+def cartInfos(email,first_name,last_name):
 
     #instanciate Iceberg API
     api_handler = IcebergAPI()
@@ -88,7 +88,7 @@ Retrieve specific infos about a user
 
 <pre>
 
-def userInfos(id,email,first_name,last_name):
+def userInfos(email,first_name,last_name):
 
     api_handler = IcebergAPI()
 
