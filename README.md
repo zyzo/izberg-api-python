@@ -56,10 +56,26 @@ api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
      * Address
      * Payment
 
-Examples:
+For examples:
+```python
 api_handler.User()
+api_handler.ProductOffer()
+```
 
-Methods are 
+##Resources
+
+ * Methods are functions allowing you to access and manipulate the resources like:
+     * find()
+     * save()
+     * search()
+     * to_JSON()
+
+For example:
+```python
+api_handler.ProductOffer.find("52")
+api_handler.ProductOffer.find("52").to_JSON()
+offer = api_handler.ProductOffer.find("52").save()
+```
 
 ##Offer
 
