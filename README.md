@@ -6,7 +6,7 @@ Table of Content
 -------------
 **Get started**
 
-1. [Setup](##Setup)
+1. [##Setup](Setup)
 2. [Cart](##Cart)
 3. [Store](##Store)
 
@@ -17,7 +17,7 @@ Table of Content
 
 ### Env variables
 
-As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
+As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceberg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
 
@@ -104,6 +104,22 @@ user_cart.addOffer(offer)
 print api_handler.Cart.mine().total_amount
     
 ```
+##Order
+
+### Get infos about an order
+
+Retrieve an command logged in user's cart by calling the <code>mine()</code> function within the class <code>Cart</code> .
+
+```python
+
+api_handler = logIn()
+
+order = api_handler.ProductOffer.find("10")
+
+print order.price
+    
+```
+
 
 ## User
 
