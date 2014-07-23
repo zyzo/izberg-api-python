@@ -64,7 +64,7 @@ api_handler.ProductOffer()
 
 ##Resources
 
- * Methods are functions allowing you to access and manipulate the resources like:
+ * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
      * find()
      * save()
      * search()
@@ -81,7 +81,7 @@ offer = api_handler.ProductOffer.find("52").save()
 
 ### Get offer
 
-In order to fetch an offer, we need to call the <code>find()</code> function within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> method within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
@@ -98,7 +98,7 @@ for variation in offer.variations:
 
 ### Edit offer
 
-To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> function again, then edit the product's attributes you want to change. And finally call the <code>save()</code> function upon your product object.
+To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> method again, then edit the product's attributes you want to change. And finally call the <code>save()</code> method upon your product object.
 
 
 ```python
@@ -115,7 +115,7 @@ To edit an offer, you must be logged as a staff user. Simply fetch the object us
 
 ### Get infos of a user's cart
 
-Retrieve the current logged in user's cart by calling the <code>mine()</code> function within the class <code>Cart</code> .
+Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class <code>Cart</code> .
 
 ```python
 
