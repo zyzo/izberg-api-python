@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from icebergsdk.resources.base import IcebergObject
+from icebergsdk.resources.base import UpdateableIcebergObject
 
-class Store(IcebergObject):
+class Store(UpdateableIcebergObject):
     endpoint = 'merchant'
-
     def product_offers(self):
         return self.get_list('productoffer', args = {'merchant': self.id})
     

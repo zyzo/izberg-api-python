@@ -1,5 +1,6 @@
 # Custom 
 /__init__.py
+env_setup.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
