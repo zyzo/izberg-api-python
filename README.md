@@ -7,8 +7,11 @@ Table of Content
 **Get started**
 
 1. [Setup](#setup)
-2. [Cart](##Cart)
-3. [Store](##Store)
+2. [Resources](#Resources)
+3. [Methods](#Methods)
+4. [Methods](#Methods)
+5. [ProductOffer](#ProductOffer)
+6. [Cart](#Cart)
 
 
 
