@@ -73,10 +73,12 @@ For example:
 ```python
 api_handler.ProductOffer.find("52")
 api_handler.ProductOffer.find("52").to_JSON()
-offer = api_handler.ProductOffer.find("52").save()
+api_handler.ProductOffer.find("52").save()
 ```
 
-##Offer
+##ProductOffer
+
+Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product. Thus, when it comes do cart and prices manipulation, we're going to deal with offers, or more accurately product offers.
 
 ### Get offer
 
