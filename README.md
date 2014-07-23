@@ -10,7 +10,7 @@ Table of Content
 2. [Resources](#resources)
 3. [Methods](#methods)
 4. [ProductOffer](#productoffer)
-5. [Products](#product)
+5. [Products](#products)
 6. [Cart](#cart)
 7. [Orders](#orders)
 
@@ -92,7 +92,7 @@ We are here going to deal with offers, or more accurately product offers.
 
 ### Get productOffer
 
-In order to fetch an offer, we need to call the <code>find()</code> method within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> method within the <code>ProductOffer</code> class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
@@ -180,7 +180,6 @@ Each Order and merchantOrder are identified with a unique id.
 
 ### Get order infos
 
-Orders are available in your dashboard.
 * Each Order is divided into 3 parts:
     * The Order object contains the summary of the order: total amount, adress, shipping, and the list of merchants concerned by the order (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2).
     * The MerchantOrder object: It contains all the infos a merchant recieves when an order is made and one or more products of the order are his.(for example, merchant_1 recieves a list of 2 items)
@@ -205,7 +204,7 @@ User
 
 ### Get user infos
 
-Retrieve specific infos about a user
+Using the <code>me()</code> method on the User class returns infos about the currently logged in user.
 
 ```python
 
