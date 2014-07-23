@@ -104,21 +104,6 @@ user_cart.addOffer(offer)
 print api_handler.Cart.mine().total_amount
     
 ```
-##Order
-
-### Get infos about an order
-
-Retrieve an command logged in user's cart by calling the <code>mine()</code> function within the class <code>Cart</code> .
-
-```python
-
-api_handler = logIn()
-
-order = api_handler.ProductOffer.find("10")
-
-print order.price
-    
-```
 
 ## Orders
 
