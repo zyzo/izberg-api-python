@@ -11,7 +11,7 @@ def logIn():
 
 def addProduct(id,email,first_name,last_name):
 
-    api_handler = identify()
+    api_handler = logIn()
 
     #Get cart
     user_cart = api_handler.Cart.mine()
@@ -32,7 +32,7 @@ def addProduct(id,email,first_name,last_name):
 
 def getInfos(id,email,first_name,last_name):
 
-    api_handler = IcebergAPI()
+    api_handler = logIn()
 
     #fetch offer object
     product = api_handler.ProductOffer.find("52")
@@ -44,10 +44,7 @@ def getInfos(id,email,first_name,last_name):
 
 def cartInfos(id,email,first_name,last_name):
 
-    api_handler = IcebergAPI()
-
-    #Identification 
-    api_handler.sso(email, first_name, last_name)
+    api_handler = logIn()
 
     user_cart = api_handler.Cart.mine()
 
@@ -58,10 +55,7 @@ def cartInfos(id,email,first_name,last_name):
 
 def userInfos(id,email,first_name,last_name):
 
-    api_handler = IcebergAPI()
-
-    #Identification 
-    api_handler.sso(email, first_name, last_name)
+    api_handler = logIn()
 
     me = api_handler.User.me()
     
@@ -74,7 +68,7 @@ def userInfos(id,email,first_name,last_name):
 
 def storeInfos(id,mail,fn,ln):
 
-    api_handler = IcebergAPI()
+    api_handler = logIn()
     #new_store = api_handler.Store()
     #new_store.name = "Mon store"
     #new_store.save()
@@ -89,9 +83,7 @@ def storeInfos(id,mail,fn,ln):
 
 def createStore(id,email, first_name, last_name):
 
-    api_handler = IcebergAPI()
-
-    api_handler.sso(email, first_name, last_name)
+    api_handler = logIn()
 
     new_store = api_handler.Store()
     new_store.name = "My store"
@@ -102,7 +94,7 @@ def createStore(id,email, first_name, last_name):
 
 
 #storeInfos("52","lol@lol.fr","Yves","Durand")
-LogIn("52","lol@lol.fr","Yves","Durand")
+userInfos("52","lol@lol.fr","Yves","Durand")
 
 
 
