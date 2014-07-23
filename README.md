@@ -1,3 +1,17 @@
+#### Env variables
+
+As you may have seen in the conf.py file, 3 variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables. For security purposes we're gonna load them in a seperate file. Let's create a env.sh file in the root folder containing the following lines.
+
+<pre>
+export ICEBERG_API_PRIVATE_KEY=XXXXXX
+export ICEBERG_APPLICATION_NAMESPACE=my_app
+export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
+</pre>
+
+Theses variables must now be loaded in the environment using 
+<pre>source env_setup.sh</pre>
+* * *
+
 #### Log in 
 
 For many of the API operations, we need to be logged in as a user (as a staff user or not). So let's create a logIn function we are gonna call everytime we need to.
