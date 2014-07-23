@@ -126,8 +126,8 @@ print order.price
 
 Orders are available in your dashboard.
 * Each Order is divided into 3 parts:
-    * The Order object contains the summary of the order. It contains a certain quantity of merchant orders depending on the number of merchants linked to the ordered products. (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2)
-    * The MerchantOrder object: It contains all the infos a merchant recieves when an order is made and one or more products are his.(for example, merchant_1 recieves a list of 2 items)
+    * The Order object contains the summary of the order: total amount, adress, shipping, and the list of merchants concerned by the order (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2).
+    * The MerchantOrder object: It contains all the infos a merchant recieves when an order is made and one or more products of the order are his.(for example, merchant_1 recieves a list of 2 items)
     * The OrderItem object contains the product informations and size.
 
 Orders, Merchant Orders and Items are available in the /order section of your dashboard.
