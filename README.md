@@ -2,11 +2,11 @@
 
 As you may have seen in the conf.py file, 3 variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables. For security purposes we're gonna load them in a seperate file. Let's create a env.sh file in the root folder containing the following lines.
 
-<pre>
+```python
 export ICEBERG_API_PRIVATE_KEY=XXXXXX
 export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
-</pre>
+```
 
 Theses variables must now be loaded in the environment using 
 <pre>source env_setup.sh</pre>
@@ -16,21 +16,21 @@ Theses variables must now be loaded in the environment using
 
 For many of the API operations, we need to be logged in as a user (as a staff user or not). So let's create a logIn function we are gonna call everytime we need to.
 
-<pre>
+```python
 
 def logIn():
     api_handler = IcebergAPI()
     api_handler.sso("userEmail","userFirstName","userLastName")
     return api_handler
 
-</pre>
+```
 * * *
 
 #### Get infos of a specific offer
 
 Let's fetch some specific informations about an offer, display the image url, description, and get stock, size and price for each variation. 
 
-<pre>
+```python
 
 #fetch offer object width the product ID
 product = api_handler.ProductOffer.find("52")
@@ -41,14 +41,14 @@ print product.description
 for variation in product.variations:
     print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
-</pre>
+```
 * * *
 
 #### Add product to cart
 
 These few lines of code show you how to simply add a product to a specific user's cart, don't forget to pass the 4 required arguments.
 
-<pre>
+```python
 
 #Initialize the API and log in
 api_handler = logIn()
@@ -69,7 +69,7 @@ user_cart.addOffer(product)
 #print total amount of the cart
 print api_handler.Cart.mine().total_amount
     
-</pre>
+```
 * * *
 
 
@@ -77,7 +77,7 @@ print api_handler.Cart.mine().total_amount
 
 Let's retrieve a user's cart object and display its shipping_adress, shipping amount and total amount.
 
-<pre>
+```python
 
 #Initialize the API and log in
 api_handler = logIn()
@@ -90,7 +90,7 @@ print user_cart.shipping_address
 print user_cart.shipping_amount
 print user_cart.total_amount
     
-</pre>
+```
 * * *
 
 
@@ -98,7 +98,7 @@ print user_cart.total_amount
 
 Retrieve specific infos about a user
 
-<pre>
+```python
 
 #Initialize the API and log in
 api_handler = logIn()
@@ -112,7 +112,7 @@ print me.last_name
 print me.email
 print me.timezone
 
-</pre>
+```
 * * *
 
 
@@ -120,7 +120,7 @@ print me.timezone
 
 Retrieve infos about a store in the application. We are gonna look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the get request's response on the "merchant" section.
 
-<pre>
+```python
 
 api_handler = IcebergAPI()
 
@@ -131,7 +131,7 @@ print store.created_on
 print store.long_description
 print store.url
 
-</pre>
+```
 
 
 
