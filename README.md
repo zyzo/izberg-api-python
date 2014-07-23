@@ -1,8 +1,10 @@
+##Iceberg Python API
+
 ###Setup
 
 #### Env variables
 
-As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables. For security purposes we're gonna load them in a seperate file. Let's create a env.sh file in the root folder containing the following lines.
+As you may have seen in the conf.py file, 3 environment variables ar needed to use the Iceperg python API: the Iceberg private key, the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
 
@@ -11,24 +13,40 @@ export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 
 ```
-And load them in the command line before starting to use the API 
-```python
-source env_setup.sh
-```
 
 #### Log in 
 
-For many of the API operations, we need to be logged in as a user (as a staff user or not). So let's create a logIn function we are gonna call everytime we need to.
+*There are two ways to log in:
+    *By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
+    *By passing directly two parameters in the IcebergAPI class wich are the access token and the username
 
 ```python
-
-api_handler = IcebergAPI()
-api_handler.sso("userEmail","userFirstName","userLastName")
-
+api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
+```
+```python
+api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
 ```
 * * *
 
-#### Get infos of a specific offer
+##Cart
+
+### Get infos of a user's cart
+
+Let's retrieve a user's cart object and display its shipping_adress, shipping amount and total amount.
+
+```python
+
+#cart object
+user_cart = api_handler.Cart.mine()
+
+#print infos
+print user_cart.shipping_address
+print user_cart.shipping_amount
+print user_cart.total_amount
+    
+```
+
+### Get infos of a specific offer
 
 Let's fetch some specific informations about an offer, display the image url, description, and get stock, size and price for each variation. 
 
@@ -44,7 +62,6 @@ for variation in product.variations:
     print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
 ```
-* * *
 
 #### Add product to cart
 
@@ -67,24 +84,6 @@ user_cart.addOffer(product)
 
 #print total amount of the cart
 print api_handler.Cart.mine().total_amount
-    
-```
-* * *
-
-
-#### Get infos of a user's cart
-
-Let's retrieve a user's cart object and display its shipping_adress, shipping amount and total amount.
-
-```python
-
-#cart object
-user_cart = api_handler.Cart.mine()
-
-#print infos
-print user_cart.shipping_address
-print user_cart.shipping_amount
-print user_cart.total_amount
     
 ```
 * * *

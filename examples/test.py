@@ -3,7 +3,7 @@
 import sys, os, json
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 sys.path[0:0] = [os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 
@@ -11,6 +11,8 @@ from icebergsdk.api import IcebergAPI
 
 
 def logIn():
+    #accessToken = os.getenv('ICEBERG_API_PRIVATE_KEY')
+    #api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
     api_handler = IcebergAPI()
     api_handler.sso("lol@lol.fr", "Yves", "Durand")
     return api_handler
@@ -18,7 +20,6 @@ def logIn():
 def addProduct():
 
     api_handler = logIn()
-
     #Get cart
     user_cart = api_handler.Cart.mine()
 
@@ -99,7 +100,7 @@ def createStore():
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    createStore()
+    addProduct()
 
 
 
