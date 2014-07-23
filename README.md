@@ -145,7 +145,7 @@ Even when they are offline, users have a cart empty or containing offers awaitin
 
 ### Get infos of a user's cart
 
-Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class <code>Cart</code> .
+Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class <code>Cart</code>.
 
 ```python
 
@@ -218,7 +218,6 @@ print me.email
 print me.timezone
 
 ```
-
 
 Store
 -------------
