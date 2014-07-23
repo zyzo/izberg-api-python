@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
 
-from icebergsdk.resources.base import IcebergObject
+from icebergsdk.resources.base import UpdateableIcebergObject
 
-class Product(IcebergObject):
+class Product(UpdateableIcebergObject):
     endpoint = 'product'
 
-class ProductOffer(IcebergObject):
+class ProductOffer(UpdateableIcebergObject):
     endpoint = 'productoffer'
 
-class ProductVariation(IcebergObject):
+class ProductVariation(UpdateableIcebergObject):
     endpoint = 'product_variation'
 
 

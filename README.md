@@ -43,34 +43,46 @@ api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
 
 ### Get offer
 
-In order to fetch an offer, we need to call the <code>find</code> function within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> function within the <code>ProductOffer</code> Class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
 
-#fetch offer object width the product ID
-product = api_handler.ProductOffer.find("52")
+offer = api_handler.ProductOffer.find("52")
 
-#print infos
-print product.default_image_url
-print product.description
-for variation in product.variations:
+print offer.default_image_url
+print offer.description
+
+for variation in offer.variations:
     print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
 
+```
+
+### Edit offer
+
+To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> function again, then edit the product's attributes you want to change. And finally call the <code>save()</code> function upon your product object.
+
+
+```python
+
+    offer = api_handler.ProductOffer.find("52")
+
+    offer.previous_price ="40.00"
+    offer.default_image_url ="myimage.png"
+
+    offer.save()
 ```
 
 ##Cart
 
 ### Get infos of a user's cart
 
-Retrieve the current logged in user's cart by calling the <code>.mine()</code> function within the class <code>Cart</code> .
+Retrieve the current logged in user's cart by calling the <code>mine()</code> function within the class <code>Cart</code> .
 
 ```python
 
-#cart object
 user_cart = api_handler.Cart.mine()
 
-#print infos
 print user_cart.shipping_address
 print user_cart.shipping_amount
 print user_cart.total_amount
@@ -79,24 +91,16 @@ print user_cart.total_amount
 
 ### Add product to cart
 
-These few lines of code show you how to simply add a product to a specific user's cart, don't forget to pass the 4 required arguments.
+Edit a user's cart by adding an offer, and then print the amount of the updated cart for example.
 
 ```python
 
-#Get cart
 user_cart = api_handler.Cart.mine()
 
-#fetch offer object width the product ID
-product = api_handler.ProductOffer.find("52")
+offer = api_handler.ProductOffer.find("52")
 
-#print propreties of the product you just found
-print product.description
-print product.price_with_vat
+user_cart.addOffer(offer)
 
-#Add offer to the logged user's cart
-user_cart.addOffer(product)
-
-#print total amount of the cart
 print api_handler.Cart.mine().total_amount
     
 ```

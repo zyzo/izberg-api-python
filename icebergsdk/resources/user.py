@@ -3,7 +3,7 @@
 from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
 from icebergsdk.exceptions import IcebergNoHandlerError
 
-class User(UpdateableIcebergObject):
+class User(IcebergObject):
     endpoint = 'user'
 
     @classmethod
