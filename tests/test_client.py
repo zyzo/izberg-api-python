@@ -29,9 +29,9 @@ class ClientTest(unittest.TestCase):
         user_cart = self.api_handler.Cart.mine()
         self.assertEquals(user_cart.id, new_cart.id)
 
-    def getProduct():
+    def test_editProduct():
         self.login()
-        
+
         product = self.api_handler.Product.find(6)
         product_category = product.category
         product.category = 999
