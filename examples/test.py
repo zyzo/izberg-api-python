@@ -94,13 +94,13 @@ def createStore():
 
     api_handler = logIn()
 
-    found_store, result = api_handler.Store.search({"id": "999"})
+    found_store, result = api_handler.Store.search({"name": "MonSuperStore"})
     #new_store = api_handler.Store()
     #new_store.name = "My store"
     #new_store.application = "/v1/application/10/"
     #new_store.save()
-    found_store[0].facebook = "facebookPage"
-    print found_store[0].facebook
+
+    print found_store[0].to_JSON()
 
 def getOrder():
 

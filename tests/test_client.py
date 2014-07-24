@@ -35,6 +35,7 @@ class ClientTest(unittest.TestCase):
         store = self.api_handler.Store()
         store.name = "MonSuperStore"
         store.pinterest = "pinterestAdress"
+        store.store_type = "decoration"
         store.application = "/v1/application/10/"
         store.save()
 
