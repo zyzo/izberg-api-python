@@ -11,11 +11,11 @@ from icebergsdk.api import IcebergAPI
 
 
 def logIn():
+    api_handler = IcebergAPI()
     #accessToken = os.getenv('ICEBERG_API_PRIVATE_KEY')
     #api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
-    api_handler = IcebergAPI()
-    api_handler.sso("lol@lol.fr", "Yves", "Durand")
-    return api_handler
+    user = api_handler.sso("lol@lol.fr", "Yves", "Durand")
+    print user['username']
 
 def addOffer():
 
@@ -125,7 +125,7 @@ def getProduct():
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    getProduct()
+    logIn()
 
 
 
