@@ -10,6 +10,6 @@ class ClientTest(unittest.TestCase):
     def test_sso(self):
         api_handler = IcebergAPI()
         user = api_handler.sso("lol@lol.fr", "Yves", "Durand")
-        print user['username']
+        self.assertEquals(user['username'], 'yvesdurant1032644')
 
 
