@@ -94,13 +94,13 @@ def createStore():
 
     api_handler = logIn()
 
-    found_store, result = api_handler.Store.search({"store_type": 3})
+    found_store, result = api_handler.Store.search({"name": "MonSuperStore702"})
     #new_store = api_handler.Store()
     #new_store.name = "My store"
     #new_store.application = "/v1/application/10/"
     #new_store.save()
 
-    print found_store[0].to_JSON()
+    print found_store[0].store_type
 
 def getOrder():
 
