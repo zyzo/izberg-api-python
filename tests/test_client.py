@@ -36,11 +36,11 @@ class ClientTest(unittest.TestCase):
         r = random.randint(1,1000)
         store_name = "MonSuperStore%s"%(r)
         store.name = store_name
-        store.store_type = "decoration"
+        store.store_type = 3
         store.application = "/v1/application/10/"
         store.save()
         
-        
+
 
 
         #found_store = self.api_handler.Store.search({"pinterest": "pinterestAdress"})
