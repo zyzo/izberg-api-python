@@ -34,10 +34,10 @@ class ClientTest(unittest.TestCase):
 
         product = self.api_handler.Product.find(6)
         product_category = product.category
-        product.category = 999
+        product.category = "999"
         product.save()
         new_product = self.api_handler.Product.find(6)
-        self.assertEquals(new_product.id, 999)
+        self.assertEquals(new_product.id, "999")
         new_product.category = product_category
         new_product.save()
 
