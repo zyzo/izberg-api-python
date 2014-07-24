@@ -22,7 +22,7 @@ Setup
 
 ### Env variables
 
-As you may have seen in the conf.py file, 2 environment variables ar needed to use the Iceberg python API: the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
+As you may have seen in the conf.py file, 2 environment variables are needed to use the Iceberg python API: the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
 
