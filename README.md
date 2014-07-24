@@ -88,11 +88,11 @@ ProductOffer
 -------------
 
 Offers differs from products, a product can not be added to a cart, the product is the physical object defined by its brand, model, colors etc ... When someone by a product on a marketplace, he actually orders an offer linked to a product from a specific merchant.<br>
-We are here going to deal with offers, or more accurately product offers.
+We are here going to deal with offers, or more accurately **productOffers**.
 
 ### Get productOffer
 
-In order to fetch an offer, we need to call the <code>find()</code> method on the **ProductOffer** class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch a **productOffer**, we need to call the <code>find()</code> method on the **ProductOffer** class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
@@ -127,7 +127,7 @@ Products
 
 ### Search for a range of products
 
-Not every proprety of Product or productOffer can be scanned with the <code>search()</code> method, but a lot can be, like name, gender, made_in, description etc...<br>
+Not every proprety of **Product** or **ProductOffer** can be scanned with the <code>search()</code> method, but a lot can be, like name, gender, made_in, description etc...<br>
 Let's look for every product wich name's contains the string "Robe". The meta variable contains info about the returned list.
 ```python
 products, meta = api_handler.Product.search({"name__icontains": "Robe"})
@@ -176,17 +176,17 @@ print api_handler.Cart.mine().total_amount
 Orders
 -------------
 
-Each Order and merchantOrder are identified with a unique id.
+Each **Order** and **merchantOrder** are identified with a unique id.
 
 ### Get order infos
 
 * Each order is divided into 3 parts:
-    * The <code>Order</code> object contains the summary of the order: total amount, adress, shipping, and the list of merchants concerned by the order (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2).
-    * The <code>MerchantOrder</code> object: It contains all the infos a merchant recieves when an order is made and one or more products of the order are his.(for example, merchant_1 recieves a list of 2 items)
-    * The <code>OrderItem</code> object contains the product informations and size.
+    * The **Order** class contains the summary of the order: total amount, adress, shipping, and the list of merchants concerned by the order (for example, 3 products have been ordered, 2 of them belong to merchant_1 and 1 of them belongs to merchand_2).
+    * The **MerchantOrder** class contains all the infos a merchant recieves when an order is made and one or more products of the order are his.(for example, merchant_1 recieves a list of 2 items)
+    * The **OrderItem** class contains the product informations and size.
 
-Orders, Merchant Orders and Items are available in the /order section of your dashboard.
-Let's display infos about the <code>MerchantOrder</code> number 6.
+**Orders**, **MerchantOrder** and **OrderItems** are available in the /order section of your dashboard.
+Let's display infos about the **MerchantOrder** number 6.
 
 ```python
 
@@ -224,7 +224,7 @@ Store
 
 ### Get store infos
 
-Retrieve infos about a store in the application. We are going to look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the GET request's response on the "merchant" section.
+Retrieve infos about a **Store** in the application. We are going to look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the GET request's response on the "merchant" section.
 
 ```python
 
