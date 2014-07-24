@@ -186,7 +186,7 @@ Each Order and merchantOrder are identified with a unique id.
     * The <code>OrderItem</code> object contains the product informations and size.
 
 Orders, Merchant Orders and Items are available in the /order section of your dashboard.
-Let's display infos about the order number 6.
+Let's display infos about the <code>MerchantOrder</code> number 6.
 
 ```python
 
