@@ -132,7 +132,8 @@ class IcebergAPI(object):
             response = json.loads(e.read())
             raise IcebergAPIError(response)
 
-        logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, response.elapsed.total_seconds(), response.text)
+        try:
+            logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, response.elapsed.total_seconds(), response.text)
 
         if 400 <= response.status_code < 500:
             raise IcebergClientError(response)
