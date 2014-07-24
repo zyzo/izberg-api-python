@@ -5,10 +5,15 @@ python:
   - "3.2"
   - "3.3"
 install:
-  - "pip install requests"
-script: python examples/test.py
+  - pip install requests
+  - pip install -r tests/requirements.txt --use-mirrors
+script:
+  - nosetests --with-coverage --cover-package=icebergsdk
 before_install:
   export PYTHONIOENCODING=UTF-8
+after_success:
+  coveralls
 env:
+  global:
   - secure: "Eb7cqj7XRE6ioWK6yQExL68A4IGYByDIOTX1EOJVTrimIxctpKP+fZ/LsLH2utXQZGXbQ71N+NtBPqybInsS+CH0iT8omNdQ4LlfhmCtjwwMwcsjeWxfrDzUy/Cq6h4egyOMT8vJ7FF0qMwYii1S6b9DcoPhHM+E+gkBJlKgxaI="
   - secure: "Gfn0wFqwLXhxTdCNIqVwVnPbFqVjtX1W306IP6cHhc+O/OjbykMDqUV3JvYwOiR+nkfXHmtquWm/hli9arviq/+zWaOH+XzbynWaJs+lgYBAS/XTGdBlTFG1mIaqD/L1Us2QKqhPHaoGmXWuOx1nXEYolyCOwTnAi/7ieW8ZQmA="
