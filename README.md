@@ -1,5 +1,8 @@
 #Iceberg Python API
 
+[![Build Status](https://travis-ci.org/algolia/algoliasearch-client-python.png?branch=raf)](https://travis-ci.org/algolia/algoliasearch-client-python) [![PyPI version](https://badge.fury.io/py/algoliasearch.png)](http://badge.fury.io/py/algoliasearch) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-python/badge.png)](https://coveralls.io/r/algolia/algoliasearch-client-python)
+
+
 The Iceberg API provides an entire set of functions and classes to access and edit Iceberg data.
 
 Table of Content
