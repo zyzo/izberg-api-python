@@ -16,7 +16,7 @@ class ClientTest(unittest.TestCase):
 
     def test_getCart(self):
         self.login()
-        currency = self.user.Cart.mine().currency
+        currency = self.api_handler.Cart.mine().currency
         self.assertEquals(currency, 'EUR')
 
 
