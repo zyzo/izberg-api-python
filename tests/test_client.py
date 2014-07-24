@@ -34,6 +34,7 @@ class ClientTest(unittest.TestCase):
 
         store = self.api_handler.Store()
         store.name = "MonSuperStore"
+        store.application = "/v1/application/10/"
         store.save()
 
 
