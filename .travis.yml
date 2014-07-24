@@ -6,7 +6,7 @@ python:
   - "3.3"
 install:
   - "pip install requests"
-script: source initiate.sh
+script: "source initiate.sh"
 before_install:
   export PYTHONIOENCODING=UTF-8
 after_success:
