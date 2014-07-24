@@ -52,7 +52,7 @@ class IcebergObject(dict):
 
         try:
             return self[k]
-        except KeyError, err:
+        except KeyError as err:
             raise AttributeError(*err.args)
 
     def __setitem__(self, k, v):
@@ -74,7 +74,7 @@ class IcebergObject(dict):
     def __getitem__(self, k):
         try:
             return super(IcebergObject, self).__getitem__(k)
-        except KeyError, err:
+        except KeyError as err:
             if k in self._transient_values:
                 raise KeyError(
                     "%r.  HINT: The %r attribute was set in the past."
