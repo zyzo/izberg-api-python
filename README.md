@@ -1,6 +1,6 @@
 #Iceberg Python API
 
-Iceberg API provides an entire set of functions and class to access and edit Iceberg data.
+The Iceberg API provides an entire set of functions and classes to access and edit Iceberg data.
 
 Table of Content
 -------------
@@ -34,8 +34,8 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 ### Log in 
 
 * There are two ways to log in:
- * By calling the sso function in the IcebergAPI() class, and passing 3 parameters wich are the user mail, first name and last name.
- * By passing directly two parameters in the IcebergAPI class wich are the access token and the username
+ * By calling the <code>sso()</code> method on the <code>IcebergAPI()</code> class, and passing 3 parameters wich are the user mail, first name and last name.
+ * By passing directly two parameters in the <code>IcebergAPI()</code> class wich are the access token and the username
 
 ```python
 api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
@@ -47,7 +47,7 @@ api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
 Resources
 -------------
 
- * You have access to the following resources directly through the main IcebergAPI object:
+ * You have access to the following resources directly through the main <code>IcebergAPI()</code> object:
      * ProductVariation
      * ProductOffer
      * Product
@@ -75,7 +75,7 @@ Methods
      * <code>find()</code> allows you to fetch a specific element within a list of elements, it can be product offers, products, orders.
      * <code>save()</code> allows you to update data about a store, offer, product etc... that has been modified.
      * <code>search()</code> returns a list of elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc...
-     * <code>to_JSON()</code> JSON serialized string containing the entirety of an object.
+     * <code>to_JSON()</code> returns a JSON serialized string containing the entirety of an object.
 
 For example:
 ```python
@@ -87,12 +87,12 @@ api_handler.ProductOffer.find("52").save()
 ProductOffer
 -------------
 
-Offers differs from products, a product can not be added to a cart, the product is the physical object defined by it's brand, model, colors etc ... When someone by a product on a marketplace, he actually orders a specific offer from a specific merchant corresponding to a product.<br>
+Offers differs from products, a product can not be added to a cart, the product is the physical object defined by its brand, model, colors etc ... When someone by a product on a marketplace, he actually orders an offer linked to a product from a specific merchant.<br>
 We are here going to deal with offers, or more accurately product offers.
 
 ### Get productOffer
 
-In order to fetch an offer, we need to call the <code>find()</code> method within the <code>ProductOffer</code> class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> method on the <code>ProductOffer</code> class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
