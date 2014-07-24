@@ -9,11 +9,11 @@ class ClientTest(unittest.TestCase):
         
     def test_sso(self):
         self.user = self.api_handler.sso("lol@lol.fr", "Yves", "Durand")
-        self.assertEquals(user['username'], 'yvesdurant1032644')
+        self.assertEquals(self.user['username'], 'yvesdurant1032644')
         return self
 
     def test_getCart(self):
         currency = self.user.Cart.mine().currency
-        self.assertEquals(self.currency, 'EUR')
+        self.assertEquals(currency, 'EUR')
 
 
