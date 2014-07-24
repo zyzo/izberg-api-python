@@ -34,8 +34,8 @@ export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 ### Log in 
 
 * There are two ways to log in:
- * By calling the <code>sso()</code> method on the <code>IcebergAPI()</code> class, and passing 3 parameters wich are the user mail, first name and last name.
- * By passing directly two parameters in the <code>IcebergAPI()</code> class wich are the access token and the username
+ * By calling the <code>sso()</code> method on the **IcebergAPI()** class, and passing 3 parameters wich are the user mail, first name and last name.
+ * By passing directly two parameters in the **IcebergAPI()** class wich are the access token and the username
 
 ```python
 api_handler = IcebergAPI().sso("userEmail","userFirstName","userLastName")
@@ -47,7 +47,7 @@ api_handler = IcebergAPI(access_token=XXXX, username=XXXX)
 Resources
 -------------
 
- * You have access to the following resources directly through the main <code>IcebergAPI()</code> object:
+ * You have access to the following resources directly through the main **IcebergAPI()** object:
      * ProductVariation
      * ProductOffer
      * Product
@@ -92,7 +92,7 @@ We are here going to deal with offers, or more accurately product offers.
 
 ### Get productOffer
 
-In order to fetch an offer, we need to call the <code>find()</code> method on the ProductOffer class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> method on the **ProductOffer** class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
@@ -109,7 +109,7 @@ for variation in offer.variations:
 
 ### Edit productOffer
 
-To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> method again, then edit the product's attributes you want to change. And finally call the <code>save()</code> method upon your product object.
+To edit an offer, you must be logged as a staff user. Simply fetch the object using the <code>find()</code> method again, then edit the product's attributes you want to change. And finally call the <code>save()</code> method upon your offer object.
 
 
 ```python
@@ -145,7 +145,7 @@ Even when they are offline, users have a cart empty or containing offers awaitin
 
 ### Get infos of a user's cart
 
-Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class Cart.
+Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class **Cart**.
 
 ```python
 
@@ -204,7 +204,7 @@ User
 
 ### Get user infos
 
-Using the <code>me()</code> method on the User class returns infos about the currently logged in user.
+Using the <code>me()</code> method on the **User** class returns infos about the currently logged in user.
 
 ```python
 
