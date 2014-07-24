@@ -92,7 +92,7 @@ We are here going to deal with offers, or more accurately product offers.
 
 ### Get productOffer
 
-In order to fetch an offer, we need to call the <code>find()</code> method on the <code>ProductOffer</code> class, and passing the id of the requested product. Once we've got it, let's print some infos.
+In order to fetch an offer, we need to call the <code>find()</code> method on the ProductOffer class, and passing the id of the requested product. Once we've got it, let's print some infos.
 
 
 ```python
@@ -127,7 +127,7 @@ Products
 
 ### Search for a range of products
 
-Not every proprety of products or productOffer can be scanned with the <code>search()</code> method, but a lot can be, like name, gender, made_in, description etc...<br>
+Not every proprety of Product or productOffer can be scanned with the <code>search()</code> method, but a lot can be, like name, gender, made_in, description etc...<br>
 Let's look for every product wich name's contains the string "Robe". The meta variable contains info about the returned list.
 ```python
 products, meta = api_handler.Product.search({"name__icontains": "Robe"})
@@ -145,7 +145,7 @@ Even when they are offline, users have a cart empty or containing offers awaitin
 
 ### Get infos of a user's cart
 
-Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class <code>Cart</code>.
+Retrieve the current logged in user's cart by calling the <code>mine()</code> method within the class Cart.
 
 ```python
 
