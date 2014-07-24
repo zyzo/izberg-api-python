@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import random
 from icebergsdk.api import IcebergAPI
 
 class ClientTest(unittest.TestCase):
