@@ -5,7 +5,6 @@ python:
 install:
   - pip install requests==2.3.0
   - pip install coverage
-  - pip install random
   - pip install -r tests/requirements.txt --use-mirrors
 script:
   - nosetests --with-coverage --cover-package=icebergsdk
