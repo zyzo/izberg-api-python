@@ -7,7 +7,7 @@ class ClientTest(unittest.TestCase):
     def setUp(self):
         self.api_handler = IcebergAPI()
 
-    def login():
+    def login(self):
         self.user = self.api_handler.sso("lol@lol.fr", "Yves", "Durand")
 
     def test_sso(self):
