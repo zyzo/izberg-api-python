@@ -8,8 +8,11 @@ class ClientTest(unittest.TestCase):
         self.api_handler = IcebergAPI()
         
     def test_sso(self):
-        api_handler = IcebergAPI()
-        user = api_handler.sso("lol@lol.fr", "Yves", "Durand")
+        self.user = self.api_handler.sso("lol@lol.fr", "Yves", "Durand")
         self.assertEquals(user['username'], 'yvesdurant1032644')
+
+    def test_getCart(self):
+        currency = self.user.Cart.mine().currency
+        self.assertEquals(self.currency, 'EUR')
 
 

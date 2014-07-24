@@ -14,8 +14,8 @@ def logIn():
     api_handler = IcebergAPI()
     #accessToken = os.getenv('ICEBERG_API_PRIVATE_KEY')
     #api_handler = IcebergAPI(access_token=accessToken, username="yvesdurant1032644")
-    user = api_handler.sso("lol@lol.fr", "Yves", "Durand")
-    print user['username']
+    api_handler.sso("lol@lol.fr", "Yves", "Durand")
+    return api_handler
 
 def addOffer():
 
@@ -27,14 +27,15 @@ def addOffer():
     offer = api_handler.ProductOffer.find("52")
 
     #print propreties of the product you just found
-    print offer.description
-    print offer.price_with_vat
+    #print offer.description
+    #print offer.price_with_vat
    
     #Add product to cart
     user_cart.addOffer(offer)
 
     #print total amount of the cart
-    print api_handler.Cart.mine().total_amount
+    print api_handler.Cart.mine().currency
+    #print api_handler.Cart.mine().total_amount
 
 
 def getInfos():
@@ -125,7 +126,7 @@ def getProduct():
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    logIn()
+    addOffer()
 
 
 
