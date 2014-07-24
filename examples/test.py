@@ -94,11 +94,13 @@ def createStore():
 
     api_handler = logIn()
 
-    new_store = api_handler.Store()
-    new_store.name = "My store"
-    new_store.application = "/v1/application/10/"
-    new_store.save()
-    print new_store.to_JSON()
+    found_store, result = api_handler.Store.search({"name": "MonSuperStore"})
+    #new_store = api_handler.Store()
+    #new_store.name = "My store"
+    #new_store.application = "/v1/application/10/"
+    #new_store.save()
+    found_store[0].facebook = "facebookPage"
+    print found_store[0].facebook
 
 def getOrder():
 
@@ -139,7 +141,7 @@ def cartInfos(i):
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    getProduct()
+    createStore()
 
 
 

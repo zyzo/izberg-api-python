@@ -34,8 +34,11 @@ class ClientTest(unittest.TestCase):
 
         store = self.api_handler.Store()
         store.name = "MonSuperStore"
+        store.id = 999
         store.application = "/v1/application/10/"
         store.save()
+
+        found_store = self.api_handler.Store.search({"name": "MonSuperStore"})
 
 
 
