@@ -9,7 +9,7 @@ class ClientTest(unittest.TestCase):
         
     def test_sso(self):
         user = self.api_handler.sso("lol@lol.fr", "Yves", "Durand")
-        self.assertEquals(user.first_name, "Yves")
+        print user.to_JSON()
 
 
 
