@@ -121,6 +121,17 @@ def getProduct():
     for product in products:
         print product.to_JSON()
 
+def cartInfos(i):
+
+    api_handler = logIn()
+
+    new_cart = api_handler.Cart()
+    new_cart.save()
+
+    user_cart = api_handler.Cart.mine()
+
+    new_cart.id == user_cart.id
+
 
 
 
