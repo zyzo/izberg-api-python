@@ -27,8 +27,22 @@ class ClientTest(unittest.TestCase):
         new_cart = self.api_handler.Cart()
         new_cart.save()
         user_cart = self.api_handler.Cart.mine()
-
         self.assertEquals(user_cart.id, new_cart.id)
+
+    def getProduct():
+        self.login()
+        
+        product = self.api_handler.Product.find(6)
+        product_category = product.category
+        product.category = 999
+        product.save()
+        new_product = self.api_handler.Product.find(6)
+        self.assertEquals(new_product.id, 999)
+        new_product.category = product_category
+        new_product.save()
+
+
+
 
 
 

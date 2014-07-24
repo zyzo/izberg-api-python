@@ -115,11 +115,13 @@ def getOrder():
 def getProduct():
 
     api_handler = logIn()
-    products, meta = api_handler.Product.search({"name__icontains": "Robe"})
+    #products, meta = api_handler.Product.search({"name__icontains": "Robe"})
+    product = api_handler.Product.find(6)
+    print product.to_JSON()
 
-    print meta
-    for product in products:
-        print product.to_JSON()
+    #print meta
+    #for product in products:
+    #    print product.to_JSON()
 
 def cartInfos(i):
 
@@ -137,7 +139,7 @@ def cartInfos(i):
 
 if __name__ == '__main__':
     #storeInfos("52","lol@lol.fr","Yves","Durand")
-    addOffer()
+    getProduct()
 
 
 
