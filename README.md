@@ -74,7 +74,7 @@ Methods
  * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
      * <code>find()</code> allows you to fetch a specific element within a list of elements, it can be product offers, products, orders.
      * <code>save()</code> allows you to update data about a store, offer, product etc... that has been modified.
-     * <code>search()</code> returns a list of elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc...
+     * <code>search()</code> returns a tupple, the first contains elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc... the second returned variable contains info about the provided list.
      * <code>to_JSON()</code> returns a JSON serialized string containing the entirety of an object.
 
 For example:
@@ -224,7 +224,7 @@ Store
 
 ### Get store infos
 
-Retrieve infos about a store in the application. We are gonna look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the GET request's response on the "merchant" section.
+Retrieve infos about a store in the application. We are going to look for the store number 11 and display infos about it. This number is allocated automatically by Iceberg, you can find your stores's IDs in the GET request's response on the "merchant" section.
 
 ```python
 
