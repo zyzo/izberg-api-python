@@ -74,7 +74,7 @@ Methods
  * Methods are functions allowing you to access and manipulate the resources, the one we are going to use:
      * <code>find()</code> allows you to fetch a specific element within a list of elements, it can be product offers, products, orders.
      * <code>save()</code> allows you to update data about a store, offer, product etc... that has been modified.
-     * <code>search()</code> returns a tupple, the first contains elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc... the second returned variable contains info about the provided list.
+     * <code>search()</code> returns a tuple, the first variable contains elements matching the requested parameter, the parameter can be a proprety like price, color, variation etc... the second returned variable contains info about the provided list.
      * <code>to_JSON()</code> returns a JSON serialized string containing the entirety of an object.
 
 For example:
