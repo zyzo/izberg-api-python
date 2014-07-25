@@ -1,6 +1,6 @@
 #Iceberg Python API
 
-[![Build Status](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON.png)](https://travis-ci.orgIceberg-Marketplace/Iceberg-API-PYTHON) [![Coverage Status](https://coveralls.io/repos/Iceberg-Marketplace/Iceberg-API-PYTHON/badge.png)](https://coveralls.io/r/Iceberg-Marketplace/Iceberg-API-PYTHON)
+[![Build Status](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON.png)](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON) [![Coverage Status](https://coveralls.io/repos/Iceberg-Marketplace/Iceberg-API-PYTHON/badge.png)](https://coveralls.io/r/Iceberg-Marketplace/Iceberg-API-PYTHON)
 
 
 The Iceberg API provides an entire set of functions and classes to access and edit Iceberg data.
@@ -19,7 +19,6 @@ Table of Content
 
 
 
-
 Setup
 -------------
 
@@ -31,7 +30,6 @@ As you may have seen in the conf.py file, 2 environment variables are needed to 
 
 export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
-
 ```
 
 ### Log in 
@@ -107,7 +105,6 @@ print offer.description
 
 for variation in offer.variations:
     print "%s items available in size %s, %s euros" %(variation['stock'],variation['name'],variation['price'])
-
 ```
 
 ### Edit productOffer
@@ -173,7 +170,6 @@ offer = api_handler.ProductOffer.find("52")
 user_cart.addOffer(offer)
 
 print api_handler.Cart.mine().total_amount
-    
 ```
 
 Orders
@@ -199,7 +195,6 @@ print merchant_order.amount
 print merchant_order.shipping_address.city
 print merchant_order.shipping_address.country
 print merchant_order.shipping_address.zipcode
-
 ```
 
 User
@@ -219,7 +214,6 @@ print me.first_name
 print me.last_name
 print me.email
 print me.timezone
-
 ```
 
 Store
@@ -237,7 +231,6 @@ print store.name
 print store.created_on
 print store.long_description
 print store.url
-
 ```
 
 
