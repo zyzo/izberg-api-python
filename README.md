@@ -1,8 +1,6 @@
 #Iceberg Python API
 
-[![Build Status](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON.png)](https://travis-ci.orgIceberg-Marketplace/Iceberg-API-PYTHON) 
-
-[![Coverage Status](https://coveralls.io/repos/Iceberg-Marketplace/Iceberg-API-PYTHON/badge.png)](https://coveralls.io/r/Iceberg-Marketplace/Iceberg-API-PYTHON)
+[![Build Status](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON.png)](https://travis-ci.orgIceberg-Marketplace/Iceberg-API-PYTHON) [![Coverage Status](https://coveralls.io/repos/Iceberg-Marketplace/Iceberg-API-PYTHON/badge.png)](https://coveralls.io/r/Iceberg-Marketplace/Iceberg-API-PYTHON)
 
 
 The Iceberg API provides an entire set of functions and classes to access and edit Iceberg data.
