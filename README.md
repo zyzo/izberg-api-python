@@ -27,7 +27,6 @@ Setup
 As you may have seen in the conf.py file, 2 environment variables are needed to use the Iceberg python API: the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
-
 export ICEBERG_APPLICATION_NAMESPACE=my_app
 export ICEBERG_APPLICATION_SECRET_KEY=XXXXXX
 ```
@@ -97,7 +96,6 @@ In order to fetch a **productOffer**, we need to call the <code>find()</code> me
 
 
 ```python
-
 offer = api_handler.ProductOffer.find("52")
 
 print offer.default_image_url
@@ -113,13 +111,12 @@ To edit an offer, you must be logged as a staff user. Simply fetch the object us
 
 
 ```python
+offer = api_handler.ProductOffer.find("52")
 
-    offer = api_handler.ProductOffer.find("52")
+offer.previous_price ="40.00"
+offer.default_image_url ="myimage.png"
 
-    offer.previous_price ="40.00"
-    offer.default_image_url ="myimage.png"
-
-    offer.save()
+offer.save()
 ```
 
 Products

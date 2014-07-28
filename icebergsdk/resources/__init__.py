@@ -17,7 +17,8 @@ def get_class_from_resource_uri(resource_uri):
         "user": User,
         "address": Address,
         "profile": Profile,
-        "payment": Payment
+        "payment": Payment,
+        "merchant": Store
     }
 
     # Hack for now... Will be changed
