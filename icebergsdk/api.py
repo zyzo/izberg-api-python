@@ -120,7 +120,7 @@ class IcebergAPI(object):
         try:
             if post_args:
                 post_args = json.dumps(post_args, cls=DateTimeAwareJSONEncoder, ensure_ascii=False)
-            print post_args
+
             response = requests.request(method,
                                         url,
                                         timeout=self.timeout,
