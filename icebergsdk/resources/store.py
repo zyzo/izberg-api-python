@@ -4,6 +4,10 @@ from icebergsdk.resources.base import UpdateableIcebergObject
 
 class Store(UpdateableIcebergObject):
     endpoint = 'merchant'
+    
     def product_offers(self):
         return self.get_list('productoffer', args = {'merchant': self.id})
+
+    def inbox(self):
+        return self.get_list("%sinbox/" % self.resource_uri)
     

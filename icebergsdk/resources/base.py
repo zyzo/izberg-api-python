@@ -95,6 +95,9 @@ class IcebergObject(dict):
         return self.__class__._handler.request(*args, **kwargs)
 
     def get_list(self, resource, **kwargs):
+        """
+        Return a list of Resource Objects
+        """
         data = self.__class__._handler.get_list(resource, **kwargs)
 
         res = []
@@ -174,12 +177,15 @@ class IcebergObject(dict):
         raise NotImplementedError()
 
     def _load_attributes_from_response(self, **response):
+        """
+        Loads attributes
+        If the data has a nested object with a resource_uri, try to math an existing object
+        """
         for key, value in response.iteritems():
             if type(value) == dict:
                 if 'resource_uri' in value: # Try to match a relation
-                    from icebergsdk.resources import get_class_from_resource_uri
-
                     try:
+                        from icebergsdk.resources import get_class_from_resource_uri
                         obj_cls = get_class_from_resource_uri(value['resource_uri'])
                         self.__dict__[key] = obj_cls.findOrCreate(value)
                     except:
@@ -194,26 +200,40 @@ class IcebergObject(dict):
     @classmethod
     def findOrCreate(cls, data):
         """
-        To Rewrite using resource_uri
+        Take a dict and return an corresponding Iceberg resource object.
 
-        Bug with "type"... 
+        Check in __objects_store for reuse of existing object
 
+        Example:
+            data: {
+                "id": 1,
+                "resource_uri": "/v1/user/1/"
+                ...
+            }
 
-        NOT GOOD
+            Will return an User object
         """
-        if "type" in data: # If we know the object type
-            if not data["type"] in cls.__objects_store: # New type collectore
-                cls.__objects_store[data["type"]] = weakref.WeakValueDictionary()
-                obj = cls()
-                cls.__objects_store[data["type"]][str(data['id'])] = obj
-            else:
-                if str(data['id']) in cls.__objects_store[data["type"]]:
-                    obj = cls.__objects_store[data["type"]][str(data['id'])]
-                else:
-                    obj = cls()
-                    cls.__objects_store[data["type"]][str(data['id'])] = obj
-        else:
+
+        from icebergsdk.resources import get_class_from_resource_uri
+
+        try:
+            obj_cls = get_class_from_resource_uri(data['resource_uri'])
+        except:
             obj = cls()
+        else:
+            data_type = obj_cls.endpoint
+
+            if not data_type in cls.__objects_store: # New type collectore
+                cls.__objects_store[data_type] = weakref.WeakValueDictionary()
+                obj = obj_cls()
+                cls.__objects_store[data_type][str(data['id'])] = obj
+            else:
+                if str(data['id']) in cls.__objects_store[data_type]:
+                    obj = cls.__objects_store[data_type][str(data['id'])]
+                else:
+                    obj = obj_cls()
+                    cls.__objects_store[data_type][str(data['id'])] = obj
+
         return obj._load_attributes_from_response(**data)
 
     @classmethod
@@ -223,6 +243,7 @@ class IcebergObject(dict):
 
         data = cls._handler.get_element(cls.endpoint, object_id)
         return cls.findOrCreate(data)
+
 
     @classmethod
     def search(cls, args = None):
@@ -310,5 +331,4 @@ class UpdateableIcebergObject(IcebergObject):
         self._unsaved_values = set()
 
         return self
-
 

@@ -32,16 +32,16 @@ class IcebergAPI(object):
         self.Payment = resources.Payment.set_handler(self)
         self.Store = resources.Store.set_handler(self)
         self.User = resources.User.set_handler(self)
+        self.Message = resources.Message.set_handler(self)
 
-        # Missing
+        ### Missing
+
         # Return
         # Store Reviews
         # Product Reviews
-        # Message
         # Invoices
         # Currencies
         # Webhooks
-
         # Feed Management
 
 
@@ -121,7 +121,13 @@ class IcebergAPI(object):
         # store = requests.get('http://api.local.iceberg-marketplace.com:8000/v1/merchant/', params = {'slug': store_slug}, headers = headers)
 
         if '//' not in path:
-            url = "%s:%s/%s/" % (self.conf.ICEBERG_API_URL, self.conf.ICEBERG_API_PORT, self.conf.ICEBERG_API_VERSION)
+            url = "%s:%s/" % (self.conf.ICEBERG_API_URL, self.conf.ICEBERG_API_PORT)
+
+            if not self.conf.ICEBERG_API_VERSION in path:
+                url = "%s%s/" % (url, self.conf.ICEBERG_API_VERSION)
+
+            if path.startswith('/'):
+                url = url[:-1] # Remove /
         else:
             url = ""
 
@@ -162,9 +168,13 @@ class IcebergAPI(object):
     def get_element(self, resource, object_id):
         return self.request("%s/%s/" % (resource, object_id))
 
-    def get_list(self, resource, **kwargs):
-        result = self.request("%s/" % resource, **kwargs)
+    def get_list(self, path, **kwargs):
+        if not path.endswith('/'):
+            path = "%s/" % path
+
+        result = self.request(path, **kwargs)
         return result['objects']
+
 
     def convert_to_register_user(self):
         raise NotImplementedError()

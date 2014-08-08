@@ -22,5 +22,8 @@ class User(IcebergObject):
         data = self.request('%sprofile/' % self.resource_uri) 
         return Profile.findOrCreate(data)
 
+    def inbox(self):
+        return self.get_list("%sinbox/" % self.resource_uri)
+
 class Profile(UpdateableIcebergObject):
     endpoint = 'profile'
