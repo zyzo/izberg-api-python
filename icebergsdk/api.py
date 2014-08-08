@@ -2,7 +2,7 @@
 
 import logging, requests, json, time, hashlib, hmac
 
-from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError, IcebergMissingApplicationSettingsError
+from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError, IcebergClientUnauthorizedError, IcebergMissingApplicationSettingsError
 from icebergsdk.conf import Configuration
 from icebergsdk import resources
 from icebergsdk.json_utils import DateTimeAwareJSONEncoder
@@ -19,26 +19,30 @@ class IcebergAPI(object):
         self.lang = lang or self.conf.ICEBERG_DEFAULT_LANG
 
         # Resources definition
+        self.Application = resources.Application.set_handler(self)
+        self.Address = resources.Address.set_handler(self)
+        self.Cart = resources.Cart.set_handler(self)
+        self.Country = resources.Country.set_handler(self)
+        self.MerchantOrder = resources.MerchantOrder.set_handler(self)
+        self.Order = resources.Order.set_handler(self)
         self.ProductVariation = resources.ProductVariation.set_handler(self)
         self.ProductOffer = resources.ProductOffer.set_handler(self)
         self.Product = resources.Product.set_handler(self)
-        self.MerchantOrder = resources.MerchantOrder.set_handler(self)
-        self.Order = resources.Order.set_handler(self)
-        self.Application = resources.Application.set_handler(self)
+        self.Profile = resources.Profile.set_handler(self)
+        self.Payment = resources.Payment.set_handler(self)
         self.Store = resources.Store.set_handler(self)
         self.User = resources.User.set_handler(self)
-        self.Profile = resources.Profile.set_handler(self)
-        self.Cart = resources.Cart.set_handler(self)
-        self.Country = resources.Country.set_handler(self)
-        self.Address = resources.Address.set_handler(self)
-        self.Payment = resources.Payment.set_handler(self)
 
         # Missing
         # Return
-        # Reviews
+        # Store Reviews
+        # Product Reviews
         # Message
         # Invoices
         # Currencies
+        # Webhooks
+
+        # Feed Management
 
 
     def get_auth_token(self):
@@ -46,13 +50,15 @@ class IcebergAPI(object):
 
     def auth_user(self, username, email, first_name = '', last_name = '', is_staff = False, is_superuser = False):
         """
-        Method for Iceberg Staff to get or create a user into the platform and get the access_token
+        Method for Iceberg Staff to get or create a user into the platform and get the access_token .
+
+        For authentication, please use the SSO method.
         """
         timestamp = int(time.time())
         secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
 
         to_compose = [username, email, first_name, last_name, is_staff, is_superuser, timestamp]
-        hash_obj = hmac.new(secret_key, ";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
+        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
         message_auth = hash_obj.hexdigest()
 
         data = {
@@ -71,6 +77,11 @@ class IcebergAPI(object):
         return self
 
     def sso(self, email, first_name, last_name):
+        """
+        TODO:
+            - Use keyword arguments (kwargs) instead if args..
+            - Add 
+        """
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError()
 
@@ -78,7 +89,7 @@ class IcebergAPI(object):
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
         to_compose = [email, first_name, last_name, timestamp]
-        hash_obj = hmac.new(secret_key, ";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
+        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
         message_auth = hash_obj.hexdigest()
 
         data = {
@@ -136,11 +147,14 @@ class IcebergAPI(object):
             logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, response.elapsed.total_seconds(), response.text)
         except:
             pass
+
+        if response.status_code == 401:
+            raise IcebergClientUnauthorizedError()
             
-        if 400 <= response.status_code < 500:
+        elif 400 <= response.status_code < 500:
             raise IcebergClientError(response)
 
-        if 500 <= response.status_code <= 600:
+        elif 500 <= response.status_code <= 600:
             raise IcebergServerError(response)
 
         return response.json()

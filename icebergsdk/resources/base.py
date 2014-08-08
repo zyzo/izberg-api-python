@@ -163,6 +163,16 @@ class IcebergObject(dict):
     def has_changed(self):
         return len(self._unsaved_values) > 0
 
+    @classmethod
+    def build_resource_uri(cls, options):
+        """
+        Generate a resource URI.
+
+        Should work like:
+            build_resource_uri(Product, {id:2}) -> https://api.iceberg.technology/v1/product/2/
+        """
+        raise NotImplementedError()
+
     def _load_attributes_from_response(self, **response):
         for key, value in response.iteritems():
             if type(value) == dict:

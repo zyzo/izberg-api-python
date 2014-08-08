@@ -69,5 +69,8 @@ class IcebergServerError(IcebergAPIError):
 class IcebergClientError(IcebergAPIError):
     pass
 
+class IcebergClientUnauthorizedError(IcebergAPIError):
+    pass
+
 
 
