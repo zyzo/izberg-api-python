@@ -118,12 +118,12 @@ class IcebergObject(dict):
             v = getattr(self, k)
 
             if isinstance(v, IcebergObject):
-                params[k] = v.to_JSON()
+                params[k] = v.as_dict()
             else:
                 params[k] = v if v is not None else ""
         return params
 
-    def __repr__(self):
+    def __repr__(self):        
         ident_parts = [type(self).__name__]
 
         if isinstance(self.get('object'), basestring):
