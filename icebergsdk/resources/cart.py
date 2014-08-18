@@ -21,6 +21,9 @@ class Cart(UpdateableIcebergObject):
         Return Payment Form data
         """
         return self.request("%s%s/" % (self.resource_uri, 'backend_form_data'))
+
+    def items(self):
+        return self.get_list('%sitems/' % self.resource_uri)
         
 
     def createOrder(self, params = None):
