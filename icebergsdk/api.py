@@ -11,6 +11,11 @@ logger = logging.getLogger('icebergsdk')
 
 class IcebergAPI(object):
     def __init__(self, username = None, access_token = None, lang = None, timeout = None, conf = None):
+        """
+        @environment:
+            - prod
+            - sandbox
+        """
         # Conf
         self.conf = conf or Configuration
         self.username = username
@@ -73,6 +78,7 @@ class IcebergAPI(object):
         }
 
         self.access_token = self.request('user/auth/', args = data)['access_token']
+        self.username = username
 
         return self
 
