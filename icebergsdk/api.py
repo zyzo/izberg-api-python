@@ -82,21 +82,29 @@ class IcebergAPI(object):
 
         return self
 
-    def sso(self, email, first_name, last_name):
-        """
-        TODO:
-            - Use keyword arguments (kwargs) instead if args..
-            - Add 
-        """
-        if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
-            raise IcebergMissingApplicationSettingsError()
+    def generate_messages_auth(self, data):
+        email = data['email']
+        first_name = data['first_name']
+        last_name = data['last_name']
+        timestamp = data['timestamp']
 
-        timestamp = int(time.time())
+        
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
         to_compose = [email, first_name, last_name, timestamp]
         hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
         message_auth = hash_obj.hexdigest()
+        return message_auth
+
+    # def sso(self, email, first_name, last_name):
+    def sso(self, email, first_name, last_name):
+        """
+        Depreciated
+        """
+        if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
+            raise IcebergMissingApplicationSettingsError()
+
+        timestamp = int(time.time())
 
         data = {
             'application': self.conf.ICEBERG_APPLICATION_NAMESPACE,
@@ -104,7 +112,12 @@ class IcebergAPI(object):
             'first_name': first_name,
             'last_name': last_name,
             'timestamp': timestamp,
-            'message_auth': message_auth
+            'message_auth': self.generate_messages_auth({
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'timestamp': timestamp
+            })
         }
 
         response = self.request('user/sso/', args = data)
@@ -113,6 +126,40 @@ class IcebergAPI(object):
         self.access_token = response['access_token']
 
         return response
+
+
+    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", include_application_data = True):
+        if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
+            raise IcebergMissingApplicationSettingsError()
+
+        timestamp = int(time.time())
+
+        data = {
+            'application': self.conf.ICEBERG_APPLICATION_NAMESPACE,
+            'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
+            'timestamp': timestamp,
+            'include_application_data': include_application_data,
+            'message_auth': self.generate_messages_auth({
+                'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'timestamp': timestamp,
+                'currency': currency,
+                'shipping_country': shipping_country
+            })
+        }
+
+        response = self.request('user/sso/', args = data)
+
+        self.username = response['username']
+        self.access_token = response['access_token']
+
+        self._sso_response = response
+
+        return self
+        # return response
 
 
     def request(self, path, args = None, post_args = None, files = None, method = None):
