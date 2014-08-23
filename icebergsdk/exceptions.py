@@ -37,10 +37,11 @@ class IcebergReadOnlyError(IcebergError):
 
 # API
 class IcebergAPIError(IcebergError):
-    def __init__(self, response):
+    def __init__(self, response, url = None):
         self.status_code = response.status_code
         self.error_codes = []
         self.message = ''
+        self.url = url
 
         try:
             self.data = response.json()
@@ -61,7 +62,7 @@ class IcebergAPIError(IcebergError):
             message = self.message
         else:
             message = self.data
-        return "Error! %s : %s: %s" % (self.status_code, self.error_codes, message)
+        return "Error in %s! %s : %s: %s" % (self.url, self.status_code, self.error_codes, message)
 
 class IcebergServerError(IcebergAPIError):
     pass

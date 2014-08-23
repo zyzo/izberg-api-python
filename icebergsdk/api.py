@@ -51,7 +51,10 @@ class IcebergAPI(object):
 
 
     def get_auth_token(self):
-        return '%s %s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.access_token)
+        if self.username == "Anonymous":
+            return '%s %s:%s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.conf.ICEBERG_APPLICATION_NAMESPACE, self.access_token)
+        else:
+            return '%s %s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.access_token)
 
     def auth_user(self, username, email, first_name = '', last_name = '', is_staff = False, is_superuser = False):
         """
@@ -186,6 +189,11 @@ class IcebergAPI(object):
 
         url += path
 
+        # HAcK to fix missing server conf. Will be remove soon
+        if self.conf.ICEBERG_ENV == "sandbox":
+            url = url.replace('https://api.iceberg', 'http://api.sandbox.iceberg')
+        # End Hack
+
         logger.debug('REQUEST %s - %s - %s - GET PARAMS: %s - POST PARAMS: %s', method, url, headers, args, post_args)
         try:
             if post_args:
@@ -211,7 +219,7 @@ class IcebergAPI(object):
             raise IcebergClientUnauthorizedError()
             
         elif 400 <= response.status_code < 500:
-            raise IcebergClientError(response)
+            raise IcebergClientError(response, url = url)
 
         elif 500 <= response.status_code <= 600:
             raise IcebergServerError(response)
