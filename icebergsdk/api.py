@@ -190,7 +190,7 @@ class IcebergAPI(object):
         url += path
 
         # HAcK to fix missing server conf. Will be remove soon
-        if self.conf.ICEBERG_ENV == "sandbox":
+        if getattr(self.conf, 'ICEBERG_ENV', "prod") == "sandbox":
             url = url.replace('https://api.iceberg', 'http://api.sandbox.iceberg')
         # End Hack
 
