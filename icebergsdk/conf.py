@@ -3,8 +3,8 @@
 import os
 
 class Configuration:
-    ICEBERG_API_URL = "https://api.iceberg.technology"
-    ICEBERG_API_PORT = 443
+    ICEBERG_API_URL = "http://api.sandbox.iceberg.technology"
+    ICEBERG_API_PORT = 80
     ICEBERG_API_PRIVATE_KEY = os.getenv('ICEBERG_API_PRIVATE_KEY', None)
 
     ICEBERG_API_SANDBOX_URL_FULL = "http://api.sandbox.iceberg.technology"
