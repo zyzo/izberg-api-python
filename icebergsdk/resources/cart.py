@@ -40,8 +40,15 @@ class Cart(UpdateableIcebergObject):
         self.request("%s%s/" % (self.resource_uri, 'items'), post_args = params, method = "post")
         return self
 
-    def addVariation(self, product_variation):
-        raise NotImplementedError()
+    def addVariation(self, product_variation, product_offer):
+        params = {
+            'offer_id': product_offer.id,
+            'variation_id': product_variation.id,
+            'quantity': 1
+        }
+        self.request("%s%s/" % (self.resource_uri, 'items'), post_args = params, method = "post")
+        return self
+
 
 
 class CartItem(UpdateableIcebergObject):
