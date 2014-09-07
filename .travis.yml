@@ -20,5 +20,5 @@ matrix:
     - python: "3.3"
 env:
   global:
-  - secure: "Eb7cqj7XRE6ioWK6yQExL68A4IGYByDIOTX1EOJVTrimIxctpKP+fZ/LsLH2utXQZGXbQ71N+NtBPqybInsS+CH0iT8omNdQ4LlfhmCtjwwMwcsjeWxfrDzUy/Cq6h4egyOMT8vJ7FF0qMwYii1S6b9DcoPhHM+E+gkBJlKgxaI="
-  - secure: "Gfn0wFqwLXhxTdCNIqVwVnPbFqVjtX1W306IP6cHhc+O/OjbykMDqUV3JvYwOiR+nkfXHmtquWm/hli9arviq/+zWaOH+XzbynWaJs+lgYBAS/XTGdBlTFG1mIaqD/L1Us2QKqhPHaoGmXWuOx1nXEYolyCOwTnAi/7ieW8ZQmA="
+  - secure: "eiPeISHkdPuFe4BibQlltu1/otEdywB+MvmveVEnH6MTOL0QlBC5b6KNqPJcrMsB9wT7kuQ/JReKY9zzUdQjSPqK5xFNFsNQVqvXP9cEkJDbyz89zwYMzolq1qoQe9L9ur/zjMSxVW/gFre2ggcRxlE92PGmo0Kosi6Z3QTrtTE="
+  - secure: "fvCTbFJedQidATw5grfK0oT2j6EiwWwvSnpa/Y9a359XjNExq2CZP1wMGybk4m8Qw+UbehN/iqXDvls3qLhCWjBEDBnv0AJJS209QJw/l+5ZDHV0BW0B5Kv6Yvwi7Hy8NnPrZm6WZ8fVWAZw3Y430QwgvzhqisQDexI4Qy1I0bg="
