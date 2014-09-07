@@ -2,20 +2,22 @@
 
 import unittest
 import random
+
+from icebergsdk.conf import ConfigurationSandbox
 from icebergsdk.api import IcebergAPI
 
 class ClientTest(unittest.TestCase):
     def setUp(self):
-        self.api_handler = IcebergAPI()
+        self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
 
     def login(self):
-        self.user = self.api_handler.sso("lol@lol.fr", "Yves", "Durand")
+        self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
 
     def test_sso(self):
         self.login()
-        self.assertEquals(self.user['first_name'], 'Yves')
-        self.assertEquals(self.user['last_name'], 'Durand')
-        self.assertEquals(self.user['email'], 'lol@lol.fr')
+        self.assertEquals(self.api_handler._sso_response['first_name'], 'Yves')
+        self.assertEquals(self.api_handler._sso_response['last_name'], 'Durand')
+        self.assertEquals(self.api_handler._sso_response['email'], 'lol@lol.fr')
 
     def test_getCart(self):
         self.login()
@@ -34,7 +36,7 @@ class ClientTest(unittest.TestCase):
         self.login()
 
         store = self.api_handler.Store()
-        r = random.randint(1,1000)
+        r = random.randint(1, 1000)
         store.name = "MonSuperStore%s"%(r)
         store.store_type = 3
         store.application = "/v1/application/10/"

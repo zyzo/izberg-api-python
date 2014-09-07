@@ -6,6 +6,9 @@ from icebergsdk.resources.base import UpdateableIcebergObject
 class Product(UpdateableIcebergObject):
     endpoint = 'product'
 
+    def reviews(self):
+        return self.get_list('review', args = {'product': self.id})
+
 class ProductOffer(UpdateableIcebergObject):
     endpoint = 'productoffer'
 

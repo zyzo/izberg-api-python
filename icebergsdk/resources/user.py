@@ -17,6 +17,8 @@ class User(IcebergObject):
     def addresses(self):
         return self.get_list('address', args = {'user': self.id})
 
+    def reviews(self):
+        return self.get_list('review', args = {'user': self.id})
 
     def profile(self):
         data = self.request('%sprofile/' % self.resource_uri) 

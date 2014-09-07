@@ -2,15 +2,16 @@
 
 import logging
 
-from icebergsdk.resources.application import Application  # NoQA
-from icebergsdk.resources.order import Order, MerchantOrder, OrderItem  # NoQA
-from icebergsdk.resources.cart import Cart, CartItem  # NoQA
-from icebergsdk.resources.product import Product, ProductOffer, ProductVariation  # NoQA
-from icebergsdk.resources.store import Store  # NoQA
-from icebergsdk.resources.user import User, Profile  # NoQA
-from icebergsdk.resources.address import Address, Country  # NoQA
-from icebergsdk.resources.payment import Payment  # NoQA
-from icebergsdk.resources.message import Message  # NoQA
+from icebergsdk.resources.application import Application
+from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
+from icebergsdk.resources.cart import Cart, CartItem
+from icebergsdk.resources.product import Product, ProductOffer, ProductVariation
+from icebergsdk.resources.store import Store
+from icebergsdk.resources.user import User, Profile
+from icebergsdk.resources.address import Address, Country
+from icebergsdk.resources.payment import Payment
+from icebergsdk.resources.message import Message
+from icebergsdk.resources.review import Review, MerchantReview
 
 logger = logging.getLogger('icebergsdk')
 
@@ -31,7 +32,9 @@ def get_class_from_resource_uri(resource_uri):
         "message": Message,
         "cart": Cart,
         "cart_item": CartItem,
-        "order_item": OrderItem
+        "order_item": OrderItem,
+        "review": Review,
+        "merchant_review": MerchantReview
     }
 
     # Hack for now... Will be changed

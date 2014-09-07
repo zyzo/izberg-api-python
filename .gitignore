@@ -1,4 +1,6 @@
 # Custom 
+playground/
+runTest.sh
 /__init__.py
 env_setup.sh
 git.sh
