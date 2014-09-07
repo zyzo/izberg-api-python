@@ -32,18 +32,18 @@ class ClientTest(unittest.TestCase):
         user_cart = self.api_handler.Cart.mine()
         self.assertEquals(user_cart.id, new_cart.id)
 
-    def test_newStore(self):
-        self.login()
+    # def test_newStore(self):
+    #     self.login()
 
-        store = self.api_handler.Store()
-        r = random.randint(1, 1000)
-        store.name = "MonSuperStore%s"%(r)
-        store.store_type = 3
-        store.application = "/v1/application/10/"
-        store.save()
+    #     store = self.api_handler.Store()
+    #     r = random.randint(1, 1000)
+    #     store.name = "MonSuperStore%s"%(r)
+    #     store.store_type = 3
+    #     store.application = "/v1/application/10/"
+    #     store.save()
 
-        found_store, meta = self.api_handler.Store.search({"name": store.name})
-        self.assertEquals(found_store[0].store_type, store.store_type)
+    #     found_store, meta = self.api_handler.Store.search({"name": store.name})
+    #     self.assertEquals(found_store[0].store_type, store.store_type)
         
 
 
