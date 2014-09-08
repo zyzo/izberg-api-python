@@ -48,7 +48,7 @@ class XMLParser(object):
         return self.products_list
 
 
-    def etree_to_dict(self, t):
+    def etree_to_dict(self, t, avoid_xml_double_dict=True):
         from collections import defaultdict
         d = {t.tag: {} if t.attrib else None}
         children = list(t)
@@ -67,7 +67,7 @@ class XMLParser(object):
             for k, v in dd.iteritems():
                 if len(v) == 1:
                     real_v = v[0]
-                    if type(real_v) == dict and len(real_v)==1 and k[:-1]==real_v.keys()[0]: ## "images":{"image":[image_array]} >> "images":[image_array]
+                    if avoid_xml_double_dict and type(real_v) == dict and len(real_v)==1 and k[:-1]==real_v.keys()[0]: ## "images":{"image":[image_array]} >> "images":[image_array]
                         real_v = real_v[real_v.keys()[0]]
                     d[t.tag][k] = real_v
                 else:
