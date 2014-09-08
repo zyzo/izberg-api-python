@@ -12,12 +12,12 @@ class Store(UpdateableIcebergObject):
         return self.get_list("%sinbox/" % self.resource_uri)
 
 
-    def import_products(self):
+    def import_products(self, feed_url=None):
         """
         Return product from XML file
         Use for initial import
         """
-        feed_url = "%sdownload_export/" % self.resource_uri
+        feed_url = feed_url or ("%sdownload_export/" % self.resource_uri)
 
         from icebergsdk.parser import XMLParser
 

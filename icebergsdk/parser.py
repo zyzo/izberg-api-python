@@ -66,7 +66,10 @@ class XMLParser(object):
 
             for k, v in dd.iteritems():
                 if len(v) == 1:
-                    d[t.tag][k] = v[0]
+                    real_v = v[0]
+                    if type(real_v) == dict and len(real_v)==1 and k[:-1]==real_v.keys()[0]: ## "images":{"image":[image_array]} >> "images":[image_array]
+                        real_v = real_v[real_v.keys()[0]]
+                    d[t.tag][k] = real_v
                 else:
                     d[t.tag][k] = v 
         if t.attrib:
