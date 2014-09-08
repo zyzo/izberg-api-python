@@ -24,6 +24,9 @@ class Store(UpdateableIcebergObject):
         parser = XMLParser()
 
         res = []
+
+        feed_url = "http://local.mirza.com:8080/media/20140908100857_report_565.xml"
+
         for element in parser.parse_feed(feed_url):
             res.append(UpdateableIcebergObject.findOrCreate(element))
 

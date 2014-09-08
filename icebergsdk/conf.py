@@ -20,7 +20,6 @@ class Configuration:
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY', None)
 
 
-
 class ConfigurationSandbox:
     ICEBERG_API_URL = "http://api.sandbox.iceberg.technology"
     ICEBERG_API_PORT = 80

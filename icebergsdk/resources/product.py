@@ -15,4 +15,7 @@ class ProductOffer(UpdateableIcebergObject):
 class ProductVariation(UpdateableIcebergObject):
     endpoint = 'product_variation'
 
+class ProductOfferImage(UpdateableIcebergObject):
+    endpoint = 'offer_image'
+
 

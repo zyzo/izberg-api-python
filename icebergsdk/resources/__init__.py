@@ -5,7 +5,7 @@ import logging
 from icebergsdk.resources.application import Application
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
-from icebergsdk.resources.product import Product, ProductOffer, ProductVariation
+from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage
 from icebergsdk.resources.store import Store
 from icebergsdk.resources.user import User, Profile
 from icebergsdk.resources.address import Address, Country
@@ -19,7 +19,8 @@ def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
         "product": Product,
-        "product_offer": ProductOffer,
+        "productoffer": ProductOffer,
+        "offer_image": ProductOfferImage,
         "product_variation": ProductVariation,
         "user": User,
         "address": Address,

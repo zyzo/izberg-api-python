@@ -58,7 +58,7 @@ class XMLParser(object):
                 for k, v in dc.iteritems():
                     dd[k].append(v)
             # try:
-            #     d = { t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()} }
+            d   = { t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()} }
             # except SyntaxError:
             # logger.warn("d = { t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()} } SyntaxError")
             if not d.has_key(t.tag) or d[t.tag] == None:
