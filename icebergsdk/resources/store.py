@@ -11,7 +11,6 @@ class Store(UpdateableIcebergObject):
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
 
-
     def import_products(self, feed_url=None):
         """
         Return product from XML file
@@ -25,10 +24,10 @@ class Store(UpdateableIcebergObject):
 
         res = []
 
-        feed_url = "http://local.mirza.com:8080/media/20140908100857_report_565.xml"
-
         for element in parser.parse_feed(feed_url):
             res.append(UpdateableIcebergObject.findOrCreate(element))
 
         return res
+
+
 

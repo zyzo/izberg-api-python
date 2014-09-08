@@ -40,7 +40,7 @@ def get_class_from_resource_uri(resource_uri):
 
     # Hack for now... Will be changed
     for resource, klass in types.iteritems():
-        if resource in resource_uri:
+        if "/%s/" % resource in resource_uri:
             return klass
 
     logger.error('cant find resource for %s' % resource_uri)

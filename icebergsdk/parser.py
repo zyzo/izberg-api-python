@@ -38,8 +38,6 @@ class XMLParser(object):
 
         self.raw_dict = self.etree_to_dict(etree.fromstring(content).find("."))
 
-        print self.raw_dict
-
         self.products_list = self.raw_dict
         for path in self.path_to_products.split("."):
             logger.debug("self.products_list keys=%s path=%s" % (self.products_list.keys(), path))
@@ -58,7 +56,11 @@ class XMLParser(object):
                 for k, v in dc.iteritems():
                     dd[k].append(v)
             # try:
-            d   = { t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()} }
+            d  = {
+                t.tag: {
+                    k: v[0] if len(v) == 1 else v for k, v in dd.iteritems()
+                }
+            }
             # except SyntaxError:
             # logger.warn("d = { t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()} } SyntaxError")
             if not d.has_key(t.tag) or d[t.tag] == None:
