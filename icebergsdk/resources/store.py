@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from icebergsdk.resources.base import UpdateableIcebergObject
+from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
 
 class Store(UpdateableIcebergObject):
     endpoint = 'merchant'
     
-    def product_offers(self):
-        return self.get_list('productoffer', args = {'merchant': self.id})
+    def product_offers(self, limit = None, offset = 0):
+        params = {
+            'merchant': self.id,
+            'offset': offset
+        }
+        if limit:
+            params['limit'] = limit
+        return self.get_list('productoffer', args = params)
 
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
@@ -29,5 +35,8 @@ class Store(UpdateableIcebergObject):
 
         return res
 
+
+class MerchantImage(IcebergObject):
+    endpoint = 'merchant_image'
 
 

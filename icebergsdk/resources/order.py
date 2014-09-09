@@ -6,13 +6,16 @@ class OrderItem(UpdateableIcebergObject):
     endpoint = 'order_item'
 
     def cancel(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'cancel'), method = "post")
+        return self._load_attributes_from_response(**data)
 
     def confirm(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'confirm'), method = "post")
+        return self._load_attributes_from_response(**data)
 
     def send(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'send'), method = "post")
+        return self._load_attributes_from_response(**data)
 
 
 
@@ -20,13 +23,16 @@ class MerchantOrder(UpdateableIcebergObject):
     endpoint = 'merchant_order'
 
     def cancel(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'cancel'), method = "post")
+        return self._load_attributes_from_response(**data)
 
     def confirm(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'confirm'), method = "post")
+        return self._load_attributes_from_response(**data)
 
     def send(self):
-        raise NotImplementedError()
+        data = self.request("%s%s/" % (self.resource_uri, 'send'), method = "post")
+        return self._load_attributes_from_response(**data)
 
 
 class Order(UpdateableIcebergObject):

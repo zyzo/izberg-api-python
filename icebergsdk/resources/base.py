@@ -182,7 +182,18 @@ class IcebergObject(dict):
         If the data has a nested object with a resource_uri, try to math an existing object
         """
         for key, value in response.iteritems():
-            if type(value) == dict:
+            if type(value) == list:
+                res = []
+                for elem in value:
+                    try:
+                        from icebergsdk.resources import get_class_from_resource_uri
+                        obj_cls = get_class_from_resource_uri(elem['resource_uri'])
+                        res.append(obj_cls.findOrCreate(elem))
+                    except:
+                        pass
+                    else:
+                        self.__dict__[key] = res
+            elif type(value) == dict:
                 if 'resource_uri' in value: # Try to match a relation
                     try:
                         from icebergsdk.resources import get_class_from_resource_uri
@@ -190,7 +201,7 @@ class IcebergObject(dict):
                         self.__dict__[key] = obj_cls.findOrCreate(value)
                     except:
                         pass
-                elif 'id' in value:
+                elif 'id' in value: # Fall back
                     self.__dict__[key] = value['id']
             else:
                 self.__dict__[key] = value

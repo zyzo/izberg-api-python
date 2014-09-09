@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-import random
+# import unittest
+# import random
 
-from icebergsdk.conf import ConfigurationSandbox
-from icebergsdk.api import IcebergAPI
+from helper import IcebergUnitTestCase
 
-class ClientTest(unittest.TestCase):
-    def setUp(self):
-        self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
-
-    def login(self):
-        self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
-
+class ClientTest(IcebergUnitTestCase):
     def test_sso(self):
         self.login()
         self.assertEquals(self.api_handler._sso_response['first_name'], 'Yves')

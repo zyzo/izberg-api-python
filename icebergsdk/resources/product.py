@@ -3,6 +3,11 @@
 
 from icebergsdk.resources.base import UpdateableIcebergObject
 
+"""
+Todo: Add addToCart method to ProductOffer and ProductVariation
+
+"""
+
 class Product(UpdateableIcebergObject):
     endpoint = 'product'
 

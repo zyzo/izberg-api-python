@@ -35,6 +35,9 @@ class IcebergNotAuthorized(IcebergError):
 class IcebergReadOnlyError(IcebergError):
     pass
 
+class IcebergMissingSsoData(IcebergError):
+    pass
+
 # API
 class IcebergAPIError(IcebergError):
     def __init__(self, response, url = None):

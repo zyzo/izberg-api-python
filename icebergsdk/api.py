@@ -2,7 +2,10 @@
 
 import logging, requests, json, time, hashlib, hmac
 
-from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError, IcebergClientUnauthorizedError, IcebergMissingApplicationSettingsError
+from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError
+from icebergsdk.exceptions import IcebergClientUnauthorizedError, IcebergMissingApplicationSettingsError
+from icebergsdk.exceptions import IcebergMissingSsoData
+
 from icebergsdk.conf import Configuration
 from icebergsdk import resources
 from icebergsdk.json_utils import DateTimeAwareJSONEncoder
@@ -12,9 +15,8 @@ logger = logging.getLogger('icebergsdk')
 class IcebergAPI(object):
     def __init__(self, username = None, access_token = None, lang = None, timeout = None, conf = None):
         """
-        @environment:
-            - prod
-            - sandbox
+        @conf:
+            Configuration, ConfigurationSandbox or custom conf
         """
         # Conf
         self.conf = conf or Configuration
@@ -38,7 +40,9 @@ class IcebergAPI(object):
         self.Store = resources.Store.set_handler(self)
         self.User = resources.User.set_handler(self)
         self.Message = resources.Message.set_handler(self)
-
+        self.Review = resources.Review.set_handler(self)
+        self.MerchantReview = resources.MerchantReview.set_handler(self)
+        
         ### Missing
 
         # Return
@@ -240,6 +244,15 @@ class IcebergAPI(object):
     def convert_to_register_user(self):
         raise NotImplementedError()
 
+
+    def me(self):
+        """
+        Return User resource
+        """
+        if not hasattr(self, '_sso_response'):
+            raise IcebergMissingSsoData()
+        
+        return self.User.findOrCreate(self._sso_response)
 
     #####
     #
