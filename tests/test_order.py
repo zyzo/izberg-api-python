@@ -9,7 +9,9 @@ class ClientOrder(IcebergUnitTestCase):
     def test_full_order(self):
         self.login()
 
-        cart = self.api_handler.Cart.mine()
+        cart = self.api_handler.Cart()
+        cart.save()
+        
         offer = self.get_random_offer()
 
         if len(offer.variations) > 1:
