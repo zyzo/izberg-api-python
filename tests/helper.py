@@ -28,7 +28,7 @@ class IcebergUnitTestCase(unittest.TestCase):
                 product_offers = product_offers
                 break
 
-        self.assertIsNotNone(test_store)
+        self.assertNotEqual(test_store, None)
 
         return random.choice(product_offers) # Return offer randomly
 
