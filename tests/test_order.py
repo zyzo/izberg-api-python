@@ -10,8 +10,6 @@ class ClientOrder(IcebergUnitTestCase):
         cart.save()
         
         offer = self.get_random_offer()
-
-        print offer.to_JSON()
         
         if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:

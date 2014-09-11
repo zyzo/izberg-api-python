@@ -5,11 +5,12 @@ from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
 class Store(UpdateableIcebergObject):
     endpoint = 'merchant'
     
-    def product_offers(self, limit = None, offset = 0):
-        params = {
+    def product_offers(self, params = None, limit = None, offset = 0):
+        params = params or {}
+        params.update({
             'merchant': self.id,
             'offset': offset
-        }
+        })
         if limit:
             params['limit'] = limit
         return self.get_list('productoffer', args = params)

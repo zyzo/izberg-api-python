@@ -2,7 +2,7 @@
 
 from helper import IcebergUnitTestCase
 
-class ClientAddress(IcebergUnitTestCase):
+class ClientReview(IcebergUnitTestCase):
     def test_create(self):
         self.login()
 
