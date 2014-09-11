@@ -3,12 +3,12 @@
 import unittest
 import random
 
-from icebergsdk.conf import ConfigurationSandbox, ConfigurationDebug
+from icebergsdk.conf import ConfigurationSandbox
 from icebergsdk.api import IcebergAPI
 
 class IcebergUnitTestCase(unittest.TestCase):
     def setUp(self):
-        self.api_handler = IcebergAPI(conf = ConfigurationDebug)
+        self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
 
     def login(self):
         self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
