@@ -215,9 +215,13 @@ class IcebergAPI(object):
             raise IcebergAPIError(response)
 
         try:
-            logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, response.elapsed.total_seconds(), response.text)
-        except:
-            pass
+            try:
+                elapsed = response.elapsed.total_seconds()
+            except:
+                elapsed = (response.elapsed.days * 1440 + response.elapsed.seconds // 60)*60
+            logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, elapsed, response.text)
+        except Exception:
+            logger.exception('ERROR in response printing')
 
         if response.status_code == 401:
             raise IcebergClientUnauthorizedError()

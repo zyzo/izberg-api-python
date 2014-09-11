@@ -17,7 +17,7 @@ class Store(UpdateableIcebergObject):
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
 
-    def import_products(self, feed_url=None):
+    def import_products(self, feed_url = None):
         """
         Return product from XML file
         Use for initial import

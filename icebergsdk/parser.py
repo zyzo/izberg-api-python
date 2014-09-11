@@ -14,9 +14,19 @@ class XMLParser(object):
         try:
             file_down = urllib2.urlopen(feed_url, timeout=180)
         except urllib2.URLError, err:
-            logger.error(err.reason)
+            logger.error(err.read())
+
+            if hasattr(err, 'reason'):
+                logger.error(err.reason)
+            else:
+                logger.error(err)
         except urllib2.HTTPError, err:
-            logger.error(err.reason)                        
+            logger.error(err.read())
+
+            if hasattr(err, 'reason'):
+                logger.error(err.reason)
+            else:
+                logger.error(err)
         else:
             products = self.parse_file(file_down)
 

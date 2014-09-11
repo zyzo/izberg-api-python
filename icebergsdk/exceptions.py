@@ -50,7 +50,7 @@ class IcebergAPIError(IcebergError):
             self.data = response.json()
         except:
             self.data = response
-        else:
+        else:            
             if 'errors' in self.data:
                 for error in self.data['errors']:
                     if 'code' in error:

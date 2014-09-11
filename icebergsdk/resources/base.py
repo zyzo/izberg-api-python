@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import warnings, sys, json
+import warnings, sys, json, logging
 import weakref  # Means that if there is no other value, it will be removed
 
+logger = logging.getLogger('icebergsdk.resource')
 
 from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError
 
@@ -120,7 +121,13 @@ class IcebergObject(dict):
             if isinstance(v, IcebergObject):
                 params[k] = v.as_dict()
             elif type(v) == list:
-                params[k] = [u.as_dict() for u in v]
+                res = []
+                for u in v:
+                    if hasattr(u, 'as_dict'):
+                        res.append(u.as_dict())
+                    else:
+                        res.append(u)
+                params[k] = res
             else:
                 params[k] = v if v is not None else ""
         return params
@@ -187,14 +194,18 @@ class IcebergObject(dict):
             if type(value) == list:
                 res = []
                 for elem in value:
-                    try:
-                        from icebergsdk.resources import get_class_from_resource_uri
-                        obj_cls = get_class_from_resource_uri(elem['resource_uri'])
-                        res.append(obj_cls.findOrCreate(elem))
-                    except:
-                        pass
+                    if 'resource_uri' in elem: # Try to match a relation
+                        try:
+                            from icebergsdk.resources import get_class_from_resource_uri
+                            obj_cls = get_class_from_resource_uri(elem['resource_uri'])
+                            res.append(obj_cls.findOrCreate(elem))
+                        except Exception:
+                            logger.exception('Cant parse resource')
                     else:
-                        self.__dict__[key] = res
+                        res.append(elem)
+                        
+                self.__dict__[key] = res
+
             elif type(value) == dict:
                 if 'resource_uri' in value: # Try to match a relation
                     try:

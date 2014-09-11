@@ -3,21 +3,41 @@
 import unittest
 import random
 
-from icebergsdk.conf import ConfigurationSandbox
+from icebergsdk.conf import ConfigurationSandbox, ConfigurationDebug
 from icebergsdk.api import IcebergAPI
 
 class IcebergUnitTestCase(unittest.TestCase):
     def setUp(self):
-        self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
+        self.api_handler = IcebergAPI(conf = ConfigurationDebug)
 
     def login(self):
         self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
+
+    def get_random_active_store(self):
+        """
+        Will return a randow active store with active offers
+        """
+        # Find a merchant
+        stores, meta = self.api_handler.Store.search({'status': "10"})
+
+        max_loop = len(stores)
+        store = None
+        while max_loop > 0:
+            store = random.choice(stores) # Return offer randomly
+            max_loop -= 1
+            product_offers = store.product_offers()
+            if len(product_offers) > 0:
+                break
+
+        self.assertNotEqual(store, None)
+
+        return store
+
 
     def get_random_offer(self):
         """
         Will return a randow active offer
         """
-        # Find a merchant
         stores, meta = self.api_handler.Store.search({'status': "10"})
 
         test_store = None
@@ -60,3 +80,5 @@ class IcebergUnitTestCase(unittest.TestCase):
         user_address.save()
 
         return user_address
+
+

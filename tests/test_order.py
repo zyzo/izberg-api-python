@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# import unittest
-# import random
-
 from helper import IcebergUnitTestCase
 
 class ClientOrder(IcebergUnitTestCase):
@@ -14,8 +11,12 @@ class ClientOrder(IcebergUnitTestCase):
         
         offer = self.get_random_offer()
 
+        print offer.to_JSON()
+        
         if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:
+                print variation
+                print variation.to_JSON()
                 if variation.stock > 0:
                     cart.addVariation(variation, offer)
                     break
@@ -27,7 +28,6 @@ class ClientOrder(IcebergUnitTestCase):
         addresses = self.api_handler.me().addresses()
 
         if len(addresses)==0:
-            # from tests.helper import createUserAddress
             address = self.create_user_address()
         else:
             address = addresses[0]
@@ -37,7 +37,6 @@ class ClientOrder(IcebergUnitTestCase):
         if cart.has_changed():
             cart.save()
 
-        print cart.status_localized
         self.assertEqual(cart.status, "20") # Valide
 
         order = cart.createOrder()
