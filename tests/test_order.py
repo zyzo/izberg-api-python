@@ -14,7 +14,7 @@ class ClientOrder(IcebergUnitTestCase):
         
         offer = self.get_random_offer()
 
-        if len(offer.variations) > 1:
+        if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:
                 if variation.stock > 0:
                     cart.addVariation(variation, offer)
@@ -37,6 +37,7 @@ class ClientOrder(IcebergUnitTestCase):
         if cart.has_changed():
             cart.save()
 
+        print cart.status_localized
         self.assertEqual(cart.status, "20") # Valide
 
         order = cart.createOrder()

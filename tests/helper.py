@@ -30,7 +30,15 @@ class IcebergUnitTestCase(unittest.TestCase):
 
         self.assertNotEqual(test_store, None)
 
-        return random.choice(product_offers) # Return offer randomly
+        max_loop = len(product_offers)
+
+        while max_loop > 0:
+            offer = random.choice(product_offers) # Return offer randomly
+            max_loop -= 1
+            if offer.stock > 0:
+                break
+
+        return offer
 
 
     def create_user_address(self):

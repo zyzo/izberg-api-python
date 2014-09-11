@@ -119,6 +119,8 @@ class IcebergObject(dict):
 
             if isinstance(v, IcebergObject):
                 params[k] = v.as_dict()
+            elif type(v) == list:
+                params[k] = [u.as_dict() for u in v]
             else:
                 params[k] = v if v is not None else ""
         return params
