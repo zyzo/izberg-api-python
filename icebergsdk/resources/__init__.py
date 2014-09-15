@@ -7,7 +7,7 @@ from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage
 from icebergsdk.resources.store import Store, MerchantImage
-from icebergsdk.resources.user import User, Profile
+from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
@@ -26,6 +26,7 @@ def get_class_from_resource_uri(resource_uri):
         "address": Address,
         "country": Country,
         "profile": Profile,
+        "user_shopping_prefs": UserShoppingPreference, 
         "payment": Payment,
         "merchant": Store,
         "merchant_image": MerchantImage,

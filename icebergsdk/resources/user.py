@@ -32,3 +32,7 @@ class Profile(UpdateableIcebergObject):
     endpoint = 'profile'
 
 
+class UserShoppingPreference(UpdateableIcebergObject):
+    endpoint = 'user_shopping_prefs'
+
+

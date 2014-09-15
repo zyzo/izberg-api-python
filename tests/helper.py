@@ -3,7 +3,7 @@
 import unittest
 import random
 
-from icebergsdk.conf import ConfigurationSandbox
+from icebergsdk.conf import ConfigurationSandbox #, ConfigurationStage
 from icebergsdk.api import IcebergAPI
 
 class IcebergUnitTestCase(unittest.TestCase):
@@ -42,7 +42,7 @@ class IcebergUnitTestCase(unittest.TestCase):
 
         test_store = None
         for store in stores:
-            product_offers = store.product_offers()
+            product_offers = store.product_offers(params = {'availability': 'in_stock'})
             if len(product_offers) > 0:
                 test_store = store
                 product_offers = product_offers
