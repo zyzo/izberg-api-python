@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from icebergsdk.resources.base import UpdateableIcebergObject
+from icebergsdk.resources.base import UpdateableIcebergObject, IcebergObject
 
 """
 Todo: Add addToCart method to ProductOffer and ProductVariation
@@ -22,5 +22,8 @@ class ProductVariation(UpdateableIcebergObject):
 
 class ProductOfferImage(UpdateableIcebergObject):
     endpoint = 'offer_image'
+
+class Category(IcebergObject):
+    endpoint = 'category'
 
 

@@ -43,6 +43,7 @@ class IcebergAPI(object):
         self.Review = resources.Review.set_handler(self)
         self.MerchantReview = resources.MerchantReview.set_handler(self)
         self.UserShoppingPreference = resources.UserShoppingPreference.set_handler(self)
+        self.Category = resources.Category.set_handler(self)
         
         ### Missing
 

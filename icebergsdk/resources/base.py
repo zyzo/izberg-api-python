@@ -194,7 +194,7 @@ class IcebergObject(dict):
             if type(value) == list:
                 res = []
                 for elem in value:
-                    if 'resource_uri' in elem: # Try to match a relation
+                    if type(elem)==dict and 'resource_uri' in elem: # Try to match a relation
                         try:
                             from icebergsdk.resources import get_class_from_resource_uri
                             obj_cls = get_class_from_resource_uri(elem['resource_uri'])
