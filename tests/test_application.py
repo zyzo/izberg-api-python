@@ -46,7 +46,7 @@ class TestApplication(IcebergUnitTestCase):
 
         self.login_user_1()
         application = self.api_handler.Application.find(new_application.id)
-        self.assertIsNotNone(application)
+        self.assertFalse(application==None)
 
         self.login_user_2()
         try:
