@@ -1,17 +1,43 @@
 # -*- coding: utf-8 -*-
-
+import os
 import unittest
 import random
 
-from icebergsdk.conf import ConfigurationSandbox #, ConfigurationStage
+from icebergsdk.conf import ConfigurationDebug, ConfigurationSandbox #, ConfigurationStage
 from icebergsdk.api import IcebergAPI
 
 class IcebergUnitTestCase(unittest.TestCase):
+    
     def setUp(self):
-        self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
+        self.setup_api_handler()
+
+    def setup_api_handler(self):
+        if os.getenv('DEBUG', False):
+            self.api_handler = IcebergAPI(conf = ConfigurationDebug)
+        else:
+            self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
+        self.api_handler._objects_to_delete = []
 
     def login(self):
         self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
+
+    def login_user_1(self):
+        self.api_handler.sso_user(email = "user1@iceberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
+
+    def login_user_2(self):
+        self.api_handler.sso_user(email = "user2@iceberg-marketplace.com", first_name = "Sara", last_name = "Crôche")
+
+    def direct_login(self):
+        self.api_handler.auth_user(username="yvesdurand5269004", email="lol@lol.fr")
+
+    def direct_login_user_1(self):
+        self.api_handler.auth_user(username="jeffstrongman", email="user1@iceberg-marketplace.com")
+
+    def direct_login_user_2(self):
+        self.api_handler.auth_user(username="saracroche", email="user2@iceberg-marketplace.com")
+
+    def direct_login_iceberg_staff(self):
+        self.api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
 
     def get_random_active_store(self):
         """
@@ -80,5 +106,4 @@ class IcebergUnitTestCase(unittest.TestCase):
         user_address.save()
 
         return user_address
-
 

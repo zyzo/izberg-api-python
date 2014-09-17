@@ -110,8 +110,10 @@ class IcebergObject(dict):
     def to_JSON(self):
         return json.dumps(self.as_dict())
 
-    def as_dict(self):
+    def as_dict(self, max_depth=2):
         params = {}
+        if max_depth <= 0:
+            return {}
         for k in self.__dict__:
             if k.startswith('_'):
                 continue
@@ -119,11 +121,13 @@ class IcebergObject(dict):
             v = getattr(self, k)
 
             if isinstance(v, IcebergObject):
-                params[k] = v.as_dict()
+                params[k] = v.as_dict(max_depth=max_depth-1)
             elif type(v) == list:
                 res = []
                 for u in v:
-                    if hasattr(u, 'as_dict'):
+                    if isinstance(u, IcebergObject):
+                        res.append(v.as_dict(max_depth=max_depth-1))
+                    elif hasattr(u, 'as_dict'):
                         res.append(u.as_dict())
                     else:
                         res.append(u)
@@ -315,7 +319,7 @@ class IcebergObject(dict):
         return self._load_attributes_from_response(**data)
 
     def delete(self):
-        return self
+        raise IcebergReadOnlyError()
 
     def save(self):
         raise IcebergReadOnlyError()
@@ -355,4 +359,14 @@ class UpdateableIcebergObject(IcebergObject):
         self._unsaved_values = set()
 
         return self
+
+    def delete(self):
+        if not self.__class__._handler:
+            raise IcebergNoHandlerError()
+            
+        self.__class__._handler.request(self.resource_uri, post_args = {}, method = "DELETE")
+        # Clean
+        self.__dict__ = {}
+        self._unsaved_values = set()
+
 

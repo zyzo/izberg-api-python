@@ -236,8 +236,12 @@ class IcebergAPI(object):
 
         elif 500 <= response.status_code <= 600:
             raise IcebergServerError(response)
+        
+        if response.content:
+            return response.json()
+        else:
+            return "No Content"
 
-        return response.json()
 
     def get_element(self, resource, object_id):
         return self.request("%s/%s/" % (resource, object_id))
