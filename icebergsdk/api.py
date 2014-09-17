@@ -68,6 +68,9 @@ class IcebergAPI(object):
 
         For authentication, please use the SSO method.
         """
+        if not self.conf.ICEBERG_API_PRIVATE_KEY:
+            raise IcebergMissingApplicationSettingsError()
+
         timestamp = int(time.time())
         secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
 
