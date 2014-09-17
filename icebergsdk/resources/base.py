@@ -315,7 +315,7 @@ class IcebergObject(dict):
         return self._load_attributes_from_response(**data)
 
     def delete(self):
-        return self
+        raise IcebergReadOnlyError()
 
     def save(self):
         raise IcebergReadOnlyError()
@@ -355,4 +355,14 @@ class UpdateableIcebergObject(IcebergObject):
         self._unsaved_values = set()
 
         return self
+
+    def delete(self):
+        if not self.__class__._handler:
+            raise IcebergNoHandlerError()
+            
+        self.__class__._handler.request(self.resource_uri, post_args = {}, method = "DELETE")
+        # Clean
+        self.__dict__ = {}
+        self._unsaved_values = set()
+
 

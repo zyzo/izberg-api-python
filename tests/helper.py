@@ -12,6 +12,7 @@ class IcebergUnitTestCase(unittest.TestCase):
             self.api_handler = IcebergAPI(conf = ConfigurationDebug)
         else:
             self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
+        self.api_handler._objects_to_delete = []
 
     def login(self):
         self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
@@ -98,5 +99,4 @@ class IcebergUnitTestCase(unittest.TestCase):
         user_address.save()
 
         return user_address
-
 

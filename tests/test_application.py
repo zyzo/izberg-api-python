@@ -4,12 +4,14 @@ from helper import IcebergUnitTestCase
 from icebergsdk.api import IcebergAPI
 from icebergsdk.exceptions import IcebergClientUnauthorizedError
 
+
+
 class TestApplication(IcebergUnitTestCase):
 
 
-    def test_create(self, namespace=None, name=None, contact_user=None):
+    def test_01_create(self, namespace=None, name=None, contact_user=None):
         """
-        - Create an application
+        Test Create an Application
         """
         self.direct_login_user_1()
         new_application = self.api_handler.Application()
@@ -17,15 +19,17 @@ class TestApplication(IcebergUnitTestCase):
         new_application.name = name or "Test App 1"
         new_application.contact_user = contact_user or self.api_handler.User.me()
         new_application.save()
+        self.api_handler._objects_to_delete.append(new_application)
         return new_application
 
-    def test_sso_read(self):
+    def test_02_sso_read(self):
         """
+        Test SSO Read an Application
         - Fetch the application secret key
         - SSO Login on this application
         - Assert authorized read detail by contact_user
         """
-        new_application = self.test_create()
+        new_application = self.test_01_create()
         
         api_handler = self.api_handler
 
@@ -51,7 +55,24 @@ class TestApplication(IcebergUnitTestCase):
         self.api_handler = api_handler ## setting back previous api_handler
 
 
+    def test_03_delete(self, application=None):
+        """
+        Test Delete an Application
+        """
+        if not application:
+            application = self.test_01_create()
+        application.delete()
 
+    def tearDown(self):
+        if hasattr(self.api_handler, "_objects_to_delete"):
+            self.login_iceberg_staff()
+            for obj in self.api_handler._objects_to_delete:
+                try:
+                    obj.delete()
+                except:
+                    print "couldnt delete obj %s" % obj
+
+        super(TestApplication, self).tearDown()
 
     # def test_read(self):
     #     self.login_no_sso()
