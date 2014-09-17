@@ -1,24 +1,23 @@
 language: python
 python:
-  - "2.6"
-  - "2.7"
-  - "3.2"
-  - "3.3"
+- '2.6'
+- '2.7'
+- '3.2'
+- '3.3'
 install:
-  - pip install requests==2.3.0
-  - pip install coverage
-  - pip install -r tests/requirements.txt --use-mirrors
+- pip install requests==2.3.0
+- pip install coverage
+- pip install -r tests/requirements.txt --use-mirrors
 script:
-  - nosetests --with-coverage --cover-package=icebergsdk
-before_install:
-  export PYTHONIOENCODING=UTF-8
-after_success:
-  coveralls
+- nosetests --with-coverage --cover-package=icebergsdk
+before_install: export PYTHONIOENCODING=UTF-8
+after_success: coveralls
 matrix:
   allow_failures:
-    - python: "3.2"
-    - python: "3.3"
+  - python: '3.2'
+  - python: '3.3'
 env:
   global:
-  - secure: "eiPeISHkdPuFe4BibQlltu1/otEdywB+MvmveVEnH6MTOL0QlBC5b6KNqPJcrMsB9wT7kuQ/JReKY9zzUdQjSPqK5xFNFsNQVqvXP9cEkJDbyz89zwYMzolq1qoQe9L9ur/zjMSxVW/gFre2ggcRxlE92PGmo0Kosi6Z3QTrtTE="
-  - secure: "fvCTbFJedQidATw5grfK0oT2j6EiwWwvSnpa/Y9a359XjNExq2CZP1wMGybk4m8Qw+UbehN/iqXDvls3qLhCWjBEDBnv0AJJS209QJw/l+5ZDHV0BW0B5Kv6Yvwi7Hy8NnPrZm6WZ8fVWAZw3Y430QwgvzhqisQDexI4Qy1I0bg="
+  - secure: eiPeISHkdPuFe4BibQlltu1/otEdywB+MvmveVEnH6MTOL0QlBC5b6KNqPJcrMsB9wT7kuQ/JReKY9zzUdQjSPqK5xFNFsNQVqvXP9cEkJDbyz89zwYMzolq1qoQe9L9ur/zjMSxVW/gFre2ggcRxlE92PGmo0Kosi6Z3QTrtTE=
+  - secure: fvCTbFJedQidATw5grfK0oT2j6EiwWwvSnpa/Y9a359XjNExq2CZP1wMGybk4m8Qw+UbehN/iqXDvls3qLhCWjBEDBnv0AJJS209QJw/l+5ZDHV0BW0B5Kv6Yvwi7Hy8NnPrZm6WZ8fVWAZw3Y430QwgvzhqisQDexI4Qy1I0bg=
+  - secure: ThQx9rMJ5gM+PLLkYkOxbsdeEXxQp7M2hUZ9P59o5M9LUydii9e//A/DDf6nZHaHJcC20/cFA9M94got1iDQSJnNfkEo/cIUOVuV4pWcok4RHVc118+jpECEsDRVkEmOQZX/zzUIkuokwbsBWGP6tqJgLcLwaEjNlQmQJR7VhxQ=
