@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from copy import copy
 from helper import IcebergUnitTestCase
 from icebergsdk.api import IcebergAPI
 from icebergsdk.exceptions import IcebergClientUnauthorizedError
@@ -37,13 +38,12 @@ class TestApplication(IcebergUnitTestCase):
         - Assert authorized read detail by contact_user
         """
         new_application = self.test_01_create()
+        previous_conf = self.api_handler.conf
+        new_conf = previous_conf() ## here we instanciate the previous conf so that we can modify some values without changing the class values
+        new_conf.ICEBERG_APPLICATION_SECRET_KEY = str(new_application.fetch_secret_key())
+        new_conf.ICEBERG_APPLICATION_NAMESPACE = str(new_application.namespace)
 
-        PREVIOUS_ICEBERG_APPLICATION_SECRET_KEY = self.api_handler.conf.ICEBERG_APPLICATION_SECRET_KEY
-        PREVIOUS_ICEBERG_APPLICATION_NAMESPACE = self.api_handler.conf.ICEBERG_APPLICATION_NAMESPACE
-        
-        self.api_handler.conf.ICEBERG_APPLICATION_SECRET_KEY = str(new_application.fetch_secret_key())
-        self.api_handler.conf.ICEBERG_APPLICATION_NAMESPACE = str(new_application.namespace)
-
+        self.api_handler = IcebergAPI(conf = new_conf)
         self.login_user_1()
         application = self.api_handler.Application.find(new_application.id)
         self.assertFalse(application==None)
@@ -56,9 +56,8 @@ class TestApplication(IcebergUnitTestCase):
             pass
         else:
             raise Exception("Application should not be accessible by user_2")
-        
-        self.api_handler.conf.ICEBERG_APPLICATION_SECRET_KEY = PREVIOUS_ICEBERG_APPLICATION_SECRET_KEY
-        self.api_handler.conf.ICEBERG_APPLICATION_NAMESPACE = PREVIOUS_ICEBERG_APPLICATION_NAMESPACE
+
+        self.api_handler.conf = previous_conf
 
 
     def tearDown(self):
