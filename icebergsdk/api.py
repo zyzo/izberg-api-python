@@ -86,8 +86,12 @@ class IcebergAPI(object):
             'message_auth': message_auth
         }
 
-        self.access_token = self.request('user/auth/', args = data)['access_token']
+        response = self.request('user/auth/', args = data)
+
         self.username = username
+        self.access_token = response['access_token']
+
+        self._auth_response = response
 
         return self
 
@@ -140,7 +144,7 @@ class IcebergAPI(object):
     def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", include_application_data = True):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError()
-
+        print "sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE)
         timestamp = int(time.time())
 
         data = {
@@ -165,10 +169,22 @@ class IcebergAPI(object):
         self.username = response['username']
         self.access_token = response['access_token']
 
-        self._sso_response = response
+        self._auth_response = response
 
         return self
         # return response
+
+
+    def _sso_response():
+        doc = "For compatibility matter, but now, should use _auth_response."
+        def fget(self):
+            return self._auth_response
+        def fset(self, value):
+            self._auth_response = value
+        def fdel(self):
+            del self._auth_response
+        return locals()
+    _sso_response = property(**_sso_response())
 
 
     def request(self, path, args = None, post_args = None, files = None, method = None):
@@ -259,10 +275,10 @@ class IcebergAPI(object):
         """
         Return User resource
         """
-        if not hasattr(self, '_sso_response'):
+        if not hasattr(self, '_auth_response'):
             raise IcebergMissingSsoData()
         
-        return self.User.findOrCreate(self._sso_response)
+        return self.User.findOrCreate(self._auth_response)
 
     #####
     #

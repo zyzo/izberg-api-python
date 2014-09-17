@@ -32,6 +32,8 @@ class Store(UpdateableIcebergObject):
         res = []
 
         for element in parser.parse_feed(feed_url):
+            if type(element) != dict:
+                raise Exception("element from export feed invalid: %s" % element)
             res.append(UpdateableIcebergObject.findOrCreate(element))
 
         return res
