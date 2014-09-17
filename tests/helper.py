@@ -7,7 +7,11 @@ from icebergsdk.conf import ConfigurationDebug, ConfigurationSandbox #, Configur
 from icebergsdk.api import IcebergAPI
 
 class IcebergUnitTestCase(unittest.TestCase):
+    
     def setUp(self):
+        self.setup_api_handler()
+
+    def setup_api_handler(self):
         if os.getenv('DEBUG', False):
             self.api_handler = IcebergAPI(conf = ConfigurationDebug)
         else:
@@ -31,6 +35,9 @@ class IcebergUnitTestCase(unittest.TestCase):
 
     def direct_login_user_2(self):
         self.api_handler.auth_user(username="saracroche", email="user2@iceberg-marketplace.com")
+
+    def direct_login_iceberg_staff(self):
+        self.api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
 
     def get_random_active_store(self):
         """

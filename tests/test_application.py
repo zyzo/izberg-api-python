@@ -22,7 +22,15 @@ class TestApplication(IcebergUnitTestCase):
         self.api_handler._objects_to_delete.append(new_application)
         return new_application
 
-    def test_02_sso_read(self):
+    def test_02_delete(self, application=None):
+        """
+        Test Delete an Application
+        """
+        if application is None:
+            application = self.test_01_create()
+        application.delete()
+
+    def test_03_sso_read(self):
         """
         Test SSO Read an Application
         - Fetch the application secret key
@@ -30,10 +38,8 @@ class TestApplication(IcebergUnitTestCase):
         - Assert authorized read detail by contact_user
         """
         new_application = self.test_01_create()
-        
-        api_handler = self.api_handler
 
-        new_conf = copy(api_handler.conf)
+        new_conf = copy(self.api_handler.conf)
         new_conf.ICEBERG_APPLICATION_SECRET_KEY = str(new_application.fetch_secret_key())
         new_conf.ICEBERG_APPLICATION_NAMESPACE = str(new_application.namespace)
 
@@ -51,26 +57,20 @@ class TestApplication(IcebergUnitTestCase):
         else:
             raise Exception("Application should not be accessible by user_2")
 
+        self.setup_api_handler()
+        self.api_handler._objects_to_delete.append(new_application)
 
-        self.api_handler = api_handler ## setting back previous api_handler
-
-
-    def test_03_delete(self, application=None):
-        """
-        Test Delete an Application
-        """
-        if not application:
-            application = self.test_01_create()
-        application.delete()
 
     def tearDown(self):
         if hasattr(self.api_handler, "_objects_to_delete"):
-            self.login_iceberg_staff()
+            self.direct_login_iceberg_staff()
             for obj in self.api_handler._objects_to_delete:
                 try:
                     obj.delete()
+                    # print "obj %s deleted" % obj
                 except:
-                    print "couldnt delete obj %s" % obj
+                    pass
+                    # print "couldnt delete obj %s" % obj
 
         super(TestApplication, self).tearDown()
 
