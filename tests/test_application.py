@@ -8,7 +8,7 @@ from icebergsdk.exceptions import IcebergClientUnauthorizedError
 
 class TestApplication(IcebergUnitTestCase):
 
-
+    pass
     def test_01_create(self, namespace=None, name=None, contact_user=None):
         """
         Test Create an Application
@@ -38,15 +38,15 @@ class TestApplication(IcebergUnitTestCase):
         - Assert authorized read detail by contact_user
         """
         new_application = self.test_01_create()
-
-        new_conf = copy(self.api_handler.conf)
+        previous_conf = self.api_handler.conf
+        new_conf = previous_conf() ## here we instanciate the previous conf so that we can modify some values without changing the class values
         new_conf.ICEBERG_APPLICATION_SECRET_KEY = str(new_application.fetch_secret_key())
         new_conf.ICEBERG_APPLICATION_NAMESPACE = str(new_application.namespace)
 
         self.api_handler = IcebergAPI(conf = new_conf)
         self.login_user_1()
         application = self.api_handler.Application.find(new_application.id)
-        self.assertIsNotNone(application)
+        self.assertFalse(application==None)
 
         self.login_user_2()
         try:
@@ -57,8 +57,7 @@ class TestApplication(IcebergUnitTestCase):
         else:
             raise Exception("Application should not be accessible by user_2")
 
-        self.setup_api_handler()
-        self.api_handler._objects_to_delete.append(new_application)
+        self.api_handler.conf = previous_conf
 
 
     def tearDown(self):
@@ -73,12 +72,5 @@ class TestApplication(IcebergUnitTestCase):
                     # print "couldnt delete obj %s" % obj
 
         super(TestApplication, self).tearDown()
-
-    # def test_read(self):
-    #     self.login_no_sso()
-    #     application = self.api_handler.me().application()
-    #     self.assertNotEqual(len(application), 0)
-
-
 
 
