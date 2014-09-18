@@ -182,12 +182,20 @@ class IcebergObject(dict):
     @classmethod
     def build_resource_uri(cls, options):
         """
-        Generate a resource URI.
+        Generate a resource URI from a class
 
         Should work like:
             build_resource_uri(Product, {id:2}) -> https://api.iceberg.technology/v1/product/2/
         """
         raise NotImplementedError()
+
+    def get_resource_uri(self):
+        if self.is_new():
+            raise Exception('Missing id for resource %s' % self.endpoint)
+
+        if not hasattr(self, 'resource_uri'):
+            self.resource_uri = "/v1/%s/%s/" % (self.endpoint, self.id)
+        return self.resource_uri
 
     def _load_attributes_from_response(self, **response):
         """
@@ -336,7 +344,16 @@ class UpdateableIcebergObject(IcebergObject):
                 v = getattr(obj, k)
 
                 if isinstance(v, IcebergObject):
-                    params[k] = v.resource_uri
+                    params[k] = v.get_resource_uri()
+                elif type(v) == list:
+
+                    res = []
+                    for elem in v:
+                        if isinstance(elem, IcebergObject):
+                            res.append(elem.get_resource_uri())
+                        else:
+                            res.append(elem)
+                    params[k] = res
                 else:
                     params[k] = v if v is not None else ""
         return params
@@ -360,11 +377,14 @@ class UpdateableIcebergObject(IcebergObject):
 
         return self
 
-    def delete(self):
-        if not self.__class__._handler:
-            raise IcebergNoHandlerError()
-            
-        self.__class__._handler.request(self.resource_uri, post_args = {}, method = "DELETE")
+    def delete(self, handler = None):
+        if not handler:
+            if not self.__class__._handler:
+                raise IcebergNoHandlerError()
+
+            handler = self.__class__._handler
+                
+        handler.request(self.resource_uri, post_args = {}, method = "DELETE")
         # Clean
         self.__dict__ = {}
         self._unsaved_values = set()
