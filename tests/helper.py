@@ -6,16 +6,21 @@ import random
 from icebergsdk.conf import ConfigurationDebug, ConfigurationSandbox #, ConfigurationStage
 from icebergsdk.api import IcebergAPI
 
+def get_api_handler():
+    if os.getenv('ICEBERG_DEBUG', False):
+        api_handler = IcebergAPI(conf = ConfigurationDebug)
+    else:
+        api_handler = IcebergAPI(conf = ConfigurationSandbox)
+
+    return api_handler
+
 class IcebergUnitTestCase(unittest.TestCase):
     
     def setUp(self):
         self.setup_api_handler()
 
     def setup_api_handler(self):
-        if os.getenv('DEBUG', False):
-            self.api_handler = IcebergAPI(conf = ConfigurationDebug)
-        else:
-            self.api_handler = IcebergAPI(conf = ConfigurationSandbox)
+        self.api_handler = get_api_handler()
         self.api_handler._objects_to_delete = []
 
     def login(self):
@@ -89,7 +94,10 @@ class IcebergUnitTestCase(unittest.TestCase):
 
         return offer
 
+    def get_random_sku(self):
+        return "test-sku-%s" % random.randint(0, 1000000000)
 
+    # Create Utils
     def create_user_address(self):
         user_address = self.api_handler.Address()
         user_address.name = "Test"
@@ -110,3 +118,23 @@ class IcebergUnitTestCase(unittest.TestCase):
 
         return user_address
 
+
+    def create_application(self, namespace = "test-app-lib-python", name = "Test App Lib Python", contact_user = None):
+        new_application = self.api_handler.Application()
+        new_application.namespace = namespace
+        new_application.name = name
+        new_application.contact_user = contact_user or self.api_handler.User.me()
+        new_application.save()
+
+        return new_application
+
+
+    def create_merchant(self, name = "test-python-lib-store", application = None):
+        self.assertNotEqual(application, None)
+
+        new_merchant = self.api_handler.Store()
+        new_merchant.name = name
+        new_merchant.application = application
+        new_merchant.save()
+
+        return new_merchant

@@ -2,7 +2,7 @@
 
 from helper import IcebergUnitTestCase
 
-class ClientProductImport(IcebergUnitTestCase):
+class ClientProductImport(IcebergUnitTestCase):    
     """
     Test the XML product import for a store
     """

@@ -42,4 +42,7 @@ class Store(UpdateableIcebergObject):
 class MerchantImage(IcebergObject):
     endpoint = 'merchant_image'
 
+class MerchantAddress(IcebergObject):
+    endpoint = 'merchant_address'
+
 

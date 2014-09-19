@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from copy import copy
+
 from helper import IcebergUnitTestCase
 from icebergsdk.api import IcebergAPI
 from icebergsdk.exceptions import IcebergClientUnauthorizedError
@@ -7,19 +7,26 @@ from icebergsdk.exceptions import IcebergClientUnauthorizedError
 
 
 class TestApplication(IcebergUnitTestCase):
-
-    pass
     def test_01_create(self, namespace=None, name=None, contact_user=None):
         """
         Test Create an Application
         """
         self.direct_login_user_1()
-        new_application = self.api_handler.Application()
-        new_application.namespace = namespace or "test-app-1"
-        new_application.name = name or "Test App 1"
-        new_application.contact_user = contact_user or self.api_handler.User.me()
-        new_application.save()
+
+        data = {}
+        if namespace:
+            data['namespace'] = namespace
+
+        if name:
+            data['name'] = name
+
+        if contact_user:
+            data['contact_user'] = contact_user
+
+        new_application = self.create_application(**data)
+
         self.api_handler._objects_to_delete.append(new_application)
+
         return new_application
 
     def test_02_delete(self, application=None):
