@@ -12,15 +12,20 @@ class ClientTest(IcebergUnitTestCase):
         self.assertEquals(self.api_handler._sso_response['last_name'], 'Durand')
         self.assertEquals(self.api_handler._sso_response['email'], 'lol@lol.fr')
 
-    # def test_direct_login(self):
-    #     self.login_user_1()
-    #     self.assertEqual(self.api_handler.User.me().email, 'user1@iceberg-marketplace.com')
+    def test_direct_login(self):
+        self.login_user_1()
+        self.assertEqual(self.api_handler.User.me().email, 'user1@iceberg-marketplace.com')
         # self.direct_login_iceberg_staff()
         # self.assertEqual(self.api_handler.User.me().email, 'staff@iceberg-marketplace.com')
 
 
-    def test_getCart(self):
+    def test_login_getCart(self):
         self.login()
+        currency = self.api_handler.Cart.mine().currency
+        self.assertEquals(currency, 'EUR')
+
+    def test_anonymous_getCart(self):
+        self.login_anonymous()
         currency = self.api_handler.Cart.mine().currency
         self.assertEquals(currency, 'EUR')
 
