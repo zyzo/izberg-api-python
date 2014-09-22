@@ -138,3 +138,23 @@ class IcebergUnitTestCase(unittest.TestCase):
         new_merchant.save()
 
         return new_merchant
+
+    @classmethod
+    def class_create_application(cls, api_handler, namespace = "test-app-lib-python", name = "Test App Lib Python", contact_user = None):
+        new_application = api_handler.Application()
+        new_application.namespace = namespace
+        new_application.name = name
+        new_application.contact_user = contact_user or api_handler.User.me()
+        new_application.save()
+        return new_application
+
+    @classmethod
+    def class_create_merchant(cls, api_handler, application, name = "test-python-lib-store"):
+        new_merchant = api_handler.Store()
+        new_merchant.application = application
+        new_merchant.name = name
+        new_merchant.save()
+        return new_merchant
+
+
+

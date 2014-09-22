@@ -5,7 +5,7 @@ import logging
 from icebergsdk.resources.application import Application
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
-from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category
+from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
 from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
@@ -39,7 +39,8 @@ def get_class_from_resource_uri(resource_uri):
         "order_item": OrderItem,
         "review": Review,
         "merchant_review": MerchantReview,
-        "category": Category
+        "category": Category,
+        "brand": Brand,
     }
 
     # Hack for now... Will be changed
