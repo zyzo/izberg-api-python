@@ -126,7 +126,7 @@ class IcebergObject(dict):
                 res = []
                 for u in v:
                     if isinstance(u, IcebergObject):
-                        res.append(v.as_dict(max_depth=max_depth-1))
+                        res.append(u.as_dict(max_depth=max_depth-1))
                     elif hasattr(u, 'as_dict'):
                         res.append(u.as_dict())
                     else:
