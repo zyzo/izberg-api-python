@@ -36,5 +36,5 @@ class ProductOfferImage(UpdateableIcebergObject):
 class Category(IcebergObject):
     endpoint = 'category'
 
-class Brand(UpdateableIcebergObject):
+class Brand(IcebergObject):
     endpoint = 'brand'

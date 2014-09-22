@@ -18,6 +18,20 @@ class Store(UpdateableIcebergObject):
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
 
+    def addresses(self, params = None, limit = None, offset = 0):
+        """
+        Return merchant addresses/contact info
+        """
+        params = params or {}
+        params.update({
+            'merchant': self.id,
+            'offset': offset
+        })
+        if limit:
+            params['limit'] = limit
+        return self.get_list('merchant_address', args = params)
+
+
     def import_products(self, feed_url = None):
         """
         Return product from XML file
@@ -39,10 +53,13 @@ class Store(UpdateableIcebergObject):
         return res
 
 
-class MerchantImage(IcebergObject):
-    endpoint = 'merchant_image'
 
-class MerchantAddress(IcebergObject):
+class MerchantAddress(UpdateableIcebergObject):
     endpoint = 'merchant_address'
 
+class StoreBankAccount(UpdateableIcebergObject):
+    endpoint = 'store_bank_account'
+
+class MerchantImage(IcebergObject):
+    endpoint = 'merchant_image'
 

@@ -6,7 +6,7 @@ from icebergsdk.resources.application import Application
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
-from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress
+from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
@@ -19,6 +19,7 @@ def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
         "product": Product,
+        "brand": Brand,
         "productoffer": ProductOffer,
         "offer_image": ProductOfferImage,
         "product_variation": ProductVariation,
@@ -29,6 +30,7 @@ def get_class_from_resource_uri(resource_uri):
         "user_shopping_prefs": UserShoppingPreference, 
         "payment": Payment,
         "merchant": Store,
+        "store_bank_account": StoreBankAccount,
         "merchant_address": MerchantAddress,
         "merchant_image": MerchantImage,
         "order": Order,

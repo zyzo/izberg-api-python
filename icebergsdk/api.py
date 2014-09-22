@@ -25,7 +25,12 @@ class IcebergAPI(object):
         self.timeout = timeout
         self.lang = lang or self.conf.ICEBERG_DEFAULT_LANG
 
-        # Resources definition
+        self.define_resources() # Resources definition
+
+    def define_resources(self):
+        """
+        For faster initialization, set the handler in the resources classes
+        """
         self.Application = resources.Application.set_handler(self)
         self.Address = resources.Address.set_handler(self)
         self.Cart = resources.Cart.set_handler(self)
@@ -37,7 +42,11 @@ class IcebergAPI(object):
         self.Product = resources.Product.set_handler(self)
         self.Profile = resources.Profile.set_handler(self)
         self.Payment = resources.Payment.set_handler(self)
+
         self.Store = resources.Store.set_handler(self)
+        self.StoreBankAccount = resources.StoreBankAccount.set_handler(self)
+        self.MerchantAddress = resources.MerchantAddress.set_handler(self)
+        
         self.User = resources.User.set_handler(self)
         self.Message = resources.Message.set_handler(self)
         self.Review = resources.Review.set_handler(self)

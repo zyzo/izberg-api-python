@@ -2,39 +2,47 @@
 
 from helper import IcebergUnitTestCase, get_api_handler
 from icebergsdk.exceptions import IcebergClientError
+from helpers.login_utils import IcebergLoginUtils
 
 class ClientCreateProduct(IcebergUnitTestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.my_context_dict = {}
-        cls.objects_to_delete = []
-        
-        api_handler = get_api_handler()
-        api_handler.auth_user(username="jeffstrongman", email="user1@iceberg-marketplace.com")
+        cls._objects_to_delete = []
 
+        cls.api_handler = get_api_handler()
+        IcebergLoginUtils.direct_login_user_1(handler = cls.api_handler)
         # Create an application
-        application = cls.class_create_application(api_handler=api_handler)
-        cls.objects_to_delete.append(application)
-        cls.my_context_dict["application"] = application
+        application = cls.api_handler.Application()
+        application.name = "test-merchant-app"
+        application.contact_user = cls.api_handler.User.me()
+        application.save()
+
+        cls.my_context_dict['application'] = application
+        cls._objects_to_delete.append(application)
 
         # Create a merchant
-        merchant = cls.class_create_merchant(api_handler=api_handler, application=application)
-        cls.my_context_dict["merchant"] = merchant
-        cls.objects_to_delete.append(merchant)
+        merchant = cls.api_handler.Store()
+        merchant.name = "Test Merchant Create Product"
+        merchant.application = application
+        merchant.save()
 
+        cls.my_context_dict['merchant'] = merchant
+        cls._objects_to_delete.append(merchant)
 
     def test_01_create_product(self):
         """
         Create a product
         """
+        self.direct_login_user_1()
+
         product = self.api_handler.Product()
         product.name = "Test Product"
         product.description = "Description of my product"
         product.gender = "W" # Woman
 
         product.save() # Need to save before assign categories
-        self.objects_to_delete.append(product)
+        self._objects_to_delete.append(product)
 
         chemise_chemisier_category = self.api_handler.Category()
         chemise_chemisier_category.id = 50 # Just to be able to 
@@ -49,21 +57,20 @@ class ClientCreateProduct(IcebergUnitTestCase):
 
         self.my_context_dict['product'] = product
 
-    def setUp(self):
-        super(ClientCreateProduct, self).setUp()
-        self.direct_login_user_1()
 
     def test_02_create_offer(self):
         """
         Create an offer (with no variation)
         """
+        self.direct_login_user_1()
+
         productoffer = self.api_handler.ProductOffer()
 
         productoffer.product = self.my_context_dict['product']
         productoffer.merchant = self.my_context_dict['merchant']
         productoffer.sku = self.get_random_sku()
         productoffer.save()
-        self.objects_to_delete.append(productoffer)
+        self._objects_to_delete.append(productoffer)
         self.my_context_dict['offer'] = productoffer
 
 
@@ -71,13 +78,15 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         Create an abstract offer (with variation)
         """
+        self.direct_login_user_1()
+
         productoffer = self.api_handler.ProductOffer()
 
         productoffer.product = self.my_context_dict['product']
         productoffer.merchant = self.my_context_dict['merchant']
         productoffer.is_abstract = True
         productoffer.save()
-        self.objects_to_delete.append(productoffer)
+        self._objects_to_delete.append(productoffer)
         self.my_context_dict['abstract_offer'] = productoffer
 
         productvariation = self.api_handler.ProductVariation()
@@ -90,7 +99,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
         productvariation.price = 75.5
         productvariation.save()
 
-        self.objects_to_delete.append(productvariation)
+        self._objects_to_delete.append(productvariation)
         self.my_context_dict['productvariation'] = productvariation
 
 
@@ -98,6 +107,8 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         Activate the offer
         """
+        self.direct_login_user_1()
+
         productoffer = self.my_context_dict['offer']
         try:
             productoffer.activate()
@@ -116,6 +127,8 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         Activate the abstract offer
         """
+        self.direct_login_user_1()
+
         productoffer = self.my_context_dict['abstract_offer']
         productvariation = self.my_context_dict['productvariation']
         try:
@@ -135,33 +148,19 @@ class ClientCreateProduct(IcebergUnitTestCase):
         self.assertEqual(productvariation.status, "active")
 
 
-    # def test_06_modify_product(self):
-    #     """
-    #     Remove the category of the product to check if the statuses change to draft
-    #     """
-    #     product = self.my_context_dict['product']
-    #     productoffer = self.my_context_dict['abstract_offer']
-    #     productvariation = self.my_context_dict['productvariation']
-    #     product.categories = []
-    #     product.save()
-    #     self.assertEqual(product.status, "draft")
-    #     productoffer.fetch()
-    #     self.assertEqual(productoffer.status, "draft")
-    #     productvariation.fetch()
-    #     self.assertEqual(productvariation.status, "draft")
-
-
-    @classmethod
-    def tearDownClass(cls):
-        if hasattr(cls, "objects_to_delete"):
-            api_handler = get_api_handler()
-            api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
-
-            for obj in cls.objects_to_delete:
-                try:
-                    obj.delete(handler = api_handler)
-                    # print "obj %s deleted" % obj
-                except:
-                    pass
-                    # print "couldnt delete obj %s" % obj
-
+    def test_06_modify_product(self):
+        """
+        Remove the category of the product to check if the statuses change to draft
+        """
+        self.direct_login_user_1()
+        
+        product = self.my_context_dict['product']
+        productoffer = self.my_context_dict['abstract_offer']
+        productvariation = self.my_context_dict['productvariation']
+        product.categories = []
+        product.save()
+        self.assertEqual(product.status, "draft")
+        productoffer.fetch()
+        self.assertEqual(productoffer.status, "draft")
+        productvariation.fetch()
+        self.assertEqual(productvariation.status, "draft")
