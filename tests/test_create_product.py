@@ -1,28 +1,36 @@
 # -*- coding: utf-8 -*-
 
 from helper import IcebergUnitTestCase, get_api_handler
-
+from helpers.login_utils import IcebergLoginUtils
 
 class ClientCreateProduct(IcebergUnitTestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.my_context_dict = {}
         cls._objects_to_delete = []
 
+        cls.api_handler = get_api_handler()
+        IcebergLoginUtils.direct_login(handler = cls.api_handler)
+
+        application = cls.api_handler.Application()
+        application.name = "test-merchant-app"
+        application.contact_user = cls.api_handler.User.me()
+        application.save()
+
+        cls.my_context_dict['application'] = application
+        cls._objects_to_delete.append(application)
+
+        merchant = cls.api_handler.Store()
+        merchant.name = "Test Merchant Create Product"
+        merchant.application = application
+        merchant.save()
+
+        cls.my_context_dict['merchant'] = merchant
+        cls._objects_to_delete.append(merchant)
+
+
     def setUp(self):
-        super(ClientCreateProduct, self).setUp()
-
-        # Log Direct User
-        self.direct_login_user_1()
-        # Create an application
-        self.application = self.create_application()
-        self._objects_to_delete.append(self.application)
-
-        # Create a merchant
-        self.merchant = self.create_merchant(application = self.application)
-        self._objects_to_delete.append(self.merchant)
-
+        pass
 
     def test_01_create_product(self):
         product = self.api_handler.Product()
@@ -49,7 +57,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
         productoffer = self.api_handler.ProductOffer()
 
         productoffer.product = self.my_context_dict['product']
-        productoffer.merchant = self.merchant
+        productoffer.merchant = self.my_context_dict['merchant']
         productoffer.sku = self.get_random_sku()
 
         productoffer.save()
@@ -60,7 +68,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
         productoffer = self.api_handler.ProductOffer()
 
         productoffer.product = self.my_context_dict['product']
-        productoffer.merchant = self.merchant
+        productoffer.merchant = self.my_context_dict['merchant']
         productoffer.is_abstract = True
         productoffer.save()
 
@@ -74,17 +82,5 @@ class ClientCreateProduct(IcebergUnitTestCase):
         self._objects_to_delete.append(productvariation)
 
 
-    @classmethod
-    def tearDownClass(cls):
-        if hasattr(cls, "_objects_to_delete"):
-            api_handler = get_api_handler()
-            api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
 
-            for obj in cls._objects_to_delete:
-                try:
-                    obj.delete(handler = api_handler)
-                    # print "obj %s deleted" % obj
-                except:
-                    pass
-                    # print "couldnt delete obj %s" % obj
 

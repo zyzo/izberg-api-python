@@ -6,8 +6,6 @@ from icebergsdk.exceptions import IcebergClientUnauthorizedError
 
 
 class TestApplication(IcebergUnitTestCase):
-
-
     @classmethod
     def setUpClass(cls):
         cls.my_context_dict = {}
@@ -77,8 +75,6 @@ class TestApplication(IcebergUnitTestCase):
         if self.my_context_dict["new_application"] in self._objects_to_delete:
             ## no need to delete it in tearDownClass if delete succeeded
             self._objects_to_delete.remove(self.my_context_dict["new_application"])
-
-
 
 
     @classmethod

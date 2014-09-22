@@ -110,7 +110,7 @@ class IcebergObject(dict):
     def to_JSON(self):
         return json.dumps(self.as_dict())
 
-    def as_dict(self, max_depth=2):
+    def as_dict(self, max_depth=4):
         params = {}
         if max_depth <= 0:
             return {}
@@ -358,9 +358,12 @@ class UpdateableIcebergObject(IcebergObject):
                     params[k] = v if v is not None else ""
         return params
 
-    def save(self):
-        if not self.__class__._handler:
-            raise IcebergNoHandlerError()
+    def save(self, handler = None):
+        if not handler:
+            if not self.__class__._handler:
+                raise IcebergNoHandlerError()
+
+            handler = self.__class__._handler
 
         if self.is_new():
             method = "POST"
@@ -369,7 +372,7 @@ class UpdateableIcebergObject(IcebergObject):
             method = "PUT"
             path = self.resource_uri
 
-        res = self.__class__._handler.request(path, post_args = self.serialize(self), method = method)
+        res = handler.request(path, post_args = self.serialize(self), method = method)
         self._load_attributes_from_response(**res)
 
         # Clean
