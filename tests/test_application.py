@@ -5,7 +5,6 @@ from icebergsdk.api import IcebergAPI
 from icebergsdk.exceptions import IcebergClientUnauthorizedError
 
 
-
 class TestApplication(IcebergUnitTestCase):
     def test_01_create(self, namespace=None, name=None, contact_user=None):
         """
