@@ -26,6 +26,9 @@ class IcebergUnitTestCase(unittest.TestCase):
     def login(self):
         self.api_handler.sso_user(email = "lol@lol.fr", first_name = "Yves", last_name = "Durand")
 
+    def login_anonymous(self):
+        self.api_handler.sso_user()
+
     def login_user_1(self):
         self.api_handler.sso_user(email = "user1@iceberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
 
