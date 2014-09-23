@@ -12,6 +12,7 @@ from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
 from icebergsdk.resources.review import Review, MerchantReview
+from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
 
 logger = logging.getLogger('icebergsdk')
 
@@ -43,6 +44,9 @@ def get_class_from_resource_uri(resource_uri):
         "merchant_review": MerchantReview,
         "category": Category,
         "brand": Brand,
+        "webhook": Webhook,
+        "webhook_trigger": WebhookTrigger,
+        "webhook_trigger_attempt": WebhookTriggerAttempt,
     }
 
     # Hack for now... Will be changed

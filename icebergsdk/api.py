@@ -54,6 +54,11 @@ class IcebergAPI(object):
         self.UserShoppingPreference = resources.UserShoppingPreference.set_handler(self)
         self.Category = resources.Category.set_handler(self)
         self.Brand = resources.Brand.set_handler(self)
+
+        self.Webhook = resources.Webhook.set_handler(self)
+        self.WebhookTrigger = resources.WebhookTrigger.set_handler(self)
+        self.WebhookTrigger = resources.WebhookTrigger.set_handler(self)
+        self.WebhookTriggerAttempt = resources.WebhookTriggerAttempt.set_handler(self)
         
         ### Missing
 
