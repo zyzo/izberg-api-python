@@ -36,25 +36,13 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         self.direct_login_user_1()
 
-        product = self.api_handler.Product()
-        product.name = "Test Product"
-        product.description = "Description of my product"
-        product.gender = "W" # Woman
-
-        product.save() # Need to save before assign categories
-        self._objects_to_delete.append(product)
-
-        chemise_chemisier_category = self.api_handler.Category()
-        chemise_chemisier_category.id = 50 # Just to be able to 
-        product.categories = [chemise_chemisier_category]
-
-
-        brand = self.api_handler.Brand()
-        brand.id = 1
-        product.brand = brand
-        
-        product.save()
-
+        product = self.create_product(
+                    name = "Test Product",
+                    description = "Description of my test product",
+                    gender = "W",
+                    categories=[50], # chemisier 
+                    brand=1
+                )
         self.my_context_dict['product'] = product
 
 
@@ -64,13 +52,11 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         self.direct_login_user_1()
 
-        productoffer = self.api_handler.ProductOffer()
-
-        productoffer.product = self.my_context_dict['product']
-        productoffer.merchant = self.my_context_dict['merchant']
-        productoffer.sku = self.get_random_sku()
-        productoffer.save()
-        self._objects_to_delete.append(productoffer)
+        productoffer = self.create_product_offer(
+                        product = self.my_context_dict['product'],
+                        merchant = self.my_context_dict['merchant'],
+                        sku = self.get_random_sku()
+                    )
         self.my_context_dict['offer'] = productoffer
 
 

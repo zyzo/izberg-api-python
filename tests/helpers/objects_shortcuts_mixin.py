@@ -7,6 +7,12 @@ class IcebergObjectCreateMixin(object):
     """
     Some shortcuts to create commons objects
     """
+
+    def delete_at_the_end(self, obj_to_delete):
+        if not obj_to_delete in self._objects_to_delete:
+            self._objects_to_delete.append(obj_to_delete)
+
+
     # Create Utils
     def create_user_address(self):
         user_address = self.api_handler.Address()
@@ -102,6 +108,61 @@ class IcebergObjectCreateMixin(object):
         return "test-sku-%s" % random.randint(0, 1000000000)
 
 
+    def create_webhook(self, application, event, url):
+        webhook = self.api_handler.Webhook()
+        webhook.application = application
+        webhook.event = event
+        webhook.url = url
+        webhook.save()
+        return webhook
+
+
+    def create_product(self, name, description, gender, categories=None, brand=None, delete_at_the_end=True):
+        product = self.api_handler.Product()
+        product.name = name
+        product.description = description
+        product.gender = gender
+        product.save()
+
+        if categories:
+            product.categories = []
+            for category in categories:
+                if type(category) == self.api_handler.Category:
+                    ## category is already a category object
+                    category_obj = category
+                else:
+                    ## category is the id
+                    category_obj = self.api_handler.Category()
+                    category_obj.id = category
+                product.categories.append(category_obj)
+
+        if brand:
+            if type(brand) == self.api_handler.Brand:
+                brand_obj = brand
+            else:
+                brand_obj = self.api_handler.Brand()
+                brand_obj.id = brand
+            product.brand = brand_obj
+
+        if categories or brand:
+            ## need to save
+            product.save()
+
+        if delete_at_the_end:
+            self.delete_at_the_end(product)
+
+        return product
 
 
 
+    def create_product_offer(self, product, merchant, sku, delete_at_the_end=True):
+        productoffer = self.api_handler.ProductOffer()
+        productoffer.product = product
+        productoffer.merchant = merchant
+        productoffer.sku = sku
+        productoffer.save()
+        
+        if delete_at_the_end:
+            self.delete_at_the_end(productoffer)
+
+        return productoffer

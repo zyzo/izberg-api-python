@@ -37,13 +37,14 @@ class IcebergUnitTestCase(unittest.TestCase, IcebergObjectCreateMixin):
         if hasattr(cls, "_objects_to_delete"):
             api_handler = get_api_handler()
             api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True) # Connect as staff
-
+            fail_silently = True
             for obj in cls._objects_to_delete:
                 try:
                     obj.delete(handler = api_handler)
                     # print "obj %s deleted" % obj
                 except:
-                    pass
+                    if not fail_silently:
+                        raise
                     # print "couldnt delete obj %s" % obj
 
 

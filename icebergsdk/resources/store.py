@@ -52,6 +52,21 @@ class Store(UpdateableIcebergObject):
 
         return res
 
+    def check_activation(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'check_activation'), method = "get")
+        return data
+
+    def reactivate(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'reactivate'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+    def pause(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'pause'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+    def stop(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'stop'), method = "post")
+        return self._load_attributes_from_response(**data)
 
 
 class MerchantAddress(UpdateableIcebergObject):
