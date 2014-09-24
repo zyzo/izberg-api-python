@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
+import time
 
 class Webhook(UpdateableIcebergObject):
     endpoint = 'webhook'
@@ -16,6 +17,18 @@ class Webhook(UpdateableIcebergObject):
     def get_test_endpoint_url(self):
         return "%s/%s/" % ("/".join(self.resource_uri.split("/")[:-2]), 'test_endpoint')
 
+
+    def wait_for_triggers(self, number_of_triggers_expected=1, max_number_of_checks=10, check_every_seconds=5):
+        webhook_triggers = []
+        ## looping to wait for the webhook to be triggered
+        number_of_attempts = 0
+        while number_of_attempts<max_number_of_checks and len(webhook_triggers)<number_of_triggers_expected:
+            if number_of_attempts > 0:
+                time.sleep(check_every_seconds) ## check every X seconds except the 1st time
+            webhook_triggers = self.triggers()
+            number_of_attempts += 1
+        print "max_number_of_checks left = %s, webhook_triggers=%s" % (max_number_of_checks, webhook_triggers)
+        return webhook_triggers
 
 class WebhookTrigger(IcebergObject):
     endpoint = 'webhook_trigger'

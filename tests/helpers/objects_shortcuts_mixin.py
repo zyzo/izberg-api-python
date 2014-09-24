@@ -108,12 +108,16 @@ class IcebergObjectCreateMixin(object):
         return "test-sku-%s" % random.randint(0, 1000000000)
 
 
-    def create_webhook(self, application, event, url):
+    def create_webhook(self, application, event, url, delete_at_the_end=True):
         webhook = self.api_handler.Webhook()
         webhook.application = application
         webhook.event = event
         webhook.url = url
         webhook.save()
+
+        if delete_at_the_end:
+            self.delete_at_the_end(webhook)
+            
         return webhook
 
 
@@ -155,11 +159,16 @@ class IcebergObjectCreateMixin(object):
 
 
 
-    def create_product_offer(self, product, merchant, sku, delete_at_the_end=True):
+    def create_product_offer(self, product, merchant, sku=None, is_abstract=False, delete_at_the_end=True, **kwargs):
         productoffer = self.api_handler.ProductOffer()
         productoffer.product = product
         productoffer.merchant = merchant
-        productoffer.sku = sku
+        productoffer.is_abstract = is_abstract
+        if sku is not None:
+            productoffer.sku = sku
+        for key, value in kwargs.iteritems(): ## assign other params
+            setattr(productoffer, key, value)
+        
         productoffer.save()
         
         if delete_at_the_end:

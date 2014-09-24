@@ -14,7 +14,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
         IcebergLoginUtils.direct_login_user_1(handler = cls.api_handler)
         # Create an application
         application = cls.api_handler.Application()
-        application.name = "test-merchant-app"
+        application.name = "test-create-product-app"
         application.contact_user = cls.api_handler.User.me()
         application.save()
 
@@ -23,7 +23,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
 
         # Create a merchant
         merchant = cls.api_handler.Store()
-        merchant.name = "Test Merchant Create Product"
+        merchant.name = "Test Create Product Merchant"
         merchant.application = application
         merchant.save()
 

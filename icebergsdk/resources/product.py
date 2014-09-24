@@ -33,6 +33,11 @@ class ProductVariation(UpdateableIcebergObject):
 class ProductOfferImage(UpdateableIcebergObject):
     endpoint = 'offer_image'
 
+    def build_resized_image_url(self, width, height, process_mode="crop"):
+        from icebergsdk.utils.image_server_utils import build_resized_image_url
+        image_server_url = self.__class__._handler.conf.IMAGE_SERVER_URL
+        return build_resized_image_url(image_server_url, self.url, width, height, process_mode)
+
 class Category(IcebergObject):
     endpoint = 'category'
 

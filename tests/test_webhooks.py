@@ -15,7 +15,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         IcebergLoginUtils.direct_login_user_1(handler = cls.api_handler)
         # Create an application
         application = cls.api_handler.Application()
-        application.name = "test-merchant-app"
+        application.name = "test-webhook-app"
         application.contact_user = cls.api_handler.User.me()
         application.save()
 
@@ -24,7 +24,7 @@ class WebhookTestCase(IcebergUnitTestCase):
 
         # Create a merchant
         merchant = cls.api_handler.Store()
-        merchant.name = "Test Merchant Create Product"
+        merchant.name = "Test Webhook Merchant"
         merchant.application = application
         merchant.save()
 
@@ -34,17 +34,20 @@ class WebhookTestCase(IcebergUnitTestCase):
 
     def test_01_create_update_webhook(self):
         """
-        Create and update a webhook
+        Create and update a new_merchant_available webhook
         """
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
         application = self.my_context_dict['application']
         
-        webhook = self.create_webhook(application=application, event="new_merchant_available", url="http://api.iceberg.technology")
-        webhook.url = webhook.get_test_endpoint_url()
-        webhook.save() ## update
-        self.my_context_dict['webhook'] = webhook
-        self._objects_to_delete.append(webhook)
+        webhook = self.create_webhook(
+                    application=application, 
+                    event="new_merchant_available",
+                    url="http://api.iceberg.technology"
+                )
+        webhook.url = webhook.get_test_endpoint_url() ## to test update
+        webhook.save() 
+        self.my_context_dict['webhook_new_merchant'] = webhook
 
 
     def test_02_trigger_test_webhook(self):
@@ -54,18 +57,9 @@ class WebhookTestCase(IcebergUnitTestCase):
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
 
-        webhook = self.my_context_dict['webhook']
+        webhook = self.my_context_dict['webhook_new_merchant']
         webhook.test_trigger()
-
-        number_of_checks = 10
-        webhook_triggers = []
-        ## looping to wait for the webhook to be triggered
-        while number_of_checks>0 and len(webhook_triggers)==0:
-            webhook_triggers = webhook.triggers()
-            number_of_checks -= 1
-            if not os.getenv('ICEBERG_DEBUG', False): ## in debug, sync >> no need to wait
-                time.sleep(5) ## check each 5 seconds
-        print "number_of_checks left = %s, webhook_triggers=%s" % (number_of_checks, webhook_triggers)
+        webhook_triggers = webhook.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 1)
         webhook_trigger = webhook_triggers[0]
         self.assertTrue(webhook_trigger.is_test)
@@ -79,18 +73,9 @@ class WebhookTestCase(IcebergUnitTestCase):
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
         
-        webhook = self.my_context_dict['webhook']
+        webhook = self.my_context_dict['webhook_new_merchant']
         new_merchant = self.create_merchant(application=self.my_context_dict['application'])
-        
-        number_of_checks = 10
-        webhook_triggers = []
-        ## looping to wait for the webhook to be triggered
-        while number_of_checks>0 and len(webhook_triggers)<=1:
-            webhook_triggers = webhook.triggers()
-            number_of_checks -= 1
-            if not os.getenv('ICEBERG_DEBUG', False): ## in debug, sync >> no need to wait
-                time.sleep(5) ## check each 5 seconds
-        print "number_of_checks left = %s, webhook_triggers=%s" % (number_of_checks, webhook_triggers)
+        webhook_triggers = webhook.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 2)
         webhook_trigger = webhook_triggers[0]
         self.assertFalse(webhook_trigger.is_test)
@@ -104,26 +89,89 @@ class WebhookTestCase(IcebergUnitTestCase):
         """
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
-        webhook = self.my_context_dict['webhook']
+        webhook = self.my_context_dict['webhook_new_merchant']
         webhook.delete()
         if webhook in self._objects_to_delete:
             ## no need to delete it in tearDownClass if delete succeeded
             self._objects_to_delete.remove(webhook)
 
+
     def test_05_create_product_and_webhook(self):
+        """
+        Create and update a product_offer_updated webhook
+        """
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
         application = self.my_context_dict['application']
         
-        webhook = self.create_webhook(application=application, event="new_merchant_available", url="http://api.iceberg.technology")
-        webhook.url = webhook.get_test_endpoint_url()
-        webhook.save() ## update
+        webhook_offer = self.create_webhook(
+                    application=application,
+                    event="product_offer_updated",
+                    url="http://api.iceberg.technology"
+                )
+        webhook_offer.url = webhook_offer.get_test_endpoint_url()
+        webhook_offer.save() ## update
 
-        self.my_context_dict['webhook_2'] = webhook
+        webhook_product = self.create_webhook(
+                    application=application,
+                    event="product_updated",
+                    url="http://api.iceberg.technology"
+                )
+        webhook_product.url = webhook_product.get_test_endpoint_url()
+        webhook_product.save() ## update
+
+        self.my_context_dict['webhook_offer_updated'] = webhook_offer
+        self.my_context_dict['webhook_product_updated'] = webhook_product
         
-    def test_05_trigger_product_offer_updated(self):
+
+    def test_06_trigger_product_offer_updated(self):
         """
         Test product_offer_updated triggering when updating a product_offer
         """
+        self.direct_login_user_1()
+
+        product = self.create_product(
+                    name = "Test Product",
+                    description = "Description of my test product",
+                    gender = "W",
+                    categories=[50], # chemisier 
+                    brand=1
+                )
+        self.my_context_dict['product'] = product
+
+        productoffer = self.create_product_offer(
+                        product = self.my_context_dict['product'],
+                        merchant = self.my_context_dict['merchant'],
+                        sku = self.get_random_sku(),
+                        price = "90"
+                    )
+        self.my_context_dict['offer'] = productoffer
+        productoffer.activate()
+
+
+        productoffer.price = "80"
+        productoffer.save()
+
+        self.login_user_1()
+        self.api_handler.access_token = self.my_context_dict['application_token']
+
+        webhook_offer = self.my_context_dict['webhook_offer_updated']
+        webhook_triggers = webhook_offer.wait_for_triggers()
+        self.assertEquals(len(webhook_triggers), 1)
+        webhook_trigger = webhook_triggers[0]
+        self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.resource_uri)
+        self.assertEqual(webhook_trigger.payload.updated_attributes, [u"price"])
+
+
+        webhook_product = self.my_context_dict['webhook_product_updated']
+        webhook_triggers = webhook_product.wait_for_triggers()
+        self.assertEquals(len(webhook_triggers), 1)
+        webhook_trigger = webhook_triggers[0]
+        self.assertEqual(product.resource_uri, webhook_trigger.payload.resource_uri)
+        self.assertEqual(webhook_trigger.payload.updated_attributes, [u"offers"])
+
+
+
+
 
         
