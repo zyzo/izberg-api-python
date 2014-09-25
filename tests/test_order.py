@@ -6,6 +6,9 @@ class ClientOrder(IcebergUnitTestCase):
 
 
     def test_anonymous_add_to_cart(self):
+        """
+        Add to cart as anonymous
+        """
         self.login_anonymous()
         cart = self.api_handler.Cart()
         cart.save()
@@ -25,6 +28,9 @@ class ClientOrder(IcebergUnitTestCase):
         
 
     def test_full_order(self):
+        """
+        Full order
+        """
         self.login()
 
         cart = self.api_handler.Cart()

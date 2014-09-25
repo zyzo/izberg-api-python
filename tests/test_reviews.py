@@ -4,6 +4,9 @@ from helper import IcebergUnitTestCase
 
 class ClientReview(IcebergUnitTestCase):
     def test_create(self):
+        """
+        Create a review on a random product offer
+        """
         self.login()
 
         offer = self.get_random_offer()
@@ -21,6 +24,9 @@ class ClientReview(IcebergUnitTestCase):
             review.save()
 
     def test_read(self):
+        """
+        Read the user's review
+        """
         self.login()
 
         reviews = self.api_handler.me().reviews()

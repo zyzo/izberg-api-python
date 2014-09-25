@@ -80,7 +80,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_trigger = webhook_triggers[0]
         self.assertFalse(webhook_trigger.is_test)
         self.assertEquals(webhook_trigger.status, "succeeded")
-        self.assertEqual(new_merchant.resource_uri, webhook_trigger.payload.resource_uri)
+        self.assertEqual(new_merchant.resource_uri, webhook_trigger.payload.get("resource_uri"))
 
 
     def test_04_delete_webhook(self):
@@ -149,7 +149,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         productoffer.activate()
 
 
-        productoffer.price = "80"
+        productoffer.price = 80
         productoffer.save()
 
         self.login_user_1()
@@ -159,19 +159,47 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_triggers = webhook_offer.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 1)
         webhook_trigger = webhook_triggers[0]
-        self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.resource_uri)
-        self.assertEqual(webhook_trigger.payload.updated_attributes, [u"price"])
+        self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.get("resource_uri"))
+        self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"price"])
 
 
         webhook_product = self.my_context_dict['webhook_product_updated']
         webhook_triggers = webhook_product.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 1)
         webhook_trigger = webhook_triggers[0]
-        self.assertEqual(product.resource_uri, webhook_trigger.payload.resource_uri)
-        self.assertEqual(webhook_trigger.payload.updated_attributes, [u"offers"])
+        self.assertEqual(product.resource_uri, webhook_trigger.payload.get("resource_uri"))
+        self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"offers"])
 
 
+    def test_07_trigger_product_offer_updated_2(self):
+        """
+        Test product_offer_updated triggering when removing price (status should go to draft)
+        """
+        self.login_user_1()
+        self.api_handler.access_token = self.my_context_dict['application_token']
 
+        webhook_offer = self.my_context_dict['webhook_offer_updated']
+        webhook_product = self.my_context_dict['webhook_product_updated']
+        productoffer = self.my_context_dict['offer']
+        product = self.my_context_dict['product']
+
+        productoffer.price = 0
+        productoffer.save() ## status should go to draft and trigger the webhook
+
+        webhook_triggers = webhook_offer.wait_for_triggers(number_of_triggers_expected=2)
+        self.assertEquals(len(webhook_triggers), 2)
+        print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
+        webhook_trigger = webhook_triggers[0]
+        self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.get("resource_uri"))
+        self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"status"])
+
+
+        webhook_triggers = webhook_product.wait_for_triggers(number_of_triggers_expected=2)
+        self.assertEquals(len(webhook_triggers), 2)
+        print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
+        webhook_trigger = webhook_triggers[0]
+        self.assertEqual(product.resource_uri, webhook_trigger.payload.get("resource_uri"))
+        self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"offers"])
 
 
         

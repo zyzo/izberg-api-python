@@ -67,6 +67,7 @@ class ClientMerchant(IcebergUnitTestCase):
 
     def test_03_create_bank_account(self):
         """
+        Create Bank Account
         """
         bank_account = self.api_handler.StoreBankAccount()
 
