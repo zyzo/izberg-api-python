@@ -68,8 +68,6 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         self.direct_login_user_1()
 
-        productoffer = self.api_handler.ProductOffer()
-
         productoffer = self.create_product_offer(
                         product = self.my_context_dict['product'],
                         merchant = self.my_context_dict['merchant'],
@@ -88,7 +86,6 @@ class ClientCreateProduct(IcebergUnitTestCase):
                         stock = 20,
                         size = "Small",
                     )
-
         self.my_context_dict['productvariation'] = productvariation
 
 
