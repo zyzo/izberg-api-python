@@ -143,7 +143,8 @@ class WebhookTestCase(IcebergUnitTestCase):
                         product = self.my_context_dict['product'],
                         merchant = self.my_context_dict['merchant'],
                         sku = self.get_random_sku(),
-                        price = "90"
+                        price = "90",
+                        image_paths = ["./tests/static/image_test.JPEG"]
                     )
         self.my_context_dict['offer'] = productoffer
         productoffer.activate()

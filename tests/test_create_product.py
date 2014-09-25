@@ -55,8 +55,10 @@ class ClientCreateProduct(IcebergUnitTestCase):
         productoffer = self.create_product_offer(
                         product = self.my_context_dict['product'],
                         merchant = self.my_context_dict['merchant'],
-                        sku = self.get_random_sku()
+                        sku = self.get_random_sku(),
+                        image_paths = ["./tests/static/image_test.JPEG"]
                     )
+
         self.my_context_dict['offer'] = productoffer
 
 
@@ -68,24 +70,25 @@ class ClientCreateProduct(IcebergUnitTestCase):
 
         productoffer = self.api_handler.ProductOffer()
 
-        productoffer.product = self.my_context_dict['product']
-        productoffer.merchant = self.my_context_dict['merchant']
-        productoffer.is_abstract = True
-        productoffer.save()
-        self._objects_to_delete.append(productoffer)
+        productoffer = self.create_product_offer(
+                        product = self.my_context_dict['product'],
+                        merchant = self.my_context_dict['merchant'],
+                        is_abstract= True,
+                        image_paths = ["./tests/static/image_test.JPEG"]
+                    )
         self.my_context_dict['abstract_offer'] = productoffer
 
-        productvariation = self.api_handler.ProductVariation()
-        productvariation.name = "Red Small"
-        productvariation.variation_type = ["color", "size"]
-        productvariation.size = "Small"
-        productvariation.sku = self.get_random_sku()
-        productvariation.product_offer = productoffer
-        productvariation.stock = 20
-        productvariation.price = 75.5
-        productvariation.save()
 
-        self._objects_to_delete.append(productvariation)
+        productvariation = self.create_product_variation(
+                        product_offer = productoffer,
+                        sku = self.get_random_sku(),
+                        variation_type = ["color", "size"],
+                        name = "Red Small",
+                        price = 75.5,
+                        stock = 20,
+                        size = "Small",
+                    )
+
         self.my_context_dict['productvariation'] = productvariation
 
 

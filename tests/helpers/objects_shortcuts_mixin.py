@@ -159,7 +159,7 @@ class IcebergObjectCreateMixin(object):
 
 
 
-    def create_product_offer(self, product, merchant, sku=None, is_abstract=False, delete_at_the_end=True, **kwargs):
+    def create_product_offer(self, product, merchant, sku=None, is_abstract=False, image_paths=None, delete_at_the_end=True, **kwargs):
         productoffer = self.api_handler.ProductOffer()
         productoffer.product = product
         productoffer.merchant = merchant
@@ -171,7 +171,28 @@ class IcebergObjectCreateMixin(object):
         
         productoffer.save()
         
+        if image_paths:
+            for image_path in image_paths:
+                productoffer.add_image(image_path)
+                
         if delete_at_the_end:
             self.delete_at_the_end(productoffer)
 
         return productoffer
+
+
+    def create_product_variation(self, product_offer, sku, gtin13=None, delete_at_the_end=True, **kwargs):
+        productvariation = self.api_handler.ProductVariation()
+        productvariation.product_offer = product_offer
+        productvariation.sku = sku
+        if gtin13 is not None:
+            productvariation.gtin13 = gtin13
+        for key, value in kwargs.iteritems(): ## assign other params
+            setattr(productvariation, key, value)
+        
+        productvariation.save()
+        
+        if delete_at_the_end:
+            self.delete_at_the_end(productvariation)
+
+        return productvariation

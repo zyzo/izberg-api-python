@@ -107,6 +107,9 @@ class IcebergObject(dict):
 
         return res
 
+    def send_image(self, *args, **kwargs):
+        return self.__class__._handler.send_image(*args, **kwargs)
+
     def to_JSON(self):
         return json.dumps(self.as_dict())
 

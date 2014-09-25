@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import mimetypes
 import logging, requests, json, time, hashlib, hmac
 
 from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError
@@ -206,15 +206,17 @@ class IcebergAPI(object):
     _sso_response = property(**_sso_response())
 
 
-    def request(self, path, args = None, post_args = None, files = None, method = None):
+
+    def request(self, path, args = None, post_args = None, files = None, method = None, headers = "default"):
         args = args or {}
         method = method or "GET"
 
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept-Language': self.lang,
-            'Authorization': self.get_auth_token()
-        }
+        if headers == "default":
+            headers = {
+                'Content-Type': 'application/json',
+                'Accept-Language': self.lang,
+                'Authorization': self.get_auth_token()
+            }
         # store = requests.get('http://api.local.iceberg-marketplace.com:8000/v1/merchant/', params = {'slug': store_slug}, headers = headers)
 
         if '//' not in path:
@@ -273,6 +275,17 @@ class IcebergAPI(object):
             return response.json()
         else:
             return "No Content"
+
+
+    def send_image(self, path, image_path, method="post"):
+        mimetype, encoding = mimetypes.guess_type(image_path)
+        image_name = image_path.split("/")[-1]
+        image_info = ('image', (image_name, open(image_path, 'rb'), mimetype) )
+        headers = {
+            'Accept-Language': self.lang,
+            'Authorization': self.get_auth_token()
+        }
+        return self.request(path, files=[image_info], method=method, headers=headers)
 
 
     def get_element(self, resource, object_id):
