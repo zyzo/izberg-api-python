@@ -126,7 +126,7 @@ class WebhookTestCase(IcebergUnitTestCase):
 
     def test_06_trigger_product_offer_updated(self):
         """
-        Test product_offer_updated triggering when updating a product_offer
+        Test product_offer_updated/product_updated triggering when updating a product_offer
         """
         self.direct_login_user_1()
 
@@ -173,7 +173,7 @@ class WebhookTestCase(IcebergUnitTestCase):
 
     def test_07_trigger_product_offer_updated_2(self):
         """
-        Test product_offer_updated triggering when removing price (status should go to draft)
+        Test product_offer_updated/product_updated triggering when removing price (status should go to draft)
         """
         self.login_user_1()
         self.api_handler.access_token = self.my_context_dict['application_token']
@@ -192,6 +192,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_trigger = webhook_triggers[0]
         self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.get("resource_uri"))
         self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"status"])
+        self.assertEqual(webhook_trigger.payload.get("status"), u"draft")
 
 
         webhook_triggers = webhook_product.wait_for_triggers(number_of_triggers_expected=2)
