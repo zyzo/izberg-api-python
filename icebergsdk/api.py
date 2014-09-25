@@ -207,11 +207,11 @@ class IcebergAPI(object):
 
 
 
-    def request(self, path, args = None, post_args = None, files = None, method = None, headers = "default"):
+    def request(self, path, args = None, post_args = None, files = None, method = None, headers = None):
         args = args or {}
         method = method or "GET"
 
-        if headers == "default":
+        if headers is None:
             headers = {
                 'Content-Type': 'application/json',
                 'Accept-Language': self.lang,
