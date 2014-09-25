@@ -27,7 +27,7 @@ class Webhook(UpdateableIcebergObject):
                 time.sleep(check_every_seconds) ## check every X seconds except the 1st time
             webhook_triggers = self.triggers(status="succeeded")
             number_of_attempts += 1
-        print "max_number_of_checks left = %s, webhook_triggers=%s" % (max_number_of_checks, webhook_triggers)
+        print "number_of_attempts = %s, webhook_triggers=%s" % (number_of_attempts, webhook_triggers)
         return webhook_triggers
 
 class WebhookTrigger(IcebergObject):

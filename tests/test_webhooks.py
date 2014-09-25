@@ -75,7 +75,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         
         webhook = self.my_context_dict['webhook_new_merchant']
         new_merchant = self.create_merchant(application=self.my_context_dict['application'])
-        webhook_triggers = webhook.wait_for_triggers()
+        webhook_triggers = webhook.wait_for_triggers(number_of_triggers_expected=2)
         self.assertEquals(len(webhook_triggers), 2)
         webhook_trigger = webhook_triggers[0]
         self.assertFalse(webhook_trigger.is_test)
