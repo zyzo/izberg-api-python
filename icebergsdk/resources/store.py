@@ -18,6 +18,20 @@ class Store(UpdateableIcebergObject):
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
 
+    def addresses(self, params = None, limit = None, offset = 0):
+        """
+        Return merchant addresses/contact info
+        """
+        params = params or {}
+        params.update({
+            'merchant': self.id,
+            'offset': offset
+        })
+        if limit:
+            params['limit'] = limit
+        return self.get_list('merchant_address', args = params)
+
+
     def import_products(self, feed_url = None):
         """
         Return product from XML file
@@ -38,11 +52,34 @@ class Store(UpdateableIcebergObject):
 
         return res
 
+    def check_activation(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'check_activation'), method = "get")
+        return data
+
+    def reactivate(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'reactivate'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+    def pause(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'pause'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+    def stop(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'stop'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+
+class MerchantAddress(UpdateableIcebergObject):
+    endpoint = 'merchant_address'
+
+class StoreBankAccount(UpdateableIcebergObject):
+    endpoint = 'store_bank_account'
 
 class MerchantImage(IcebergObject):
     endpoint = 'merchant_image'
 
-class MerchantAddress(IcebergObject):
-    endpoint = 'merchant_address'
-
+    def build_resized_image_url(self, width, height, process_mode="crop"):
+        from icebergsdk.utils.image_server_utils import build_resized_image_url
+        image_server_url = self.__class__._handler.conf.IMAGE_SERVER_URL
+        return build_resized_image_url(image_server_url, self.url, width, height, process_mode)
 

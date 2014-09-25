@@ -6,12 +6,13 @@ from icebergsdk.resources.application import Application
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
-from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress
+from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
 from icebergsdk.resources.review import Review, MerchantReview
+from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
 
 logger = logging.getLogger('icebergsdk')
 
@@ -19,6 +20,7 @@ def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
         "product": Product,
+        "brand": Brand,
         "productoffer": ProductOffer,
         "offer_image": ProductOfferImage,
         "product_variation": ProductVariation,
@@ -30,6 +32,7 @@ def get_class_from_resource_uri(resource_uri):
         "user_shopping_prefs": UserShoppingPreference, 
         "payment": Payment,
         "merchant": Store,
+        "store_bank_account": StoreBankAccount,
         "merchant_address": MerchantAddress,
         "merchant_image": MerchantImage,
         "order": Order,
@@ -40,7 +43,11 @@ def get_class_from_resource_uri(resource_uri):
         "order_item": OrderItem,
         "review": Review,
         "merchant_review": MerchantReview,
-        "category": Category
+        "category": Category,
+        "brand": Brand,
+        "webhook": Webhook,
+        "webhook_trigger": WebhookTrigger,
+        "webhook_trigger_attempt": WebhookTriggerAttempt,
     }
 
     # Hack for now... Will be changed

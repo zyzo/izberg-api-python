@@ -7,6 +7,8 @@ class ConfigurationBase(object):
     ICEBERG_AUTH_HEADER = "IcebergAccessToken"
     ICEBERG_DEFAULT_LANG = "en"
 
+    IMAGE_SERVER_URL = ""
+
 
 class Configuration(ConfigurationBase):
     """
@@ -22,6 +24,8 @@ class Configuration(ConfigurationBase):
     ICEBERG_API_PRIVATE_KEY = os.getenv('ICEBERG_API_PRIVATE_KEY', None)
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY', None)
+
+    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
 
 
 class ConfigurationSandbox(ConfigurationBase):
@@ -39,6 +43,7 @@ class ConfigurationSandbox(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_SANDBOX', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_SANDBOX', None)
 
+    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
 
 
 class ConfigurationStage(ConfigurationBase):
@@ -56,7 +61,7 @@ class ConfigurationStage(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_STAGE', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_STAGE', None)
 
-
+    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
 
 ######
 ##  Development Configuration. Use for local development.
@@ -71,7 +76,6 @@ class ConfigurationDebug(ConfigurationBase):
     ICEBERG_API_PRIVATE_KEY = os.getenv('ICEBERG_API_PRIVATE_KEY_DEBUG', None)
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_DEBUG', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_DEBUG', None)
-
 
 
 class ConfigurationDebugSandbox(ConfigurationBase):

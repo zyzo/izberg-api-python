@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__author__ = "Florian Poullin <florian@modizy.com>"
+__author__ = "Florian Poullin <florian@iceberg-marketplace.com>"
 
 
 
