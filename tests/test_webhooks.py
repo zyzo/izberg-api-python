@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import time
-import json
+
+
 from helper import IcebergUnitTestCase, get_api_handler
 from helpers.login_utils import IcebergLoginUtils
-import os
 
 class WebhookTestCase(IcebergUnitTestCase):
     @classmethod

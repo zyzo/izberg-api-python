@@ -3,8 +3,6 @@
 from helper import IcebergUnitTestCase
 
 class ClientOrder(IcebergUnitTestCase):
-
-
     def test_anonymous_add_to_cart(self):
         self.login_anonymous()
         cart = self.api_handler.Cart()

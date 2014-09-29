@@ -12,6 +12,7 @@ class ClientCreateProduct(IcebergUnitTestCase):
 
         cls.api_handler = get_api_handler()
         IcebergLoginUtils.direct_login_user_1(handler = cls.api_handler)
+
         # Create an application
         application = cls.api_handler.Application()
         application.name = "test-create-product-app"

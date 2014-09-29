@@ -38,7 +38,6 @@ class IcebergLoginUtils(object):
         handler.auth_user(username="jeffstrongman", email="user1@iceberg-marketplace.com")
 
 
-
     # Staff
     @classmethod
     def direct_login_iceberg_staff(cls, handler):
