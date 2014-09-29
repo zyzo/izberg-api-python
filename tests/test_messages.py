@@ -56,9 +56,13 @@ class MessagesTest(IcebergUnitTestCase):
         message.body = "Test Body"
 
         message.save()
+        self._objects_to_delete.append(message)
+
+        self.assertEqual(message.status, "unread")
 
         application = self.my_context_dict['application']
         messages = application.inbox()
+
 
         found = False
 
@@ -67,6 +71,12 @@ class MessagesTest(IcebergUnitTestCase):
                 found = True
                 self.assertEqual(applicaton_message.subject, message.subject)
                 self.assertEqual(applicaton_message.body, message.body)
+
+        message.read()
+        self.assertEqual(message.status, "read")
+
+        message.close()
+        self.assertEqual(message.status, "closed")
 
         self.assertTrue(found)
 
