@@ -15,9 +15,14 @@ class Store(UpdateableIcebergObject):
             params['limit'] = limit
         return self.get_list('productoffer', args = params)
 
+    # Messages
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
 
+    def outbox(self):
+        return self.get_list("%soutbox/" % self.resource_uri)
+
+    # Addresses
     def addresses(self, params = None, limit = None, offset = 0):
         """
         Return merchant addresses/contact info
@@ -56,6 +61,7 @@ class Store(UpdateableIcebergObject):
         data = self.request("%s%s/" % (self.resource_uri, 'check_activation'), method = "get")
         return data
 
+    # Transactions
     def reactivate(self):
         data = self.request("%s%s/" % (self.resource_uri, 'reactivate'), method = "post")
         return self._load_attributes_from_response(**data)

@@ -60,10 +60,9 @@ class MessagesTest(IcebergUnitTestCase):
 
         self.assertEqual(message.status, "unread")
 
+        # Check application inbox
         application = self.my_context_dict['application']
         messages = application.inbox()
-
-
         found = False
 
         for applicaton_message in messages:
@@ -72,13 +71,28 @@ class MessagesTest(IcebergUnitTestCase):
                 self.assertEqual(applicaton_message.subject, message.subject)
                 self.assertEqual(applicaton_message.body, message.body)
 
+        self.assertTrue(found)
+
+        # Check user outbox
+        messages = self.api_handler.me().outbox()
+        found = False
+
+        for user_message in messages:
+            if applicaton_message.id == message.id:
+                found = True
+                self.assertEqual(applicaton_message.subject, message.subject)
+                self.assertEqual(applicaton_message.body, message.body)
+
+        self.assertTrue(found)
+
+        # Check status transition
         message.read()
         self.assertEqual(message.status, "read")
 
         message.close()
         self.assertEqual(message.status, "closed")
 
-        self.assertTrue(found)
+
 
 
 
