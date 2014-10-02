@@ -159,6 +159,8 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_triggers = webhook_offer.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 1)
         webhook_trigger = webhook_triggers[0]
+        webhook_attempts = webhook_trigger.attempts(response_code__gte=200, response_code__lte=205)
+        self.assertEquals(len(webhook_attempts), 1)
         self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.resource_uri)
         self.assertEqual(webhook_trigger.payload.updated_attributes, [u"price"])
 
@@ -167,6 +169,8 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_triggers = webhook_product.wait_for_triggers()
         self.assertEquals(len(webhook_triggers), 1)
         webhook_trigger = webhook_triggers[0]
+        webhook_attempts = webhook_trigger.attempts(response_code__gte=200, response_code__lte=205)
+        self.assertEquals(len(webhook_attempts), 1)
         self.assertEqual(product.resource_uri, webhook_trigger.payload.resource_uri)
         self.assertEqual(webhook_trigger.payload.updated_attributes, [u"offers"])
 

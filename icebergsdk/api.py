@@ -47,6 +47,7 @@ class IcebergAPI(object):
         self.Store = resources.Store.set_handler(self)
         self.StoreBankAccount = resources.StoreBankAccount.set_handler(self)
         self.MerchantAddress = resources.MerchantAddress.set_handler(self)
+        self.MerchantCommissionSettings = resources.MerchantCommissionSettings.set_handler(self)
         
         self.User = resources.User.set_handler(self)
         self.Message = resources.Message.set_handler(self)

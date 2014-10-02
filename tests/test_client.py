@@ -12,6 +12,9 @@ class ClientTest(IcebergUnitTestCase):
         self.assertEquals(self.api_handler._sso_response['last_name'], 'Durand')
         self.assertEquals(self.api_handler._sso_response['email'], 'lol@lol.fr')
 
+        self.api_handler.User.me().profile()
+        
+
     def test_direct_login(self):
         self.login_user_1()
         self.assertEqual(self.api_handler.User.me().email, 'user1@iceberg-marketplace.com')

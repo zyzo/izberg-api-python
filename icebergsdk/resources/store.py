@@ -83,3 +83,6 @@ class MerchantImage(IcebergObject):
         image_server_url = self.__class__._handler.conf.IMAGE_SERVER_URL
         return build_resized_image_url(image_server_url, self.image_path, width, height, process_mode)
 
+
+class MerchantCommissionSettings(UpdateableIcebergObject):
+    endpoint = 'commission_settings'

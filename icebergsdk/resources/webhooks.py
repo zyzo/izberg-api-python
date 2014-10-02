@@ -33,8 +33,8 @@ class Webhook(UpdateableIcebergObject):
 class WebhookTrigger(IcebergObject):
     endpoint = 'webhook_trigger'
 
-    def attempts(self):
-        return self.get_list('%sattempts/' % self.resource_uri)
+    def attempts(self, **filters):
+        return self.get_list('%sattempts/' % self.resource_uri, args=filters)
 
 
 class WebhookTriggerAttempt(IcebergObject):

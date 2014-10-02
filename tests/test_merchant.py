@@ -38,7 +38,7 @@ class ClientMerchant(IcebergUnitTestCase):
     # Account Related tests
     def test_01_create_merchant(self):
         """
-        Create contact information for the store
+        Create merchant
         """
         merchant = self.create_merchant(application = self.my_context_dict['application'])
 
@@ -75,6 +75,17 @@ class ClientMerchant(IcebergUnitTestCase):
         bank_account.account_IBAN = "989898"
         bank_account.account_owner_name = "Florian Poullin"
         bank_account.save()
+
+
+
+    def test_04_create_commission_settings(self):
+        """
+        """
+        commission_settings = self.api_handler.MerchantCommissionSettings()
+
+        commission_settings.merchant = self.my_context_dict['merchant']
+        commission_settings.cpa = 25
+        commission_settings.save()
 
 
     # @classmethod
