@@ -2,7 +2,7 @@
 
 import logging
 
-from icebergsdk.resources.application import Application
+from icebergsdk.resources.application import Application, ApplicationCommissionSettings
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
@@ -19,6 +19,7 @@ logger = logging.getLogger('icebergsdk')
 def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
+        "application_commission_settings": ApplicationCommissionSettings,
         "product": Product,
         "brand": Brand,
         "productoffer": ProductOffer,

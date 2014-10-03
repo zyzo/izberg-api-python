@@ -32,6 +32,7 @@ class IcebergAPI(object):
         For faster initialization, set the handler in the resources classes
         """
         self.Application = resources.Application.set_handler(self)
+        self.ApplicationCommissionSettings = resources.ApplicationCommissionSettings.set_handler(self)
         self.Address = resources.Address.set_handler(self)
         self.Cart = resources.Cart.set_handler(self)
         self.Country = resources.Country.set_handler(self)

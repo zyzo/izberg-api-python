@@ -68,6 +68,10 @@ class Store(UpdateableIcebergObject):
         data = self.request("%s%s/" % (self.resource_uri, 'stop'), method = "post")
         return self._load_attributes_from_response(**data)
 
+    def feeds(self, **filters):
+        filters["merchant"] = self.id
+        return self.get_list(MerchantFeed.endpoint, args = filters)
+
 
 class MerchantAddress(UpdateableIcebergObject):
     endpoint = 'merchant_address'
@@ -86,3 +90,7 @@ class MerchantImage(IcebergObject):
 
 class MerchantCommissionSettings(UpdateableIcebergObject):
     endpoint = 'commission_settings'
+
+
+class MerchantFeed(UpdateableIcebergObject):
+    endpoint = 'merchant_catalog_feed'

@@ -2,6 +2,7 @@
 
 from icebergsdk.resources.base import UpdateableIcebergObject
 
+
 class Application(UpdateableIcebergObject):
     endpoint = 'application'
 
@@ -19,3 +20,6 @@ class Application(UpdateableIcebergObject):
 
 
 
+
+class ApplicationCommissionSettings(UpdateableIcebergObject):
+    endpoint = 'application_commission_settings'
