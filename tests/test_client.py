@@ -7,6 +7,9 @@ from helper import IcebergUnitTestCase
 
 class ClientTest(IcebergUnitTestCase):
     def test_sso(self):
+        """
+        SSO Connect
+        """
         self.login()
         self.assertEquals(self.api_handler._sso_response['first_name'], 'Yves')
         self.assertEquals(self.api_handler._sso_response['last_name'], 'Durand')
@@ -16,6 +19,9 @@ class ClientTest(IcebergUnitTestCase):
         
 
     def test_direct_login(self):
+        """
+        Direct Login
+        """
         self.login_user_1()
         self.assertEqual(self.api_handler.User.me().email, 'user1@iceberg-marketplace.com')
         # self.direct_login_iceberg_staff()
@@ -23,16 +29,25 @@ class ClientTest(IcebergUnitTestCase):
 
 
     def test_login_getCart(self):
+        """
+        Get cart after SSO
+        """
         self.login()
         currency = self.api_handler.Cart.mine().currency
         self.assertEquals(currency, 'EUR')
 
     def test_anonymous_getCart(self):
+        """
+        Get cart as anonymous
+        """
         self.login_anonymous()
         currency = self.api_handler.Cart.mine().currency
         self.assertEquals(currency, 'EUR')
 
     def test_newCart(self):
+        """
+        Create new cart after SSO
+        """
         self.login()
 
         new_cart = self.api_handler.Cart()

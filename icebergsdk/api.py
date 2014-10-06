@@ -36,6 +36,8 @@ class IcebergAPI(object):
         self.Application = ResourceManager(resource_class=resources.Application, api_handler=self)
         self.ApplicationCommissionSettings = ResourceManager(resource_class=resources.ApplicationCommissionSettings, api_handler=self)
         self.ApplicationMerchantPolicies = ResourceManager(resource_class=resources.ApplicationMerchantPolicies, api_handler=self)
+        self.ApplicationTransaction = ResourceManager(resource_class=resources.ApplicationTransaction, api_handler=self)
+        self.MarketPlaceTransaction = ResourceManager(resource_class=resources.MarketPlaceTransaction, api_handler=self)
         self.Address = ResourceManager(resource_class=resources.Address, api_handler=self)
         self.Cart = CartResourceManager(resource_class=resources.Cart, api_handler=self)
         self.Country = ResourceManager(resource_class=resources.Country, api_handler=self)
@@ -54,6 +56,7 @@ class IcebergAPI(object):
         self.MerchantCommissionSettings = ResourceManager(resource_class=resources.MerchantCommissionSettings, api_handler=self)
         self.MerchantFeed = ResourceManager(resource_class=resources.MerchantFeed, api_handler=self)
         self.MerchantShippingPolicy = ResourceManager(resource_class=resources.MerchantShippingPolicy, api_handler=self)
+        self.MerchantTransaction = ResourceManager(resource_class=resources.MerchantTransaction, api_handler=self)
         
         self.User = UserResourceManager(resource_class=resources.User, api_handler=self)
         self.Message = ResourceManager(resource_class=resources.Message, api_handler=self)
@@ -67,6 +70,9 @@ class IcebergAPI(object):
         self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
         self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
         self.WebhookTriggerAttempt = ResourceManager(resource_class=resources.WebhookTriggerAttempt, api_handler=self)
+
+        
+        self.Transaction = ResourceManager(resource_class=resources.Transaction, api_handler=self)
         
         ### Missing
 

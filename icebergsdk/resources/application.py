@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from icebergsdk.resources.base import UpdateableIcebergObject
+from icebergsdk.resources.base import UpdateableIcebergObject, IcebergObject
 
 
 class Application(UpdateableIcebergObject):
@@ -54,3 +54,9 @@ class ApplicationMerchantPolicies(UpdateableIcebergObject):
             self.mandatory_info["store_legal"] = store_legal
 
         self.save()
+
+
+class ApplicationTransaction(IcebergObject):
+    endpoint = 'app_transaction'
+
+    

@@ -16,6 +16,8 @@ Lot's of stuff to rewrite/remove/add
 
 class IcebergObject(dict):
     __objects_store = {} # Will store the object for relationship management
+    
+    raw_fields = []
 
     def __init__(self, api_key=None, handler = None, **params):
         super(IcebergObject, self).__init__()
@@ -222,15 +224,20 @@ class IcebergObject(dict):
                 self.__dict__[key] = res
 
             elif type(value) == dict:
-                if 'resource_uri' in value: # Try to match a relation
+                if key in self.raw_fields:
+                    self.__dict__[key] = value ## keep this field as raw
+                elif 'resource_uri' in value: # Try to match a relation
                     try:
                         from icebergsdk.resources import get_class_from_resource_uri
                         obj_cls = get_class_from_resource_uri(value['resource_uri'])
                         self.__dict__[key] = obj_cls.findOrCreate(self._handler, value)
                     except:
-                        pass
+                        ## keep it as dict
+                        self.__dict__[key] = value
                 elif 'id' in value: # Fall back
                     self.__dict__[key] = value['id']
+                else:
+                    self.__dict__[key] = value ## keep it as dict
             else:
                 self.__dict__[key] = value
         return self

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+from decimal import Decimal
 from helper import IcebergUnitTestCase, get_api_handler
 from helpers.login_utils import IcebergLoginUtils
 
@@ -91,7 +91,10 @@ class CommissionsTestCase(IcebergUnitTestCase):
     def test_01_full_order(self):
         offer = self.my_context_dict['offer']
         
-        self.login()
+        self.login_user_1()
+        self.api_handler.access_token = self.my_context_dict['application_token']
+
+
         cart = self.api_handler.Cart()
         cart.save()
 
@@ -128,6 +131,57 @@ class CommissionsTestCase(IcebergUnitTestCase):
 
         merchant_order = order.merchant_orders[0]
         merchant_order.confirm()
+
+        self.my_context_dict['order'] = order
+        self.my_context_dict['merchant_order'] = merchant_order
+
+    def test_02_check_store_commission(self):
+        """
+        Check store commission amount
+        """
+        self.direct_login_iceberg_staff()
+        merchant_order = self.my_context_dict['merchant_order']
+        order = self.my_context_dict['order']
+        transaction = self.api_handler.Transaction.findWhere({"order":order})
+        self.my_context_dict['transaction'] = transaction
+        merchant_transactions = self.api_handler.MerchantTransaction.search(args={"transaction":transaction.id})[0]
+        self.assertEqual(len(merchant_transactions), 1)
+        merchant_transaction = merchant_transactions[0]
+        expected_merchant_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.75)).quantize(Decimal("0.01"))
+        vat_on_shipping = float(merchant_order.vat)-float(merchant_order.vat_on_products)
+        expected_merchant_commission += Decimal(str((float(merchant_order.shipping)+vat_on_shipping))).quantize(Decimal("0.01"))
+        self.assertEqual(Decimal(merchant_transaction.amount),  expected_merchant_commission)
+
+
+    def test_03_check_app_commission(self):
+        """
+        Check app commission amount
+        """
+        self.direct_login_iceberg_staff()
+        merchant_order = self.my_context_dict['merchant_order']
+        transaction = self.my_context_dict['transaction']
+        app_transactions = self.api_handler.ApplicationTransaction.search(args={"transaction":transaction.id})[0]
+        self.assertEqual(len(app_transactions), 1)
+        app_transaction = app_transactions[0]
+        expected_app_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.25*0.5)).quantize(Decimal("0.01"))
+        self.assertEqual(Decimal(app_transaction.amount),  expected_app_commission)
+
+
+
+    def test_04_check_mp_commission(self):
+        """
+        Check MP commission amount
+        """
+        self.direct_login_iceberg_staff()
+        merchant_order = self.my_context_dict['merchant_order']
+        transaction = self.my_context_dict['transaction']
+        mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":transaction.id})[0]
+        self.assertEqual(len(mp_transactions), 1)
+        mp_transaction = mp_transactions[0]
+        expected_mp_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.25*0.5)).quantize(Decimal("0.01"))
+        self.assertEqual(Decimal(mp_transaction.amount),  expected_mp_commission)
+
+
 
 
 

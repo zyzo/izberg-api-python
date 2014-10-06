@@ -118,3 +118,8 @@ class MerchantFeed(UpdateableIcebergObject):
 
     def parse(self):
         return self.request("%s%s/" % (self.resource_uri, 'parse'), method = "post")
+
+
+class MerchantTransaction(IcebergObject):
+    endpoint = 'store_transaction'
+
