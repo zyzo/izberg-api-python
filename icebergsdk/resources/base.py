@@ -226,7 +226,7 @@ class IcebergObject(dict):
                     try:
                         from icebergsdk.resources import get_class_from_resource_uri
                         obj_cls = get_class_from_resource_uri(value['resource_uri'])
-                        self.__dict__[key] = obj_cls.findOrCreate(value)
+                        self.__dict__[key] = obj_cls.findOrCreate(self._handler, value)
                     except:
                         pass
                 elif 'id' in value: # Fall back
