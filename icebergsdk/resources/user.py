@@ -6,13 +6,21 @@ from icebergsdk.exceptions import IcebergNoHandlerError
 class User(IcebergObject):
     endpoint = 'user'
 
+    # @classmethod
+    # def me(cls):
+    #     if not cls._handler:
+    #         raise IcebergNoHandlerError()
+
+    #     data = cls._handler.request("%s/me/" % (cls.endpoint))
+    #     return cls.findOrCreate(data)
+    
     @classmethod
-    def me(cls):
-        if not cls._handler:
+    def me(cls, handler):
+        if not handler:
             raise IcebergNoHandlerError()
 
-        data = cls._handler.request("%s/me/" % (cls.endpoint))
-        return cls.findOrCreate(data)
+        data = handler.request("%s/me/" % (cls.endpoint))
+        return cls.findOrCreate(handler, data)
 
     def addresses(self):
         return self.get_list('address', args = {'user': self.id})
@@ -25,7 +33,7 @@ class User(IcebergObject):
 
     def profile(self):
         data = self.request('%sprofile/' % self.resource_uri) 
-        return Profile.findOrCreate(data)
+        return Profile.findOrCreate(self._handler, data)
 
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)

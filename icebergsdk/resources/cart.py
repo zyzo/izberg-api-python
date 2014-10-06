@@ -8,16 +8,27 @@ from icebergsdk.resources.order import Order
 class Cart(UpdateableIcebergObject):
     endpoint = 'cart'
 
+    # @classmethod
+    # def mine(cls):
+    #     """
+    #     Return current Cart for logged user
+    #     """
+    #     if not cls._handler:
+    #         raise IcebergNoHandlerError()
+
+    #     data = cls._handler.request("%s/mine/" % (cls.endpoint))
+    #     return cls.findOrCreate(data)
+
     @classmethod
-    def mine(cls):
+    def mine(cls, handler):
         """
         Return current Cart for logged user
         """
-        if not cls._handler:
+        if not handler:
             raise IcebergNoHandlerError()
 
-        data = cls._handler.request("%s/mine/" % (cls.endpoint))
-        return cls.findOrCreate(data)
+        data = handler.request("%s/mine/" % (cls.endpoint))
+        return cls.findOrCreate(handler, data)
 
     def form_data(self):
         """
@@ -39,7 +50,7 @@ class Cart(UpdateableIcebergObject):
         params = params or {}
 
         data = self.request("%s%s/" % (self.resource_uri, 'createOrder'), method = "post", post_args = params)
-        return Order.findOrCreate(data)
+        return Order.findOrCreate(self._handler, data)
 
     def addOffer(self, product_offer):
         """

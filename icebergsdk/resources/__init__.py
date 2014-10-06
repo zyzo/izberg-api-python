@@ -2,11 +2,12 @@
 
 import logging
 
-from icebergsdk.resources.application import Application, ApplicationCommissionSettings
+from icebergsdk.resources.application import Application, ApplicationCommissionSettings, ApplicationMerchantPolicies
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
-from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount, MerchantCommissionSettings
+from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount,\
+                                       MerchantCommissionSettings, MerchantFeed, MerchantShippingPolicy
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
@@ -20,6 +21,7 @@ def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
         "application_commission_settings": ApplicationCommissionSettings,
+        "application_merchant_policies": ApplicationMerchantPolicies,
         "product": Product,
         "brand": Brand,
         "productoffer": ProductOffer,
@@ -50,6 +52,8 @@ def get_class_from_resource_uri(resource_uri):
         "webhook": Webhook,
         "webhook_trigger": WebhookTrigger,
         "webhook_trigger_attempt": WebhookTriggerAttempt,
+        "merchant_catalog_feed": MerchantFeed,
+        "merchant_shipping_policy": MerchantShippingPolicy,
     }
 
     # Hack for now... Will be changed

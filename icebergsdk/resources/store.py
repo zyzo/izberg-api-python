@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import time
 from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
 
 class Store(UpdateableIcebergObject):
@@ -56,8 +56,8 @@ class Store(UpdateableIcebergObject):
         data = self.request("%s%s/" % (self.resource_uri, 'check_activation'), method = "get")
         return data
 
-    def reactivate(self):
-        data = self.request("%s%s/" % (self.resource_uri, 'reactivate'), method = "post")
+    def reactivate(self, **kwargs):
+        data = self.request("%s%s/" % (self.resource_uri, 'reactivate'), method = "post", args=kwargs)
         return self._load_attributes_from_response(**data)
 
     def pause(self):
@@ -71,6 +71,19 @@ class Store(UpdateableIcebergObject):
     def feeds(self, **filters):
         filters["merchant"] = self.id
         return self.get_list(MerchantFeed.endpoint, args = filters)
+
+
+    def wait_for_active_offers(self, number_of_active_offers_expected=1, max_number_of_checks=10, check_every_seconds=5):
+        active_offers = []
+        ## looping to wait for the webhook to be active_offered
+        number_of_attempts = 0
+        while number_of_attempts<max_number_of_checks and len(active_offers)<number_of_active_offers_expected:
+            if number_of_attempts > 0:
+                time.sleep(check_every_seconds) ## check every X seconds except the 1st time
+            active_offers = self.product_offers(params={"status":"active"})
+            number_of_attempts += 1
+        print "number_of_attempts = %s, active_offers=%s" % (number_of_attempts, active_offers)
+        return active_offers
 
 
 class MerchantAddress(UpdateableIcebergObject):
@@ -92,5 +105,16 @@ class MerchantCommissionSettings(UpdateableIcebergObject):
     endpoint = 'commission_settings'
 
 
+class MerchantShippingPolicy(UpdateableIcebergObject):
+    endpoint = 'merchant_policy_parameter'
+
+
 class MerchantFeed(UpdateableIcebergObject):
     endpoint = 'merchant_catalog_feed'
+
+    def validate(self):
+        data = self.request("%s%s/" % (self.resource_uri, 'validate'), method = "post")
+        return self._load_attributes_from_response(**data)
+
+    def parse(self):
+        return self.request("%s%s/" % (self.resource_uri, 'parse'), method = "post")
