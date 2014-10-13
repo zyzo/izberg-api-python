@@ -48,7 +48,7 @@ class Store(UpdateableIcebergObject):
         for element in parser.parse_feed(feed_url):
             if type(element) != dict:
                 raise Exception("element from export feed invalid: %s" % element)
-            res.append(UpdateableIcebergObject.findOrCreate(element))
+            res.append(UpdateableIcebergObject.findOrCreate(self._handler, element))
 
         return res
 
@@ -97,7 +97,7 @@ class MerchantImage(IcebergObject):
 
     def build_resized_image_url(self, width, height, process_mode="crop"):
         from icebergsdk.utils.image_server_utils import build_resized_image_url
-        image_server_url = self.__class__._handler.conf.IMAGE_SERVER_URL
+        image_server_url = self._handler.conf.IMAGE_SERVER_URL
         return build_resized_image_url(image_server_url, self.image_path, width, height, process_mode)
 
 
