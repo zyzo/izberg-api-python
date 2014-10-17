@@ -8,6 +8,7 @@ from icebergsdk.exceptions import IcebergMissingSsoData
 
 from icebergsdk.conf import Configuration
 from icebergsdk import resources
+from icebergsdk.managers import ResourceManager, UserResourceManager, CartResourceManager
 from icebergsdk.json_utils import DateTimeAwareJSONEncoder
 
 logger = logging.getLogger('icebergsdk')
@@ -24,42 +25,54 @@ class IcebergAPI(object):
         self.access_token = access_token
         self.timeout = timeout
         self.lang = lang or self.conf.ICEBERG_DEFAULT_LANG
-
         self.define_resources() # Resources definition
+        self._objects_store = {} # Will store the object for relationship management
+
 
     def define_resources(self):
         """
         For faster initialization, set the handler in the resources classes
         """
-        self.Application = resources.Application.set_handler(self)
-        self.Address = resources.Address.set_handler(self)
-        self.Cart = resources.Cart.set_handler(self)
-        self.Country = resources.Country.set_handler(self)
-        self.MerchantOrder = resources.MerchantOrder.set_handler(self)
-        self.Order = resources.Order.set_handler(self)
-        self.ProductVariation = resources.ProductVariation.set_handler(self)
-        self.ProductOffer = resources.ProductOffer.set_handler(self)
-        self.ProductOfferImage = resources.ProductOfferImage.set_handler(self)
-        self.Product = resources.Product.set_handler(self)
-        self.Profile = resources.Profile.set_handler(self)
-        self.Payment = resources.Payment.set_handler(self)
+        self.Application = ResourceManager(resource_class=resources.Application, api_handler=self)
+        self.ApplicationCommissionSettings = ResourceManager(resource_class=resources.ApplicationCommissionSettings, api_handler=self)
+        self.ApplicationMerchantPolicies = ResourceManager(resource_class=resources.ApplicationMerchantPolicies, api_handler=self)
+        self.ApplicationTransaction = ResourceManager(resource_class=resources.ApplicationTransaction, api_handler=self)
+        self.MarketPlaceTransaction = ResourceManager(resource_class=resources.MarketPlaceTransaction, api_handler=self)
+        self.Address = ResourceManager(resource_class=resources.Address, api_handler=self)
+        self.Cart = CartResourceManager(resource_class=resources.Cart, api_handler=self)
+        self.Country = ResourceManager(resource_class=resources.Country, api_handler=self)
+        self.MerchantOrder = ResourceManager(resource_class=resources.MerchantOrder, api_handler=self)
+        self.Order = ResourceManager(resource_class=resources.Order, api_handler=self)
+        self.ProductVariation = ResourceManager(resource_class=resources.ProductVariation, api_handler=self)
+        self.ProductOffer = ResourceManager(resource_class=resources.ProductOffer, api_handler=self)
+        self.ProductOfferImage = ResourceManager(resource_class=resources.ProductOfferImage, api_handler=self)
+        self.Product = ResourceManager(resource_class=resources.Product, api_handler=self)
+        self.Profile = ResourceManager(resource_class=resources.Profile, api_handler=self)
+        self.Payment = ResourceManager(resource_class=resources.Payment, api_handler=self)
 
-        self.Store = resources.Store.set_handler(self)
-        self.StoreBankAccount = resources.StoreBankAccount.set_handler(self)
-        self.MerchantAddress = resources.MerchantAddress.set_handler(self)
+        self.Store = ResourceManager(resource_class=resources.Store, api_handler=self)
+        self.StoreBankAccount = ResourceManager(resource_class=resources.StoreBankAccount, api_handler=self)
+        self.MerchantAddress = ResourceManager(resource_class=resources.MerchantAddress, api_handler=self)
+        self.MerchantCommissionSettings = ResourceManager(resource_class=resources.MerchantCommissionSettings, api_handler=self)
+        self.MerchantFeed = ResourceManager(resource_class=resources.MerchantFeed, api_handler=self)
+        self.MerchantShippingPolicy = ResourceManager(resource_class=resources.MerchantShippingPolicy, api_handler=self)
+        self.MerchantTransaction = ResourceManager(resource_class=resources.MerchantTransaction, api_handler=self)
         
-        self.User = resources.User.set_handler(self)
-        self.Message = resources.Message.set_handler(self)
-        self.Review = resources.Review.set_handler(self)
-        self.MerchantReview = resources.MerchantReview.set_handler(self)
-        self.UserShoppingPreference = resources.UserShoppingPreference.set_handler(self)
-        self.Category = resources.Category.set_handler(self)
-        self.Brand = resources.Brand.set_handler(self)
+        self.User = UserResourceManager(resource_class=resources.User, api_handler=self)
+        self.Message = ResourceManager(resource_class=resources.Message, api_handler=self)
+        self.Review = ResourceManager(resource_class=resources.Review, api_handler=self)
+        self.MerchantReview = ResourceManager(resource_class=resources.MerchantReview, api_handler=self)
+        self.UserShoppingPreference = ResourceManager(resource_class=resources.UserShoppingPreference, api_handler=self)
+        self.Category = ResourceManager(resource_class=resources.Category, api_handler=self)
+        self.Brand = ResourceManager(resource_class=resources.Brand, api_handler=self)
 
-        self.Webhook = resources.Webhook.set_handler(self)
-        self.WebhookTrigger = resources.WebhookTrigger.set_handler(self)
-        self.WebhookTrigger = resources.WebhookTrigger.set_handler(self)
-        self.WebhookTriggerAttempt = resources.WebhookTriggerAttempt.set_handler(self)
+        self.Webhook = ResourceManager(resource_class=resources.Webhook, api_handler=self)
+        self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
+        self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
+        self.WebhookTriggerAttempt = ResourceManager(resource_class=resources.WebhookTriggerAttempt, api_handler=self)
+
+        
+        self.Transaction = ResourceManager(resource_class=resources.Transaction, api_handler=self)
         
         ### Missing
 

@@ -7,6 +7,9 @@ class ClientProductImport(IcebergUnitTestCase):
     Test the XML product import for a store
     """
     def test_import(self):
+    	"""
+        Product import from a random catalog
+        """
         self.login()
 
         store = self.get_random_active_store()

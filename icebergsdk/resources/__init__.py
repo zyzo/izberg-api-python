@@ -2,23 +2,31 @@
 
 import logging
 
-from icebergsdk.resources.application import Application
+from icebergsdk.resources.application import Application, ApplicationCommissionSettings, ApplicationMerchantPolicies,\
+                                             ApplicationTransaction
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
-from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount
+from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount,\
+                                       MerchantCommissionSettings, MerchantFeed, MerchantShippingPolicy,\
+                                       MerchantTransaction
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
 from icebergsdk.resources.review import Review, MerchantReview
 from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
+from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 
 logger = logging.getLogger('icebergsdk')
 
 def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
+        "application_commission_settings": ApplicationCommissionSettings,
+        "application_merchant_policies": ApplicationMerchantPolicies,
+        "app_transaction": ApplicationTransaction,
+        "mp_transaction": MarketPlaceTransaction,
         "product": Product,
         "brand": Brand,
         "productoffer": ProductOffer,
@@ -33,6 +41,7 @@ def get_class_from_resource_uri(resource_uri):
         "payment": Payment,
         "merchant": Store,
         "store_bank_account": StoreBankAccount,
+        "commission_settings": MerchantCommissionSettings,
         "merchant_address": MerchantAddress,
         "merchant_image": MerchantImage,
         "order": Order,
@@ -48,6 +57,10 @@ def get_class_from_resource_uri(resource_uri):
         "webhook": Webhook,
         "webhook_trigger": WebhookTrigger,
         "webhook_trigger_attempt": WebhookTriggerAttempt,
+        "merchant_catalog_feed": MerchantFeed,
+        "merchant_shipping_policy": MerchantShippingPolicy,
+        "store_transaction": MerchantTransaction,
+        "transaction": Transaction,
     }
 
     # Hack for now... Will be changed
