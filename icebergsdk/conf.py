@@ -45,6 +45,23 @@ class ConfigurationSandbox(ConfigurationBase):
 
     IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
 
+class ConfigurationSandboxStage(ConfigurationBase):
+    """
+    Sandbox Configuration. Isolated from Production.
+    """
+    ICEBERG_API_URL = "http://api.sandbox.stage.iceberg.technology"
+    ICEBERG_API_PORT = 80
+    ICEBERG_CORS = "http://api.sandbox.stage.iceberg.technology/cors/"
+    ICEBERG_API_URL_FULL = "%s:%s" % (ICEBERG_API_URL, ICEBERG_API_PORT)
+    ICEBERG_ENV = "sandbox_stage"
+
+    # Keys
+    ICEBERG_API_PRIVATE_KEY = os.getenv('ICEBERG_API_PRIVATE_KEY_SANDBOX_STAGE', None)
+    ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_SANDBOX_STAGE', None)
+    ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_SANDBOX_STAGE', None)
+
+    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
+
 
 class ConfigurationStage(ConfigurationBase):
     """

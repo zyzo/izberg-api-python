@@ -138,7 +138,7 @@ class IcebergObject(dict):
                         res.append(u)
                 params[k] = res
             else:
-                params[k] = v if v is not None else ""
+                params[k] = v # if v is not None else ""
         return params
 
     def __repr__(self):        
@@ -410,7 +410,7 @@ class UpdateableIcebergObject(IcebergObject):
                             res.append(elem)
                     params[k] = res
                 else:
-                    params[k] = v if v is not None else ""
+                    params[k] = v # if v is not None else ""
         return params
 
     # def save(self, handler = None):

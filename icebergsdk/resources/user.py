@@ -35,8 +35,12 @@ class User(IcebergObject):
         data = self.request('%sprofile/' % self.resource_uri) 
         return Profile.findOrCreate(self._handler, data)
 
+    # Messages
     def inbox(self):
         return self.get_list("%sinbox/" % self.resource_uri)
+
+    def outbox(self):
+        return self.get_list("%soutbox/" % self.resource_uri)
 
 
 class Profile(UpdateableIcebergObject):
