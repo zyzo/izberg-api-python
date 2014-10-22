@@ -265,7 +265,7 @@ class IcebergObject(dict):
         try:
             obj_cls = get_class_from_resource_uri(data['resource_uri'])
         except:
-            obj = cls()
+            obj = cls(handler=handler)
         else:
             data_type = obj_cls.endpoint
 
@@ -276,13 +276,13 @@ class IcebergObject(dict):
 
             if not data_type in handler._objects_store: # New type collectore
                 handler._objects_store[data_type] = weakref.WeakValueDictionary()
-                obj = obj_cls()
+                obj = obj_cls(handler=handler)
                 handler._objects_store[data_type][key] = obj
             else:
                 if key in handler._objects_store[data_type]:
                     obj = handler._objects_store[data_type][key]
                 else:
-                    obj = obj_cls()
+                    obj = obj_cls(handler=handler)
                     handler._objects_store[data_type][key] = obj
 
 
@@ -350,19 +350,11 @@ class IcebergObject(dict):
     #     return cls.search()[0]
 
     @classmethod
-<<<<<<< HEAD
-    def all(cls, args = None):
+    def all(cls, handler, args = None):
         """
         Like search but return the first result
         """
-        return cls.search(args)[0]
-=======
-    def all(cls, handler):
-        """
-        Like search but return the first result
-        """
-        return cls.search(handler)[0]
->>>>>>> 43b08b19026d2e43fc5f559e81f9e2be59fc53aa
+        return cls.search(handler, args)[0]
 
 
     def validate_format(self):
