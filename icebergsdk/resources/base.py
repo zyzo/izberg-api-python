@@ -16,6 +16,8 @@ Lot's of stuff to rewrite/remove/add
 
 class IcebergObject(dict):
     __objects_store = {} # Will store the object for relationship management
+    
+    raw_fields = []
 
     def __init__(self, api_key=None, handler = None, **params):
         super(IcebergObject, self).__init__()
@@ -93,22 +95,22 @@ class IcebergObject(dict):
             "To unset a property, set it to None.")
 
     def request(self, *args, **kwargs):
-        return self.__class__._handler.request(*args, **kwargs)
+        return self._handler.request(*args, **kwargs)
 
     def get_list(self, resource, **kwargs):
         """
         Return a list of Resource Objects
         """
-        data = self.__class__._handler.get_list(resource, **kwargs)
+        data = self._handler.get_list(resource, **kwargs)
 
         res = []
         for element in data:
-            res.append(IcebergObject.findOrCreate(element))
+            res.append(IcebergObject.findOrCreate(self._handler, element))
 
         return res
 
     def send_image(self, *args, **kwargs):
-        return self.__class__._handler.send_image(*args, **kwargs)
+        return self._handler.send_image(*args, **kwargs)
 
     def to_JSON(self):
         return json.dumps(self.as_dict())
@@ -159,10 +161,10 @@ class IcebergObject(dict):
     def __str__(self):
         return json.dumps(self, sort_keys=True, indent=2)
 
-    @classmethod
-    def set_handler(cls, handler):
-        cls._handler = handler
-        return cls
+    # @classmethod
+    # def set_handler(cls, handler):
+    #     cls._handler = handler
+    #     return cls
 
     def to_dict(self):
         warnings.warn(
@@ -213,7 +215,7 @@ class IcebergObject(dict):
                         try:
                             from icebergsdk.resources import get_class_from_resource_uri
                             obj_cls = get_class_from_resource_uri(elem['resource_uri'])
-                            res.append(obj_cls.findOrCreate(elem))
+                            res.append(obj_cls.findOrCreate(self._handler, elem))
                         except Exception:
                             logger.exception('Cant parse resource')
                     else:
@@ -222,26 +224,31 @@ class IcebergObject(dict):
                 self.__dict__[key] = res
 
             elif type(value) == dict:
-                if 'resource_uri' in value: # Try to match a relation
+                if key in self.raw_fields:
+                    self.__dict__[key] = value ## keep this field as raw
+                elif 'resource_uri' in value: # Try to match a relation
                     try:
                         from icebergsdk.resources import get_class_from_resource_uri
                         obj_cls = get_class_from_resource_uri(value['resource_uri'])
-                        self.__dict__[key] = obj_cls.findOrCreate(value)
+                        self.__dict__[key] = obj_cls.findOrCreate(self._handler, value)
                     except:
-                        pass
+                        ## keep it as dict
+                        self.__dict__[key] = value
                 elif 'id' in value: # Fall back
                     self.__dict__[key] = value['id']
+                else:
+                    self.__dict__[key] = value ## keep it as dict
             else:
                 self.__dict__[key] = value
         return self
 
 
     @classmethod
-    def findOrCreate(cls, data):
+    def findOrCreate(cls, handler, data):
         """
         Take a dict and return an corresponding Iceberg resource object.
 
-        Check in __objects_store for reuse of existing object
+        Check in _objects_store for reuse of existing object
 
         Example:
             data: {
@@ -267,53 +274,95 @@ class IcebergObject(dict):
             else:
                 key = str(data['id'])
 
-            if not data_type in cls.__objects_store: # New type collectore
-                cls.__objects_store[data_type] = weakref.WeakValueDictionary()
+            if not data_type in handler._objects_store: # New type collectore
+                handler._objects_store[data_type] = weakref.WeakValueDictionary()
                 obj = obj_cls()
-                cls.__objects_store[data_type][key] = obj
+                handler._objects_store[data_type][key] = obj
             else:
-                if key in cls.__objects_store[data_type]:
-                    obj = cls.__objects_store[data_type][key]
+                if key in handler._objects_store[data_type]:
+                    obj = handler._objects_store[data_type][key]
                 else:
                     obj = obj_cls()
-                    cls.__objects_store[data_type][key] = obj
+                    handler._objects_store[data_type][key] = obj
+
 
         return obj._load_attributes_from_response(**data)
 
+    # @classmethod
+    # def find(cls, object_id):
+    #     if not cls._handler:
+    #         raise IcebergNoHandlerError()
+
+    #     data = cls._handler.get_element(cls.endpoint, object_id)
+    #     return cls.findOrCreate(data)
     @classmethod
-    def find(cls, object_id):
-        if not cls._handler:
+    def find(cls, handler, object_id):
+        if not handler:
             raise IcebergNoHandlerError()
 
-        data = cls._handler.get_element(cls.endpoint, object_id)
-        return cls.findOrCreate(data)
+        data = handler.get_element(cls.endpoint, object_id)
+        return cls.findOrCreate(handler, data)
 
+
+    # @classmethod
+    # def search(cls, args = None):
+    #     if not cls._handler:
+    #         raise IcebergNoHandlerError()
+
+    #     data = cls._handler.request("%s/" % cls.endpoint, args)
+    #     res = []
+    #     for element in data['objects']:
+    #         res.append(cls.findOrCreate(element))
+
+    #     return res, data["meta"]  # cls.findOrCreate(data)
 
     @classmethod
-    def search(cls, args = None):
-        if not cls._handler:
+    def search(cls, handler, args = None):
+        if not handler:
             raise IcebergNoHandlerError()
 
-        data = cls._handler.request("%s/" % cls.endpoint, args)
+        data = handler.request("%s/" % cls.endpoint, args)
         res = []
         for element in data['objects']:
-            res.append(cls.findOrCreate(element))
+            res.append(cls.findOrCreate(handler, element))
 
         return res, data["meta"]  # cls.findOrCreate(data)
 
+    # @classmethod
+    # def findWhere(cls, args):
+    #     """
+    #     Like search but return the first result
+    #     """
+    #     return cls.search(args)[0][0]
+
     @classmethod
-    def findWhere(cls, args):
+    def findWhere(cls, handler, args):
         """
         Like search but return the first result
         """
-        return cls.search(args)[0][0]
+        return cls.search(handler, args)[0][0]
+
+    # @classmethod
+    # def all(cls):
+    #     """
+    #     Like search but return the first result
+    #     """
+    #     return cls.search()[0]
 
     @classmethod
+<<<<<<< HEAD
     def all(cls, args = None):
         """
         Like search but return the first result
         """
         return cls.search(args)[0]
+=======
+    def all(cls, handler):
+        """
+        Like search but return the first result
+        """
+        return cls.search(handler)[0]
+>>>>>>> 43b08b19026d2e43fc5f559e81f9e2be59fc53aa
 
 
     def validate_format(self):
@@ -323,16 +372,28 @@ class IcebergObject(dict):
         raise NotImplementedError()
 
 
+    # def fetch(self):
+    #     """
+    #     Resets the model's state from the server
+    #     """
+    #     if not self.__class__._handler:
+    #         raise IcebergNoHandlerError()
+
+    #     data = self.__class__._handler.request(self.resource_uri)
+
+    #     return self._load_attributes_from_response(**data)
+
     def fetch(self):
         """
         Resets the model's state from the server
         """
-        if not self.__class__._handler:
+        if not self._handler:
             raise IcebergNoHandlerError()
 
-        data = self.__class__._handler.request(self.resource_uri)
+        data = self._handler.request(self.resource_uri)
 
         return self._load_attributes_from_response(**data)
+
 
     def delete(self):
         raise IcebergReadOnlyError()
@@ -366,12 +427,34 @@ class UpdateableIcebergObject(IcebergObject):
                     params[k] = v # if v is not None else ""
         return params
 
+    # def save(self, handler = None):
+    #     if not handler:
+    #         if not self.__class__._handler:
+    #             raise IcebergNoHandlerError()
+
+    #         handler = self.__class__._handler
+
+    #     if self.is_new():
+    #         method = "POST"
+    #         path = "%s/" % self.endpoint
+    #     else:
+    #         method = "PUT"
+    #         path = self.resource_uri
+
+    #     res = handler.request(path, post_args = self.serialize(self), method = method)
+    #     self._load_attributes_from_response(**res)
+
+    #     # Clean
+    #     self._unsaved_values = set()
+
+    #     return self
+
     def save(self, handler = None):
         if not handler:
-            if not self.__class__._handler:
+            if not self._handler:
                 raise IcebergNoHandlerError()
 
-            handler = self.__class__._handler
+            handler = self._handler
 
         if self.is_new():
             method = "POST"
@@ -388,12 +471,25 @@ class UpdateableIcebergObject(IcebergObject):
 
         return self
 
+    # def delete(self, handler = None):
+    #     if not handler:
+    #         if not self.__class__._handler:
+    #             raise IcebergNoHandlerError()
+
+    #         handler = self.__class__._handler
+                
+    #     handler.request(self.resource_uri, post_args = {}, method = "DELETE")
+    #     # Clean
+    #     self.__dict__ = {}
+    #     self._unsaved_values = set()
+
+
     def delete(self, handler = None):
         if not handler:
-            if not self.__class__._handler:
+            if not self._handler:
                 raise IcebergNoHandlerError()
 
-            handler = self.__class__._handler
+            handler = self._handler
                 
         handler.request(self.resource_uri, post_args = {}, method = "DELETE")
         # Clean

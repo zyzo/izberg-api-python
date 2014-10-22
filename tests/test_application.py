@@ -32,6 +32,13 @@ class TestApplication(IcebergUnitTestCase):
         self._objects_to_delete.append(new_application)
         self.my_context_dict["new_application"] = new_application
 
+        app_found = False
+        for app in self.api_handler.User.me().applications():
+            if app.id == new_application.id:
+                app_found = True
+                break
+        self.assertTrue(app_found)
+
         return new_application
 
     def test_02_sso_read(self):
