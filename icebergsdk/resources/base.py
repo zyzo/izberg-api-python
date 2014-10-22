@@ -262,16 +262,21 @@ class IcebergObject(dict):
         else:
             data_type = obj_cls.endpoint
 
+            if "pk" in data:
+                key = str(data['pk'])
+            else:
+                key = str(data['id'])
+
             if not data_type in cls.__objects_store: # New type collectore
                 cls.__objects_store[data_type] = weakref.WeakValueDictionary()
                 obj = obj_cls()
-                cls.__objects_store[data_type][str(data['id'])] = obj
+                cls.__objects_store[data_type][key] = obj
             else:
-                if str(data['id']) in cls.__objects_store[data_type]:
-                    obj = cls.__objects_store[data_type][str(data['id'])]
+                if key in cls.__objects_store[data_type]:
+                    obj = cls.__objects_store[data_type][key]
                 else:
                     obj = obj_cls()
-                    cls.__objects_store[data_type][str(data['id'])] = obj
+                    cls.__objects_store[data_type][key] = obj
 
         return obj._load_attributes_from_response(**data)
 
@@ -304,11 +309,11 @@ class IcebergObject(dict):
         return cls.search(args)[0][0]
 
     @classmethod
-    def all(cls):
+    def all(cls, args = None):
         """
         Like search but return the first result
         """
-        return cls.search()[0]
+        return cls.search(args)[0]
 
 
     def validate_format(self):

@@ -13,6 +13,7 @@ from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
 from icebergsdk.resources.review import Review, MerchantReview
 from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
+from icebergsdk.resources.currency import Currency
 
 logger = logging.getLogger('icebergsdk')
 
@@ -21,6 +22,7 @@ def get_class_from_resource_uri(resource_uri):
         "application": Application,
         "product": Product,
         "brand": Brand,
+        "currency": Currency,
         "productoffer": ProductOffer,
         "offer_image": ProductOfferImage,
         "product_variation": ProductVariation,
