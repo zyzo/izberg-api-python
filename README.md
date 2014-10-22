@@ -157,7 +157,7 @@ print user_cart.total_amount
     
 ```
 
-### Add product to cart
+### Add an offer to cart
 
 Edit a user's cart by adding an offer, and then print the amount of the updated cart for example.
 
@@ -168,6 +168,21 @@ user_cart = api_handler.Cart.mine()
 offer = api_handler.ProductOffer.find("52")
 
 user_cart.addOffer(offer)
+
+print api_handler.Cart.mine().total_amount
+```
+
+### Add an offer variation to cart
+
+Edit a user's cart by adding an offer, and then print the amount of the updated cart for example.
+
+```python
+
+user_cart = api_handler.Cart.mine()
+
+offer = api_handler.ProductOffer.find("52")
+variation = offer.variations[0]
+user_cart.addVariation(variation)
 
 print api_handler.Cart.mine().total_amount
 ```
