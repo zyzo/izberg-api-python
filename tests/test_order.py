@@ -25,7 +25,7 @@ class ClientOrder(IcebergUnitTestCase):
         cart.fetch()
         
 
-    def test_full_order(self):
+    def test_full_order(self, offer_id=None):
         """
         Full order
         """
@@ -34,7 +34,10 @@ class ClientOrder(IcebergUnitTestCase):
         cart = self.api_handler.Cart()
         cart.save()
         
-        offer = self.get_random_offer()
+        if offer_id:
+            offer = self.api_handler.ProductOffer.find(offer_id)
+        else:
+            offer = self.get_random_offer()
         
         if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:
