@@ -4,6 +4,9 @@ from decimal import Decimal
 from helper import IcebergUnitTestCase, get_api_handler
 from helpers.login_utils import IcebergLoginUtils
 
+MERCHANT_COMMISSION = 0.40
+REVENUE_SHARING = 0.05
+
 class CommissionsTestCase(IcebergUnitTestCase):
     @classmethod
     def setUpClass(cls):
@@ -52,7 +55,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
 
         commission_settings = cls.api_handler.MerchantCommissionSettings()
         commission_settings.merchant = merchant
-        commission_settings.cpa = 25
+        commission_settings.cpa = MERCHANT_COMMISSION*100
         commission_settings.save()
 
         cls.my_context_dict['commission_settings'] = commission_settings
@@ -62,7 +65,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
         application_settings = cls.api_handler.ApplicationCommissionSettings()
         application_settings.application = application
         application_settings.merchant = merchant
-        application_settings.revenue_sharing = 50
+        application_settings.revenue_sharing = REVENUE_SHARING*100
         application_settings.save()
         cls.my_context_dict['application_settings'] = application_settings
         cls._objects_to_delete.append(application_settings)
@@ -147,10 +150,12 @@ class CommissionsTestCase(IcebergUnitTestCase):
         merchant_transactions = self.api_handler.MerchantTransaction.search(args={"transaction":transaction.id})[0]
         self.assertEqual(len(merchant_transactions), 1)
         merchant_transaction = merchant_transactions[0]
-        expected_merchant_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.75)).quantize(Decimal("0.01"))
+        expected_merchant_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*(1-MERCHANT_COMMISSION))).quantize(Decimal("0.01"))
         vat_on_shipping = float(merchant_order.vat)-float(merchant_order.vat_on_products)
         expected_merchant_commission += Decimal(str((float(merchant_order.shipping)+vat_on_shipping))).quantize(Decimal("0.01"))
-        self.assertEqual(Decimal(merchant_transaction.amount),  expected_merchant_commission)
+        # self.assertEqual(Decimal(merchant_transaction.amount),  expected_merchant_commission)
+        difference = abs(expected_merchant_commission-Decimal(merchant_transaction.amount))
+        self.assertLessEqual(difference, Decimal("0.01"))
 
 
     def test_03_check_app_commission(self):
@@ -163,7 +168,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
         app_transactions = self.api_handler.ApplicationTransaction.search(args={"transaction":transaction.id})[0]
         self.assertEqual(len(app_transactions), 1)
         app_transaction = app_transactions[0]
-        expected_app_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.25*0.5)).quantize(Decimal("0.01"))
+        expected_app_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*MERCHANT_COMMISSION*(1-REVENUE_SHARING))).quantize(Decimal("0.01"))
         # self.assertEqual(Decimal(app_transaction.amount),  expected_app_commission)
         difference = abs(expected_app_commission-Decimal(app_transaction.amount))
         self.assertLessEqual(difference, Decimal("0.01"))
@@ -178,12 +183,15 @@ class CommissionsTestCase(IcebergUnitTestCase):
         merchant_order = self.my_context_dict['merchant_order']
         transaction = self.my_context_dict['transaction']
         mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":transaction.id})[0]
-        self.assertEqual(len(mp_transactions), 1)
-        mp_transaction = mp_transactions[0]
-        expected_mp_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*0.25*0.5)).quantize(Decimal("0.01"))
-        # self.assertEqual(Decimal(mp_transaction.amount),  expected_mp_commission)
-        difference = abs(expected_mp_commission-Decimal(mp_transaction.amount))
-        self.assertLessEqual(difference, Decimal("0.01"))
+        if REVENUE_SHARING:
+            self.assertEqual(len(mp_transactions), 1)
+            mp_transaction = mp_transactions[0]
+            expected_mp_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*MERCHANT_COMMISSION*REVENUE_SHARING)).quantize(Decimal("0.01"))
+            # self.assertEqual(Decimal(mp_transaction.amount),  expected_mp_commission)
+            difference = abs(expected_mp_commission-Decimal(mp_transaction.amount))
+            self.assertLessEqual(difference, Decimal("0.01"))
+        else:
+            self.assertEqual(len(mp_transactions), 0)
 
 
 
