@@ -37,12 +37,19 @@ class ClientCreateProduct(IcebergUnitTestCase):
         """
         self.direct_login_user_1()
 
+        try:
+            brand = self.api_handler.Brand.find(1)
+        except:
+            brand = self.api_handler.Brand()
+            brand.name = "Test Brand"
+            brand.save()
+
         product = self.create_product(
                     name = "Test Product",
                     description = "Description of my test product",
                     gender = "W",
                     categories=[50], # chemisier 
-                    brand=1
+                    brand= brand
                 )
         self.my_context_dict['product'] = product
 

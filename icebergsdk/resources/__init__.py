@@ -16,7 +16,9 @@ from icebergsdk.resources.payment import Payment
 from icebergsdk.resources.message import Message
 from icebergsdk.resources.review import Review, MerchantReview
 from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
+from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
+
 
 logger = logging.getLogger('icebergsdk')
 
@@ -29,13 +31,13 @@ def get_class_from_resource_uri(resource_uri):
         "mp_transaction": MarketPlaceTransaction,
         "product": Product,
         "brand": Brand,
+        "currency": Currency,
         "productoffer": ProductOffer,
         "offer_image": ProductOfferImage,
         "product_variation": ProductVariation,
         "user": User,
         "address": Address,
         "country": Country,
-        "brand": Brand,
         "profile": Profile,
         "user_shopping_prefs": UserShoppingPreference, 
         "payment": Payment,
@@ -53,7 +55,6 @@ def get_class_from_resource_uri(resource_uri):
         "review": Review,
         "merchant_review": MerchantReview,
         "category": Category,
-        "brand": Brand,
         "webhook": Webhook,
         "webhook_trigger": WebhookTrigger,
         "webhook_trigger_attempt": WebhookTriggerAttempt,

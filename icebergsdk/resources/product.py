@@ -44,8 +44,14 @@ class ProductOfferImage(UpdateableIcebergObject):
         image_server_url = self._handler.conf.IMAGE_SERVER_URL
         return build_resized_image_url(image_server_url, self.image_path, width, height, process_mode)
 
+class Brand(UpdateableIcebergObject):
+    endpoint = 'brand'
+
+
 class Category(IcebergObject):
     endpoint = 'category'
 
-class Brand(IcebergObject):
-    endpoint = 'brand'
+
+
+
+

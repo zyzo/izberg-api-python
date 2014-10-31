@@ -44,6 +44,9 @@ class IcebergObject(dict):
             self._unsaved_values.add(k)
             self[k] = v
 
+    def __nonzero__(self):
+        return True
+
     def _init_unsaved(self):
         # Allows for unpickling in Python 3.x
         if not hasattr(self, '_unsaved_values'):
@@ -265,20 +268,26 @@ class IcebergObject(dict):
         try:
             obj_cls = get_class_from_resource_uri(data['resource_uri'])
         except:
-            obj = cls()
+            obj = cls(handler=handler)
         else:
             data_type = obj_cls.endpoint
+
+            if "pk" in data:
+                key = str(data['pk'])
+            else:
+                key = str(data['id'])
 
             if not data_type in handler._objects_store: # New type collectore
                 handler._objects_store[data_type] = weakref.WeakValueDictionary()
                 obj = obj_cls(handler=handler)
-                handler._objects_store[data_type][str(data['id'])] = obj
+                handler._objects_store[data_type][key] = obj
             else:
-                if str(data['id']) in handler._objects_store[data_type]:
-                    obj = handler._objects_store[data_type][str(data['id'])]
+                if key in handler._objects_store[data_type]:
+                    obj = handler._objects_store[data_type][key]
                 else:
                     obj = obj_cls(handler=handler)
-                    handler._objects_store[data_type][str(data['id'])] = obj
+                    handler._objects_store[data_type][key] = obj
+
 
         return obj._load_attributes_from_response(**data)
 
@@ -344,11 +353,11 @@ class IcebergObject(dict):
     #     return cls.search()[0]
 
     @classmethod
-    def all(cls, handler):
+    def all(cls, handler, args = None):
         """
         Like search but return the first result
         """
-        return cls.search(handler)[0]
+        return cls.search(handler, args)[0]
 
 
     def validate_format(self):

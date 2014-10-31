@@ -13,6 +13,9 @@ class Application(UpdateableIcebergObject):
     def outbox(self):
         return self.get_list("%soutbox/" % self.resource_uri)
 
+    def merchants(self, params = None):
+        params = params or {}
+        return self.get_list("%smerchants/" % self.resource_uri, args = params)
 
     def fetch_secret_key(self):
     	return self.request("%sfetchSecretKey/" % self.resource_uri)["secret_key"]

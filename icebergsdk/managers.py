@@ -21,8 +21,8 @@ class ResourceManager(object):
     def findWhere(self, args):
         return self.resource_class.findWhere(self.api_handler, args)
 
-    def all(self):
-        return self.resource_class.all(self.api_handler)
+    def all(self, args = None):
+        return self.resource_class.all(self.api_handler, args = args)
 
     def save(self):
         return self.resource_class.save(self.api_handler)
