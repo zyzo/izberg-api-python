@@ -39,6 +39,9 @@ class TestApplication(IcebergUnitTestCase):
                 break
         self.assertTrue(app_found)
 
+        # merchants
+        new_application.merchants()
+
         return new_application
 
     def test_02_sso_read(self):

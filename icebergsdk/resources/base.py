@@ -44,6 +44,9 @@ class IcebergObject(dict):
             self._unsaved_values.add(k)
             self[k] = v
 
+    def __nonzero__(self):
+        return True
+
     def _init_unsaved(self):
         # Allows for unpickling in Python 3.x
         if not hasattr(self, '_unsaved_values'):

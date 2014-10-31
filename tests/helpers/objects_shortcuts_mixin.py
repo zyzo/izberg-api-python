@@ -2,6 +2,7 @@
 
 import random
 
+from icebergsdk.resources import Brand
 
 class IcebergObjectCreateMixin(object):
     """
@@ -141,7 +142,7 @@ class IcebergObjectCreateMixin(object):
                 product.categories.append(category_obj)
 
         if brand:
-            if type(brand) == self.api_handler.Brand:
+            if isinstance(brand, Brand):
                 brand_obj = brand
             else:
                 brand_obj = self.api_handler.Brand()
