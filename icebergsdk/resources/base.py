@@ -395,10 +395,25 @@ class IcebergObject(dict):
 
     def save(self):
         raise IcebergReadOnlyError()
-        
 
+
+def dict_force_text(anything):
+    if isinstance(anything, str): ## ex: anything = 'étoile' in a coding: utf-8 file
+        return anything.decode("utf-8").encode("utf-8")
+    elif isinstance(anything, unicode): ## ex: anything = u'étoile'
+        return anything.encode("utf-8")
+    elif isinstance(anything, dict):
+        new_dict = {}
+        for key, value in anything.iteritems():
+            new_dict[dict_force_text(key)] = dict_force_text(value)
+        return new_dict
+    elif isinstance(anything, list):
+        return [dict_force_text(item) for item in anything]
+    else: 
+        return anything
 
 class UpdateableIcebergObject(IcebergObject):
+
     def serialize(self, obj):
         params = {}
         if obj._unsaved_values:
@@ -420,6 +435,9 @@ class UpdateableIcebergObject(IcebergObject):
                     params[k] = res
                 else:
                     params[k] = v # if v is not None else ""
+        
+        params = dict_force_text(params)
+        
         return params
 
     # def save(self, handler = None):

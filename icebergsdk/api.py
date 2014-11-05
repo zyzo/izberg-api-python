@@ -73,6 +73,9 @@ class IcebergAPI(object):
 
         
         self.Transaction = ResourceManager(resource_class=resources.Transaction, api_handler=self)
+
+        self.Return = ResourceManager(resource_class=resources.Return, api_handler=self)
+        self.Refund = ResourceManager(resource_class=resources.Refund, api_handler=self)
         
         ### Missing
 

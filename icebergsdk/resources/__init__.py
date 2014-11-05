@@ -18,6 +18,7 @@ from icebergsdk.resources.review import Review, MerchantReview
 from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
 from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
+from icebergsdk.resources.return_refund import Return, Refund
 
 
 logger = logging.getLogger('icebergsdk')
@@ -62,6 +63,8 @@ def get_class_from_resource_uri(resource_uri):
         "merchant_shipping_policy": MerchantShippingPolicy,
         "store_transaction": MerchantTransaction,
         "transaction": Transaction,
+        "return": Return,
+        "refund": Refund,
     }
 
     # Hack for now... Will be changed
