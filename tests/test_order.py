@@ -25,7 +25,7 @@ class ClientOrder(IcebergUnitTestCase):
         cart.fetch()
         
 
-    def test_02_full_order(self, offer_id=None):
+    def full_order(self, offer_ids=None, number_of_offers=2):
         """
         Full order
         """
@@ -34,20 +34,27 @@ class ClientOrder(IcebergUnitTestCase):
         cart = self.api_handler.Cart()
         cart.save()
         
-        if offer_id:
-            offer = self.api_handler.ProductOffer.find(offer_id)
-        else:
-            offer = self.get_random_offer()
+        offers = []
         
-        if hasattr(offer, 'variations') and len(offer.variations) > 0:
-            for variation in offer.variations:
-                print variation
-                print variation.to_JSON()
-                if variation.stock > 0:
-                    cart.addVariation(variation, offer)
-                    break
+        if offer_ids:
+            for offer_id in offer_ids:
+                offers.append(self.api_handler.ProductOffer.find(offer_id))
         else:
-            cart.addOffer(offer)
+
+            for i in xrange(number_of_offers):
+                offers.append(self.get_random_offer())
+            
+
+        for offer in offers:
+            if hasattr(offer, 'variations') and len(offer.variations) > 0:
+                for variation in offer.variations:
+                    print variation
+                    print variation.to_JSON()
+                    if variation.stock > 0:
+                        cart.addVariation(variation, offer)
+                        break
+            else:
+                cart.addOffer(offer)
 
         cart.fetch()
 
@@ -71,13 +78,25 @@ class ClientOrder(IcebergUnitTestCase):
         self.my_context_dict['order'] = order
         self.my_context_dict['merchant_order'] = order.merchant_orders[0]
 
+    def test_02_full_order(self):
+        """
+        Full order
+        """
+        self.full_order()
+
     def test_03_confirm_merchant_order(self):
+        """
+        Confirm merchant order
+        """
         self.login()
         merchant_order = self.my_context_dict['merchant_order']
         merchant_order.confirm()
 
             
     def test_04_create_return(self):
+        """
+        Create return
+        """
         self.login()
         merchant_order = self.my_context_dict['merchant_order']
 
@@ -91,12 +110,18 @@ class ClientOrder(IcebergUnitTestCase):
         self.my_context_dict['return_request'] = return_request
         
     def test_05_accept_return(self):
+        """
+        Accept Return
+        """
         self.login()
         return_request = self.my_context_dict['return_request']
         return_request.accept()
         
         
     def test_06_create_refund(self):
+        """
+        Create Refund
+        """
         self.login()
         return_request = self.my_context_dict['return_request']
         merchant_order = self.my_context_dict['merchant_order']
