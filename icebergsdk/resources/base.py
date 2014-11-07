@@ -5,7 +5,8 @@ import weakref  # Means that if there is no other value, it will be removed
 
 logger = logging.getLogger('icebergsdk.resource')
 
-from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError
+from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError,\
+    IcebergMultipleObjectsReturned, IcebergObjectNotFound
 
 
 """
@@ -343,7 +344,13 @@ class IcebergObject(dict):
         """
         Like search but return the first result
         """
-        return cls.search(handler, args)[0][0]
+        results, meta = cls.search(handler, args)
+        if len(results) > 1:
+            raise IcebergMultipleObjectsReturned()
+        elif len(results) == 0:
+            raise IcebergObjectNotFound()
+        return results[0]
+
 
     # @classmethod
     # def all(cls):
