@@ -25,7 +25,7 @@ class ClientOrder(IcebergUnitTestCase):
         cart.fetch()
         
 
-    def full_order(self, offer_ids=None, number_of_offers=10):
+    def full_order(self, offer_ids=None, number_of_offers=3):
         """
         Full order
         """
