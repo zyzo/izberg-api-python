@@ -183,7 +183,12 @@ class ClientOrder(IcebergUnitTestCase):
         self.assertEqual(total_refund_amount, transaction_sum)
 
         theoretical_refund_amount = Decimal(order.amount_vat_included) - Decimal(order_item_not_refunded.amount_vat_included)
-        self.assertEqual(total_refund_amount, theoretical_refund_amount)
+
+        # self.assertEqual(total_refund_amount, theoretical_refund_amount)
+        amount_diff = abs(abs(total_refund_amount) - abs(theoretical_refund_amount))
+        self.assertLessEqual(amount_diff, Decimal("0.01"))
+
+
         ## This was the checks for Full Refund : TODO do other checks ?
 
         # sell_transaction = self.api_handler.Transaction.findWhere({"order":order.id, "transaction_type":1})
@@ -247,7 +252,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.merchant = merchant_order.merchant
         refund.user = self.api_handler.User.me()
         refund.partial_refund = True
-        refund.shipping = merchant_order.shipping_vat_included
+        refund.shipping = 0
         refund.adjustment = 0
         refund.memo = u"Mémô"
         refund.seller_note = u"Séllèr Nötè" 
@@ -269,9 +274,8 @@ class ClientOrder(IcebergUnitTestCase):
         order_item_not_refunded = self.my_context_dict['order_item_not_refunded']
 
 
-        refund_transactions = self.api_handler.Transaction.search({"order":order.id, "transaction_type":2})
+        refund_transactions = self.api_handler.Transaction.search({"order":order.id, "transaction_type":2})[0]
         self.assertEqual(len(refund_transactions), 2)
-        print "refund_transactions: %s" % refund_transactions
 
         refund_transaction = refund_transactions[0] ## ordered by -timestamp so should be the first one
 

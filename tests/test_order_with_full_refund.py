@@ -143,8 +143,9 @@ class ClientOrder(IcebergUnitTestCase):
         refund.save()
         self.my_context_dict['refund'] = refund
 
-        theoretical_amount = sum([Decimal(return_request.order_item.amount_vat_included) for return_request in return_requests])
-        self.assertEqual(Decimal(refund.amount), theoretical_amount)
+        # theoretical_amount = sum([Decimal(return_request.order_item.amount_vat_included) for return_request in return_requests])
+        self.assertEqual(Decimal(refund.amount), Decimal(merchant_order.price_vat_included)) ## product price vat included
+        self.assertEqual(Decimal(refund.total_refund_amount), Decimal(merchant_order.amount_vat_included)) ## total amounts
 
 
     def test_07_check_transactions(self):
@@ -196,9 +197,9 @@ class ClientOrder(IcebergUnitTestCase):
         self.assertEqual(total_refund_amount, Decimal(order.amount_vat_included))
 
 
-        self.assertEqual(Decimal(merchant_sell_transaction.amount), -Decimal(merchant_refund_transaction.amount))
-        self.assertEqual(Decimal(app_sell_transaction.amount), -Decimal(app_refund_transaction.amount))
         self.assertEqual(Decimal(mp_sell_transaction.amount), -Decimal(mp_refund_transaction.amount))
+        self.assertEqual(Decimal(app_sell_transaction.amount), -Decimal(app_refund_transaction.amount))
+        self.assertEqual(Decimal(merchant_sell_transaction.amount), -Decimal(merchant_refund_transaction.amount))
 
 
 

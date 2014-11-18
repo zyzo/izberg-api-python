@@ -4,8 +4,10 @@ from decimal import Decimal
 from helper import IcebergUnitTestCase, get_api_handler
 from helpers.login_utils import IcebergLoginUtils
 
-MERCHANT_COMMISSION = 0.40
-REVENUE_SHARING = 0.05
+MERCHANT_COMMISSION = Decimal("0.40")
+REVENUE_SHARING = Decimal("0.05")
+APPLICABLE_TAX_RATE = Decimal("0.20")
+
 
 class CommissionsTestCase(IcebergUnitTestCase):
     @classmethod
@@ -66,6 +68,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
         application_settings.application = application
         application_settings.merchant = merchant
         application_settings.revenue_sharing = REVENUE_SHARING*100
+        application_settings.applicable_tax_rate = APPLICABLE_TAX_RATE*100
         application_settings.save()
         cls.my_context_dict['application_settings'] = application_settings
         cls._objects_to_delete.append(application_settings)
@@ -105,8 +108,6 @@ class CommissionsTestCase(IcebergUnitTestCase):
      
         if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:
-                print variation
-                print variation.to_JSON()
                 if variation.stock > 0:
                     cart.addVariation(variation, offer)
                     break
@@ -141,18 +142,19 @@ class CommissionsTestCase(IcebergUnitTestCase):
     def test_02_check_store_commission(self):
         """
         Check store commission amount
+        ## NB: ASSUMES a 20%% vat rate
         """
         self.direct_login_iceberg_staff()
         merchant_order = self.my_context_dict['merchant_order']
         order = self.my_context_dict['order']
-        transaction = self.api_handler.Transaction.findWhere({"order":order})
+        transaction = self.api_handler.Transaction.findWhere({"order":order.id})
         self.my_context_dict['transaction'] = transaction
         merchant_transactions = self.api_handler.MerchantTransaction.search(args={"transaction":transaction.id})[0]
         self.assertEqual(len(merchant_transactions), 1)
         merchant_transaction = merchant_transactions[0]
-        expected_merchant_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*(1-MERCHANT_COMMISSION))).quantize(Decimal("0.01"))
-        vat_on_shipping = float(merchant_order.vat)-float(merchant_order.vat_on_products)
-        expected_merchant_commission += Decimal(str((float(merchant_order.shipping)+vat_on_shipping))).quantize(Decimal("0.01"))
+        expected_merchant_commission = ( Decimal(merchant_order.price) + Decimal(merchant_order.vat_on_products) )*(1-MERCHANT_COMMISSION)
+        expected_merchant_commission = expected_merchant_commission.quantize(Decimal("0.01"))
+        expected_merchant_commission += Decimal(merchant_order.shipping_vat_included) ## adding shipping
         # self.assertEqual(Decimal(merchant_transaction.amount),  expected_merchant_commission)
         difference = abs(expected_merchant_commission-Decimal(merchant_transaction.amount))
         self.assertLessEqual(difference, Decimal("0.01"))
@@ -161,6 +163,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
     def test_03_check_app_commission(self):
         """
         Check app commission amount
+        ## NB: ASSUMES a 20%% vat rate
         """
         self.direct_login_iceberg_staff()
         merchant_order = self.my_context_dict['merchant_order']
@@ -168,7 +171,9 @@ class CommissionsTestCase(IcebergUnitTestCase):
         app_transactions = self.api_handler.ApplicationTransaction.search(args={"transaction":transaction.id})[0]
         self.assertEqual(len(app_transactions), 1)
         app_transaction = app_transactions[0]
-        expected_app_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*MERCHANT_COMMISSION*(1-REVENUE_SHARING))).quantize(Decimal("0.01"))
+        expected_app_commission = (Decimal(merchant_order.price)+Decimal(merchant_order.vat_on_products))*MERCHANT_COMMISSION*(1-REVENUE_SHARING)
+        expected_app_commission = expected_app_commission.quantize(Decimal("0.01"))
+
         # self.assertEqual(Decimal(app_transaction.amount),  expected_app_commission)
         difference = abs(expected_app_commission-Decimal(app_transaction.amount))
         self.assertLessEqual(difference, Decimal("0.01"))
@@ -178,6 +183,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
     def test_04_check_mp_commission(self):
         """
         Check MP commission amount
+        ## NB: ASSUMES a 20%% vat rate
         """
         self.direct_login_iceberg_staff()
         merchant_order = self.my_context_dict['merchant_order']
@@ -186,7 +192,8 @@ class CommissionsTestCase(IcebergUnitTestCase):
         if REVENUE_SHARING:
             self.assertEqual(len(mp_transactions), 1)
             mp_transaction = mp_transactions[0]
-            expected_mp_commission = Decimal(str((float(merchant_order.price)+float(merchant_order.vat_on_products))*MERCHANT_COMMISSION*REVENUE_SHARING)).quantize(Decimal("0.01"))
+            expected_mp_commission = (Decimal(merchant_order.price)+Decimal(merchant_order.vat_on_products))*MERCHANT_COMMISSION*REVENUE_SHARING
+            expected_mp_commission = expected_mp_commission.quantize(Decimal("0.01"))
             # self.assertEqual(Decimal(mp_transaction.amount),  expected_mp_commission)
             difference = abs(expected_mp_commission-Decimal(mp_transaction.amount))
             self.assertLessEqual(difference, Decimal("0.01"))

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-
 import warnings, sys, json, logging
 import weakref  # Means that if there is no other value, it will be removed
 
+from decimal import Decimal
 logger = logging.getLogger('icebergsdk.resource')
 
 from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError,\
@@ -409,6 +409,8 @@ def dict_force_text(anything):
         return anything.decode("utf-8").encode("utf-8")
     elif isinstance(anything, unicode): ## ex: anything = u'étoile'
         return anything.encode("utf-8")
+    elif isinstance(anything, Decimal):
+        return str(anything)
     elif isinstance(anything, dict):
         new_dict = {}
         for key, value in anything.iteritems():
@@ -444,6 +446,8 @@ class UpdateableIcebergObject(IcebergObject):
                     params[k] = v # if v is not None else ""
         
         params = dict_force_text(params)
+
+        print "params=%s" % params
         
         return params
 
