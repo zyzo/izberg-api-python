@@ -140,6 +140,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.adjustment = 0
         refund.memo = u"Mémô"
         refund.seller_note = u"Séllèr Nötè" 
+        refund.sync = True
         refund.save()
         self.my_context_dict['refund'] = refund
 

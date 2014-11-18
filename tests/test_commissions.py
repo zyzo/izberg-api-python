@@ -157,7 +157,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
         expected_merchant_commission += Decimal(merchant_order.shipping_vat_included) ## adding shipping
         # self.assertEqual(Decimal(merchant_transaction.amount),  expected_merchant_commission)
         difference = abs(expected_merchant_commission-Decimal(merchant_transaction.amount))
-        self.assertLessEqual(difference, Decimal("0.01"))
+        self.assertTrue(difference <= Decimal("0.01"))
 
 
     def test_03_check_app_commission(self):
@@ -176,7 +176,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
 
         # self.assertEqual(Decimal(app_transaction.amount),  expected_app_commission)
         difference = abs(expected_app_commission-Decimal(app_transaction.amount))
-        self.assertLessEqual(difference, Decimal("0.01"))
+        self.assertTrue(difference <= Decimal("0.01"))
 
 
 
@@ -196,7 +196,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
             expected_mp_commission = expected_mp_commission.quantize(Decimal("0.01"))
             # self.assertEqual(Decimal(mp_transaction.amount),  expected_mp_commission)
             difference = abs(expected_mp_commission-Decimal(mp_transaction.amount))
-            self.assertLessEqual(difference, Decimal("0.01"))
+            self.assertTrue(difference <= Decimal("0.01"))
         else:
             self.assertEqual(len(mp_transactions), 0)
 

@@ -143,6 +143,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.adjustment = 0
         refund.memo = u"Mémô"
         refund.seller_note = u"Séllèr Nötè" 
+        refund.sync = True
         refund.save()
         self.my_context_dict['refund'] = refund
 
@@ -152,7 +153,7 @@ class ClientOrder(IcebergUnitTestCase):
 
     def test_07_check_transactions(self):
         """
-        Check Refund Transactions
+        Check First Partial Refund Transactions
         """
         self.direct_login_iceberg_staff()
 
@@ -186,7 +187,7 @@ class ClientOrder(IcebergUnitTestCase):
 
         # self.assertEqual(total_refund_amount, theoretical_refund_amount)
         amount_diff = abs(abs(total_refund_amount) - abs(theoretical_refund_amount))
-        self.assertLessEqual(amount_diff, Decimal("0.01"))
+        self.assertTrue(amount_diff <= Decimal("0.01"))
 
 
         ## This was the checks for Full Refund : TODO do other checks ?
@@ -256,6 +257,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.adjustment = 0
         refund.memo = u"Mémô"
         refund.seller_note = u"Séllèr Nötè" 
+        refund.sync = True
         refund.save()
         self.my_context_dict['refund'] = refund
 
@@ -265,7 +267,7 @@ class ClientOrder(IcebergUnitTestCase):
 
     def test_11_check_transactions(self):
         """
-        Check Refund Transactions
+        Check Second Partial Refund Transactions
         """
         self.direct_login_iceberg_staff()
 
