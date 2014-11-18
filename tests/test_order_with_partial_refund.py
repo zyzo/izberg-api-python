@@ -150,6 +150,8 @@ class ClientOrder(IcebergUnitTestCase):
         theoretical_amount = sum([Decimal(return_request.order_item.amount_vat_included) for return_request in return_requests])
         self.assertEqual(Decimal(refund.amount), theoretical_amount)
 
+        self.assertEqual(refund.status, "complete")
+
 
     def test_07_check_transactions(self):
         """
@@ -173,12 +175,17 @@ class ClientOrder(IcebergUnitTestCase):
         merchant_refund_transaction = merchant_transactions[0]
 
         mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":refund_transaction.id})[0]
-        self.assertEqual(len(mp_transactions), 1)
-        mp_refund_transaction = mp_transactions[0]
+        ## if we find some mp_transactions, there should be revenue sharing # TODO make a call to know if revenue sharing
+        has_revenue_sharing = len(mp_transactions) > 0 
+        if has_revenue_sharing:
+            self.assertEqual(len(mp_transactions), 1)
+            mp_refund_transaction = mp_transactions[0]
 
-        transaction_sum = - (
-            Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount) + Decimal(mp_refund_transaction.amount)
-        )
+        transaction_sum = Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount)
+        if has_revenue_sharing:
+            transaction_sum += Decimal(mp_refund_transaction.amount)
+        transaction_sum = - transaction_sum
+
         total_refund_amount = Decimal(refund.total_refund_amount)
 
         self.assertEqual(total_refund_amount, transaction_sum)
@@ -264,6 +271,8 @@ class ClientOrder(IcebergUnitTestCase):
         theoretical_amount = sum([Decimal(return_request.order_item.amount_vat_included) for return_request in return_requests])
         self.assertEqual(Decimal(refund.amount), theoretical_amount)
 
+        self.assertEqual(refund.status, "complete")
+
 
     def test_11_check_transactions(self):
         """
@@ -290,12 +299,18 @@ class ClientOrder(IcebergUnitTestCase):
         merchant_refund_transaction = merchant_transactions[0]
 
         mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":refund_transaction.id})[0]
-        self.assertEqual(len(mp_transactions), 1)
-        mp_refund_transaction = mp_transactions[0]
+        ## if we find some mp_transactions, there should be revenue sharing # TODO make a call to know if revenue sharing
+        has_revenue_sharing = len(mp_transactions) > 0 
+        if has_revenue_sharing:
+            self.assertEqual(len(mp_transactions), 1)
+            mp_refund_transaction = mp_transactions[0]
 
-        transaction_sum = - (
-            Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount) + Decimal(mp_refund_transaction.amount)
-        )
+        transaction_sum = Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount)
+        if has_revenue_sharing:
+            transaction_sum += Decimal(mp_refund_transaction.amount)
+        transaction_sum = - transaction_sum
+
+
         total_refund_amount = Decimal(refund.total_refund_amount)
 
         self.assertEqual(total_refund_amount, transaction_sum)

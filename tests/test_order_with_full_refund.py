@@ -148,6 +148,8 @@ class ClientOrder(IcebergUnitTestCase):
         self.assertEqual(Decimal(refund.amount), Decimal(merchant_order.price_vat_included)) ## product price vat included
         self.assertEqual(Decimal(refund.total_refund_amount), Decimal(merchant_order.amount_vat_included)) ## total amounts
 
+        self.assertEqual(refund.status, "complete")
+        
 
     def test_07_check_transactions(self):
         """
