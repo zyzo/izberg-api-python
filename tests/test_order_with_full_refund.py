@@ -169,8 +169,10 @@ class ClientOrder(IcebergUnitTestCase):
         merchant_sell_transaction = merchant_transactions[0]
 
         mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":sell_transaction.id})[0]
-        self.assertEqual(len(mp_transactions), 1)
-        mp_sell_transaction = mp_transactions[0]
+        has_revenue_sharing = len(mp_transactions) > 0 ## if we find some mp_transactions, there should be revenue sharing
+        if has_revenue_sharing:
+            self.assertEqual(len(mp_transactions), 1)
+            mp_sell_transaction = mp_transactions[0]
 
 
 
@@ -185,22 +187,27 @@ class ClientOrder(IcebergUnitTestCase):
         merchant_refund_transaction = merchant_transactions[0]
 
         mp_transactions = self.api_handler.MarketPlaceTransaction.search(args={"transaction":refund_transaction.id})[0]
-        self.assertEqual(len(mp_transactions), 1)
-        mp_refund_transaction = mp_transactions[0]
+        if has_revenue_sharing:
+            self.assertEqual(len(mp_transactions), 1)
+            mp_refund_transaction = mp_transactions[0]
+        else:
+            self.assertEqual(len(mp_transactions), 0)
 
-        transaction_sum = - (
-            Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount) + Decimal(mp_refund_transaction.amount)
-        )
+
+        transaction_sum = Decimal(app_refund_transaction.amount) + Decimal(merchant_refund_transaction.amount)
+        if has_revenue_sharing:
+            transaction_sum += Decimal(mp_refund_transaction.amount)
+        transaction_sum = - transaction_sum
+
         total_refund_amount = Decimal(refund.total_refund_amount)
-
         self.assertEqual(total_refund_amount, transaction_sum)
 
         self.assertEqual(total_refund_amount, Decimal(order.amount_vat_included))
-
-
-        self.assertEqual(Decimal(mp_sell_transaction.amount), -Decimal(mp_refund_transaction.amount))
+    
         self.assertEqual(Decimal(app_sell_transaction.amount), -Decimal(app_refund_transaction.amount))
         self.assertEqual(Decimal(merchant_sell_transaction.amount), -Decimal(merchant_refund_transaction.amount))
+        if has_revenue_sharing:
+            self.assertEqual(Decimal(mp_sell_transaction.amount), -Decimal(mp_refund_transaction.amount))
 
 
 
