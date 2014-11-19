@@ -35,8 +35,10 @@ class IcebergAPI(object):
         """
         self.Application = ResourceManager(resource_class=resources.Application, api_handler=self)
         self.ApplicationCommissionSettings = ResourceManager(resource_class=resources.ApplicationCommissionSettings, api_handler=self)
+        self.ApplicationPaymentSettings = ResourceManager(resource_class=resources.ApplicationPaymentSettings, api_handler=self)
         self.ApplicationMerchantPolicies = ResourceManager(resource_class=resources.ApplicationMerchantPolicies, api_handler=self)
         self.ApplicationTransaction = ResourceManager(resource_class=resources.ApplicationTransaction, api_handler=self)
+        self.ApplicationUrls = ResourceManager(resource_class=resources.ApplicationUrls, api_handler=self)
         self.MarketPlaceTransaction = ResourceManager(resource_class=resources.MarketPlaceTransaction, api_handler=self)
         self.Address = ResourceManager(resource_class=resources.Address, api_handler=self)
         self.Cart = CartResourceManager(resource_class=resources.Cart, api_handler=self)

@@ -24,65 +24,11 @@ class ClientOrder(IcebergUnitTestCase):
 
         cart.fetch()
         
-
-    def full_order(self, offer_ids=None, number_of_offers=3):
-        """
-        Full order
-        """
-        self.login()
-
-        cart = self.api_handler.Cart()
-        cart.save()
-        
-        offers = []
-        
-        if offer_ids:
-            for offer_id in offer_ids:
-                offers.append(self.api_handler.ProductOffer.find(offer_id))
-        else:
-
-            for i in xrange(number_of_offers):
-                offers.append(self.get_random_offer())
-            
-
-        for offer in offers:
-            if hasattr(offer, 'variations') and len(offer.variations) > 0:
-                for variation in offer.variations:
-                    print variation
-                    print variation.to_JSON()
-                    if variation.stock > 0:
-                        cart.addVariation(variation, offer)
-                        break
-            else:
-                cart.addOffer(offer)
-
-        cart.fetch()
-
-        addresses = self.api_handler.me().addresses()
-
-        if len(addresses)==0:
-            address = self.create_user_address()
-        else:
-            address = addresses[0]
-
-        cart.shipping_address = address
-
-        if cart.has_changed():
-            cart.save()
-
-        self.assertEqual(cart.status, "20") # Valide
-
-        order = cart.createOrder()
-        order.authorizeOrder()
-
-        self.my_context_dict['order'] = order
-        self.my_context_dict['merchant_order'] = order.merchant_orders[0]
-
     def test_02_full_order(self):
         """
         Full order
         """
-        self.full_order()
+        self.full_order(number_of_offers=3)
 
     def test_03_confirm_merchant_order(self):
         """
