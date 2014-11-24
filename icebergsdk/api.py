@@ -176,6 +176,7 @@ class IcebergAPI(object):
     def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", include_application_data = True):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError()
+
         print "sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE)
         timestamp = int(time.time())
 

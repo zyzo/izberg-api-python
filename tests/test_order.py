@@ -38,8 +38,6 @@ class ClientOrder(IcebergUnitTestCase):
         
         if hasattr(offer, 'variations') and len(offer.variations) > 0:
             for variation in offer.variations:
-                print variation
-                print variation.to_JSON()
                 if variation.stock > 0:
                     cart.addVariation(variation, offer)
                     break
