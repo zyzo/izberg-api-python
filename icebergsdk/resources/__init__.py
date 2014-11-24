@@ -3,7 +3,7 @@
 import logging
 
 from icebergsdk.resources.application import Application, ApplicationCommissionSettings, ApplicationMerchantPolicies,\
-                                             ApplicationTransaction
+                                             ApplicationTransaction, ApplicationPaymentSettings, ApplicationUrls
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
@@ -18,6 +18,7 @@ from icebergsdk.resources.review import Review, MerchantReview
 from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTriggerAttempt
 from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
+from icebergsdk.resources.return_refund import Return, Refund
 
 
 logger = logging.getLogger('icebergsdk')
@@ -26,7 +27,9 @@ def get_class_from_resource_uri(resource_uri):
     types = {
         "application": Application,
         "application_commission_settings": ApplicationCommissionSettings,
+        "app_payment_settings": ApplicationPaymentSettings,
         "application_merchant_policies": ApplicationMerchantPolicies,
+        "application_urls": ApplicationUrls,
         "app_transaction": ApplicationTransaction,
         "mp_transaction": MarketPlaceTransaction,
         "product": Product,
@@ -62,6 +65,8 @@ def get_class_from_resource_uri(resource_uri):
         "merchant_shipping_policy": MerchantShippingPolicy,
         "store_transaction": MerchantTransaction,
         "transaction": Transaction,
+        "return": Return,
+        "refund": Refund,
     }
 
     # Hack for now... Will be changed

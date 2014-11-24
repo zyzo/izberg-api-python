@@ -32,6 +32,14 @@ class Application(UpdateableIcebergObject):
 class ApplicationCommissionSettings(UpdateableIcebergObject):
     endpoint = 'application_commission_settings'
 
+class ApplicationPaymentSettings(UpdateableIcebergObject):
+    endpoint = 'app_payment_settings'
+
+
+
+class ApplicationUrls(UpdateableIcebergObject):
+    endpoint = 'application_urls'
+
 
 
 class ApplicationMerchantPolicies(UpdateableIcebergObject):

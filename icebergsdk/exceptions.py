@@ -38,6 +38,12 @@ class IcebergReadOnlyError(IcebergError):
 class IcebergMissingSsoData(IcebergError):
     pass
 
+class IcebergMultipleObjectsReturned(IcebergError):
+    pass
+
+class IcebergObjectNotFound(IcebergError):
+    pass
+
 # API
 class IcebergAPIError(IcebergError):
     def __init__(self, response, url = None):

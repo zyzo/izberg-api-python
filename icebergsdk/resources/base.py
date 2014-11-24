@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-
 import warnings, sys, json, logging
 import weakref  # Means that if there is no other value, it will be removed
 
+from decimal import Decimal
 logger = logging.getLogger('icebergsdk.resource')
 
-from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError
+from icebergsdk.exceptions import IcebergNoHandlerError, IcebergReadOnlyError,\
+    IcebergMultipleObjectsReturned, IcebergObjectNotFound
 
 
 """
@@ -343,7 +344,13 @@ class IcebergObject(dict):
         """
         Like search but return the first result
         """
-        return cls.search(handler, args)[0][0]
+        results, meta = cls.search(handler, args)
+        if len(results) > 1:
+            raise IcebergMultipleObjectsReturned()
+        elif len(results) == 0:
+            raise IcebergObjectNotFound()
+        return results[0]
+
 
     # @classmethod
     # def all(cls):
@@ -395,10 +402,27 @@ class IcebergObject(dict):
 
     def save(self):
         raise IcebergReadOnlyError()
-        
 
+
+def dict_force_text(anything):
+    if isinstance(anything, str): ## ex: anything = 'étoile' in a coding: utf-8 file
+        return anything.decode("utf-8").encode("utf-8")
+    elif isinstance(anything, unicode): ## ex: anything = u'étoile'
+        return anything.encode("utf-8")
+    elif isinstance(anything, Decimal):
+        return str(anything)
+    elif isinstance(anything, dict):
+        new_dict = {}
+        for key, value in anything.iteritems():
+            new_dict[dict_force_text(key)] = dict_force_text(value)
+        return new_dict
+    elif isinstance(anything, list):
+        return [dict_force_text(item) for item in anything]
+    else: 
+        return anything
 
 class UpdateableIcebergObject(IcebergObject):
+
     def serialize(self, obj):
         params = {}
         if obj._unsaved_values:
@@ -420,6 +444,11 @@ class UpdateableIcebergObject(IcebergObject):
                     params[k] = res
                 else:
                     params[k] = v # if v is not None else ""
+        
+        params = dict_force_text(params)
+
+        print "params=%s" % params
+        
         return params
 
     # def save(self, handler = None):
