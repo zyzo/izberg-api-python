@@ -1,30 +1,21 @@
 # -*- coding: utf-8 -*-
-import mimetypes
-import logging, requests, json, time, hashlib, hmac
 
-from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError
-from icebergsdk.exceptions import IcebergClientUnauthorizedError, IcebergMissingApplicationSettingsError
+import mimetypes
+import logging, time, hashlib, hmac
+
+from icebergsdk.exceptions import IcebergMissingApplicationSettingsError
 from icebergsdk.exceptions import IcebergMissingSsoData
 
-from icebergsdk.conf import Configuration
 from icebergsdk import resources
 from icebergsdk.managers import ResourceManager, UserResourceManager, CartResourceManager
-from icebergsdk.json_utils import DateTimeAwareJSONEncoder
+from icebergsdk.mixins.request_mixin import IcebergRequestBase
 
 logger = logging.getLogger('icebergsdk')
 
-class IcebergAPI(object):
-    def __init__(self, username = None, access_token = None, lang = None, timeout = None, conf = None):
-        """
-        @conf:
-            Configuration, ConfigurationSandbox or custom conf
-        """
-        # Conf
-        self.conf = conf or Configuration
-        self.username = username
-        self.access_token = access_token
-        self.timeout = timeout
-        self.lang = lang or self.conf.ICEBERG_DEFAULT_LANG
+class IcebergAPI(IcebergRequestBase):
+    def __init__(self, *args, **kwargs):
+        super(IcebergAPI, self).__init__(*args, **kwargs)
+
         self.define_resources() # Resources definition
         self._objects_store = {} # Will store the object for relationship management
 
@@ -89,13 +80,6 @@ class IcebergAPI(object):
         # Webhooks
         # Feed Management
 
-
-    def get_auth_token(self):
-        if self.username == "Anonymous":
-            return '%s %s:%s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.conf.ICEBERG_APPLICATION_NAMESPACE, self.access_token)
-        else:
-            return '%s %s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.access_token)
-
     def auth_user(self, username, email, first_name = '', last_name = '', is_staff = False, is_superuser = False):
         """
         Method for Iceberg Staff to get or create a user into the platform and get the access_token .
@@ -138,11 +122,14 @@ class IcebergAPI(object):
         last_name = data['last_name']
         timestamp = data['timestamp']
 
-        
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
         to_compose = [email, first_name, last_name, timestamp]
-        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
+        to_compose_str = ";".join(str(x) for x in to_compose)
+
+        logger.debug("Create message_auth with %s", to_compose_str)
+
+        hash_obj = hmac.new(b"%s" % secret_key, b"%s" % to_compose_str, digestmod = hashlib.sha1)
         message_auth = hash_obj.hexdigest()
         return message_auth
 
@@ -180,9 +167,9 @@ class IcebergAPI(object):
 
     def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", include_application_data = True):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
-            raise IcebergMissingApplicationSettingsError()
+            raise IcebergMissingApplicationSettingsError(self.conf.ICEBERG_ENV)
 
-        print "sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE)
+        logger.debug("sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE))
         timestamp = int(time.time())
 
         data = {
@@ -225,77 +212,6 @@ class IcebergAPI(object):
     _sso_response = property(**_sso_response())
 
 
-
-    def request(self, path, args = None, post_args = None, files = None, method = None, headers = None):
-        args = args or {}
-        method = method or "GET"
-
-        if headers is None:
-            headers = {
-                'Content-Type': 'application/json',
-                'Accept-Language': self.lang,
-                'Authorization': self.get_auth_token()
-            }
-        # store = requests.get('http://api.local.iceberg-marketplace.com:8000/v1/merchant/', params = {'slug': store_slug}, headers = headers)
-
-        if '//' not in path:
-            url = "%s:%s/" % (self.conf.ICEBERG_API_URL, self.conf.ICEBERG_API_PORT)
-
-            if not self.conf.ICEBERG_API_VERSION in path:
-                url = "%s%s/" % (url, self.conf.ICEBERG_API_VERSION)
-
-            if path.startswith('/'):
-                url = url[:-1] # Remove /
-        else:
-            url = ""
-
-        url += path
-
-        # HAcK to fix missing server conf. Will be remove soon
-        if getattr(self.conf, 'ICEBERG_ENV', "prod") == "sandbox":
-            url = url.replace('https://api.iceberg', 'http://api.sandbox.iceberg')
-        # End Hack
-
-        logger.debug('REQUEST %s - %s - %s - GET PARAMS: %s - POST PARAMS: %s', method, url, headers, args, post_args)
-        try:
-            if post_args:
-                post_args = json.dumps(post_args, cls=DateTimeAwareJSONEncoder, ensure_ascii=False)
-
-            response = requests.request(method,
-                                        url,
-                                        timeout=self.timeout,
-                                        params=args,
-                                        data=post_args,
-                                        files=files,
-                                        headers=headers)
-        except requests.HTTPError as e:
-            response = json.loads(e.read())
-            raise IcebergAPIError(response)
-
-        try:
-            try:
-                elapsed = response.elapsed.total_seconds()
-            except:
-                elapsed = (response.elapsed.days * 1440 + response.elapsed.seconds // 60)*60
-            logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, elapsed, response.text)
-        except Exception:
-            logger.exception('ERROR in response printing')
-
-        if response.status_code == 401:
-            raise IcebergClientUnauthorizedError()
-            
-        elif 400 <= response.status_code < 500:
-            raise IcebergClientError(response, url = url)
-
-        elif 500 <= response.status_code <= 600:
-            raise IcebergServerError(response)
-        
-        if response.content:
-            return response.json()
-        else:
-            return "No Content"
-
-
     def send_image(self, path, image_path, method="post"):
         mimetype, encoding = mimetypes.guess_type(image_path)
         image_name = image_path.split("/")[-1]
@@ -330,6 +246,8 @@ class IcebergAPI(object):
             raise IcebergMissingSsoData()
         
         return self.User.findOrCreate(self._auth_response)
+
+
 
     #####
     #
