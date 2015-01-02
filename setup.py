@@ -23,7 +23,7 @@ setup(
     author='Iceberg',
     author_email='florian@iceberg-marketplace.com',
     url='https://github.com/Iceberg-Marketplace/Iceberg-API-PYTHON',
-    packages = ["icebergsdk", 'icebergsdk.resources'],
+    packages = ["icebergsdk", 'icebergsdk.resources', 'icebergsdk.mixins', 'icebergsdk.utils'],
     install_requires = install_requires,
     keywords = ['iceberg', 'modizy', 'marketplace', 'saas'],
     classifiers = [
