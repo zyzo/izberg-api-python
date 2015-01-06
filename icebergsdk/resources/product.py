@@ -51,7 +51,15 @@ class Brand(UpdateableIcebergObject):
 class Category(IcebergObject):
     endpoint = 'category'
 
-
+    def children(self, params = None, limit = None, offset = 0):
+        params = params or {}
+        params.update({
+            'parents': self.id,
+            'offset': offset
+        })
+        if limit:
+            params['limit'] = limit
+        return self.get_list('category', args = params)
 
 
 
