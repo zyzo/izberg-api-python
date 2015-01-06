@@ -4,7 +4,7 @@ import logging, requests, json
 
 from icebergsdk.conf import Configuration
 from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError
-from icebergsdk.exceptions import IcebergClientUnauthorizedError
+from icebergsdk.exceptions import IcebergClientUnauthorizedError, IcebergObjectNotFound
 
 from icebergsdk.json_utils import DateTimeAwareJSONEncoder
 
@@ -91,7 +91,10 @@ class IcebergRequestBase(object):
             raise IcebergClientUnauthorizedError()
             
         elif 400 <= response.status_code < 500:
-            raise IcebergClientError(response, url = url)
+            if response.status_code == 404:
+                raise IcebergObjectNotFound(response, url = url)
+            else:
+                raise IcebergClientError(response, url = url)
 
         elif 500 <= response.status_code <= 600:
             raise IcebergServerError(response)

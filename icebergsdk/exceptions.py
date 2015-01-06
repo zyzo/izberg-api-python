@@ -41,8 +41,6 @@ class IcebergMissingSsoData(IcebergError):
 class IcebergMultipleObjectsReturned(IcebergError):
     pass
 
-class IcebergObjectNotFound(IcebergError):
-    pass
 
 # API
 class IcebergAPIError(IcebergError):
@@ -79,6 +77,9 @@ class IcebergAPIError(IcebergError):
         else:
             message = self.data
         return "Error in %s! %s : %s: %s" % (self.url, self.status_code, self.error_codes, message)
+
+class IcebergObjectNotFound(IcebergAPIError):
+    pass
 
 class IcebergServerError(IcebergAPIError):
     pass
