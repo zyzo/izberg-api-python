@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from decimal import Decimal
+
 from helper import IcebergUnitTestCase
 
 class ClientOrder(IcebergUnitTestCase):
