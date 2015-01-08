@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import mimetypes
-import logging, time, hashlib, hmac
+import logging, time, hashlib, hmac, datetime
 
 from icebergsdk.exceptions import IcebergMissingApplicationSettingsError
 from icebergsdk.exceptions import IcebergMissingSsoData
@@ -20,56 +20,60 @@ class IcebergAPI(IcebergRequestBase):
         self._objects_store = {} # Will store the object for relationship management
 
 
+    # def __get_
+
+
     def define_resources(self):
         """
         For faster initialization, set the handler in the resources classes
         """
-        self.Application = ResourceManager(resource_class=resources.Application, api_handler=self)
-        self.ApplicationCommissionSettings = ResourceManager(resource_class=resources.ApplicationCommissionSettings, api_handler=self)
-        self.ApplicationPaymentSettings = ResourceManager(resource_class=resources.ApplicationPaymentSettings, api_handler=self)
-        self.ApplicationMerchantPolicies = ResourceManager(resource_class=resources.ApplicationMerchantPolicies, api_handler=self)
-        self.ApplicationTransaction = ResourceManager(resource_class=resources.ApplicationTransaction, api_handler=self)
-        self.ApplicationUrls = ResourceManager(resource_class=resources.ApplicationUrls, api_handler=self)
-        self.MarketPlaceTransaction = ResourceManager(resource_class=resources.MarketPlaceTransaction, api_handler=self)
-        self.Address = ResourceManager(resource_class=resources.Address, api_handler=self)
+        resource_classes_list = [
+            resources.Application,
+            resources.ApplicationCommissionSettings,
+            resources.ApplicationPaymentSettings,
+            resources.ApplicationMerchantPolicies,
+            resources.ApplicationTransaction,
+            resources.ApplicationUrls,
+            resources.MarketPlaceTransaction,
+            resources.Address,
+            resources.Country,
+            resources.MerchantOrder,
+            resources.Order,
+            resources.ProductVariation,
+            resources.ProductOffer,
+            resources.ProductOfferImage,
+            resources.Product,
+            resources.Profile,
+            resources.Payment,
+            resources.Store,
+            resources.StoreBankAccount,
+            resources.MerchantAddress,
+            resources.MerchantCommissionSettings,
+            resources.MerchantFeed,
+            resources.MerchantShippingPolicy,
+            resources.MerchantTransaction,
+            resources.Message,
+            resources.Review,
+            resources.MerchantReview,
+            resources.UserShoppingPreference,
+            resources.Category,
+            resources.Brand,
+            resources.Webhook,
+            resources.WebhookTrigger,
+            resources.WebhookTrigger,
+            resources.WebhookTriggerAttempt,
+            resources.Transaction,
+            resources.Return,
+            resources.Refund
+        ]
+
+        for resource_class in resource_classes_list:
+            setattr(self, resource_class.__name__, ResourceManager(resource_class=resource_class, api_handler=self))
+
+
         self.Cart = CartResourceManager(resource_class=resources.Cart, api_handler=self)
-        self.Country = ResourceManager(resource_class=resources.Country, api_handler=self)
-        self.MerchantOrder = ResourceManager(resource_class=resources.MerchantOrder, api_handler=self)
-        self.Order = ResourceManager(resource_class=resources.Order, api_handler=self)
-        self.ProductVariation = ResourceManager(resource_class=resources.ProductVariation, api_handler=self)
-        self.ProductOffer = ResourceManager(resource_class=resources.ProductOffer, api_handler=self)
-        self.ProductOfferImage = ResourceManager(resource_class=resources.ProductOfferImage, api_handler=self)
-        self.Product = ResourceManager(resource_class=resources.Product, api_handler=self)
-        self.Profile = ResourceManager(resource_class=resources.Profile, api_handler=self)
-        self.Payment = ResourceManager(resource_class=resources.Payment, api_handler=self)
-
-        self.Store = ResourceManager(resource_class=resources.Store, api_handler=self)
-        self.StoreBankAccount = ResourceManager(resource_class=resources.StoreBankAccount, api_handler=self)
-        self.MerchantAddress = ResourceManager(resource_class=resources.MerchantAddress, api_handler=self)
-        self.MerchantCommissionSettings = ResourceManager(resource_class=resources.MerchantCommissionSettings, api_handler=self)
-        self.MerchantFeed = ResourceManager(resource_class=resources.MerchantFeed, api_handler=self)
-        self.MerchantShippingPolicy = ResourceManager(resource_class=resources.MerchantShippingPolicy, api_handler=self)
-        self.MerchantTransaction = ResourceManager(resource_class=resources.MerchantTransaction, api_handler=self)
-        
         self.User = UserResourceManager(resource_class=resources.User, api_handler=self)
-        self.Message = ResourceManager(resource_class=resources.Message, api_handler=self)
-        self.Review = ResourceManager(resource_class=resources.Review, api_handler=self)
-        self.MerchantReview = ResourceManager(resource_class=resources.MerchantReview, api_handler=self)
-        self.UserShoppingPreference = ResourceManager(resource_class=resources.UserShoppingPreference, api_handler=self)
-        self.Category = ResourceManager(resource_class=resources.Category, api_handler=self)
-        self.Brand = ResourceManager(resource_class=resources.Brand, api_handler=self)
 
-        self.Webhook = ResourceManager(resource_class=resources.Webhook, api_handler=self)
-        self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
-        self.WebhookTrigger = ResourceManager(resource_class=resources.WebhookTrigger, api_handler=self)
-        self.WebhookTriggerAttempt = ResourceManager(resource_class=resources.WebhookTriggerAttempt, api_handler=self)
-
-        
-        self.Transaction = ResourceManager(resource_class=resources.Transaction, api_handler=self)
-
-        self.Return = ResourceManager(resource_class=resources.Return, api_handler=self)
-        self.Refund = ResourceManager(resource_class=resources.Refund, api_handler=self)
-        
         ### Missing
 
         # Return
@@ -125,6 +129,19 @@ class IcebergAPI(IcebergRequestBase):
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
         to_compose = [email, first_name, last_name, timestamp]
+
+        if data.get('currency', None):
+            to_compose.append(data.get('currency'))
+
+        if data.get('shipping_country', None):
+            to_compose.append(data.get('shipping_country'))
+
+        if data.get('from_session_id', None):
+            to_compose.append(data.get('from_session_id'))
+
+        if data.get('birth_date', None):
+            to_compose.append(data.get('birth_date'))
+
         to_compose_str = ";".join(str(x) for x in to_compose)
 
         logger.debug("Create message_auth with %s", to_compose_str)
@@ -165,12 +182,15 @@ class IcebergAPI(IcebergRequestBase):
         return response
 
 
-    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", include_application_data = True):
+    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", birth_date = None, include_application_data = True):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError(self.conf.ICEBERG_ENV)
 
         logger.debug("sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE))
         timestamp = int(time.time())
+
+        if birth_date and isinstance(birth_date, datetime.date):
+            birth_date = birth_date.isoformat()
 
         data = {
             'application': self.conf.ICEBERG_APPLICATION_NAMESPACE,
@@ -185,9 +205,19 @@ class IcebergAPI(IcebergRequestBase):
                 'last_name': last_name,
                 'timestamp': timestamp,
                 'currency': currency,
-                'shipping_country': shipping_country
+                'shipping_country': shipping_country,
+                'birth_date': birth_date
             })
         }
+
+        if shipping_country:
+            data['shipping_country'] = shipping_country
+
+        if currency:
+            data['currency'] = currency
+
+        if birth_date:
+            data['birth_date'] = birth_date
 
         response = self.request('user/sso/', args = data)
 
