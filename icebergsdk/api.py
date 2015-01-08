@@ -224,6 +224,32 @@ class IcebergAPI(object):
         return locals()
     _sso_response = property(**_sso_response())
 
+    def _safe_log(self, logger_function, message, *args):
+        KEYS_TO_HIDE = ["message_auth", "Authorization", "access_token", "password"]
+        safe_args = []
+        for arg in args:
+            if type(arg) == dict:
+                safe_arg = {}
+                for key in arg:
+                    if key in KEYS_TO_HIDE:
+                        safe_arg[key] = 'SECURED'
+                    else:
+                        safe_arg[key] = arg[key]
+                safe_args.append(safe_arg)
+            elif isinstance(arg, basestring):
+                should_be_secured = False
+                for key_to_hide in KEYS_TO_HIDE:
+                    if key_to_hide in arg:
+                        should_be_secured = True
+                        break
+                if should_be_secured:
+                    safe_args.append('SECURED')
+                else:
+                    safe_args.append(arg)
+            else:
+                safe_args.append(arg)
+
+        logger_function(message, *safe_args)
 
 
     def request(self, path, args = None, post_args = None, files = None, method = None, headers = None):
@@ -256,7 +282,8 @@ class IcebergAPI(object):
             url = url.replace('https://api.iceberg', 'http://api.sandbox.iceberg')
         # End Hack
 
-        logger.debug('REQUEST %s - %s - %s - GET PARAMS: %s - POST PARAMS: %s', method, url, headers, args, post_args)
+        self._safe_log(logger.debug, 'REQUEST %s - %s - %s - GET PARAMS: %s - POST PARAMS: %s', method, url, headers, args, post_args)
+        # logger.debug('REQUEST %s - %s - %s - GET PARAMS: %s - POST PARAMS: %s', method, url, headers, args, post_args)
         try:
             if post_args:
                 post_args = json.dumps(post_args, cls=DateTimeAwareJSONEncoder, ensure_ascii=False)
@@ -277,7 +304,7 @@ class IcebergAPI(object):
                 elapsed = response.elapsed.total_seconds()
             except:
                 elapsed = (response.elapsed.days * 1440 + response.elapsed.seconds // 60)*60
-            logger.debug('RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, elapsed, response.text)
+            self._safe_log(logger.debug,'RESPONSE - Status: %s - Response Time (s): %s - %s', response.status_code, elapsed, response.text)
         except Exception:
             logger.exception('ERROR in response printing')
 
