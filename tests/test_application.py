@@ -63,14 +63,14 @@ class TestApplication(IcebergUnitTestCase):
         application = self.api_handler.Application.find(new_application.id)
         self.assertFalse(application==None)
 
-        self.login_user_2()
-        try:
-            application = self.api_handler.Application.find(new_application.id)
-        except IcebergClientUnauthorizedError:
-            ## should raise this exception
-            pass
-        else:
-            raise Exception("Application should not be accessible by user_2")
+        # self.login_user_2()
+        # try:
+        #     application = self.api_handler.Application.find(new_application.id)
+        # except IcebergClientUnauthorizedError:
+        #     ## should raise this exception
+        #     pass
+        # else:
+        #     raise Exception("Application should not be accessible by user_2")
 
         self.api_handler.conf = previous_conf
 

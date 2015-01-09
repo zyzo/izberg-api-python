@@ -79,6 +79,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_trigger = webhook_triggers[0]
         self.assertFalse(webhook_trigger.is_test)
         self.assertEquals(webhook_trigger.status, "succeeded")
+        webhook_trigger.fetch() ## fetch detail to get payload
         self.assertEqual(new_merchant.resource_uri, webhook_trigger.payload.get("resource_uri"))
 
 
@@ -166,7 +167,9 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_triggers = webhook_offer.wait_for_triggers(number_of_triggers_expected=2)
         self.assertEquals(len(webhook_triggers), 2)
         first_webhook_trigger = webhook_triggers[1]
+        first_webhook_trigger.fetch() ## fetch detail to get payload
         second_webhook_trigger = webhook_triggers[0]
+        second_webhook_trigger.fetch() ## fetch detail to get payload
 
         webhook_attempts = first_webhook_trigger.attempts(response_code__gte=200, response_code__lte=205)
         self.assertEquals(len(webhook_attempts), 1)
@@ -185,6 +188,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_triggers = webhook_product.wait_for_triggers(number_of_triggers_expected=2)
         self.assertEquals(len(webhook_triggers), 2)
         webhook_trigger = webhook_triggers[0]
+        webhook_trigger.fetch() ## fetch detail to get payload
         webhook_attempts = webhook_trigger.attempts(response_code__gte=200, response_code__lte=205)
         self.assertEquals(len(webhook_attempts), 1)
         self.assertEqual(product.resource_uri, webhook_trigger.payload.get("resource_uri"))
@@ -208,8 +212,9 @@ class WebhookTestCase(IcebergUnitTestCase):
 
         webhook_triggers = webhook_offer.wait_for_triggers(number_of_triggers_expected=3)
         self.assertEquals(len(webhook_triggers), 3)
-        print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
+        # print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
         webhook_trigger = webhook_triggers[0]
+        webhook_trigger.fetch() ## fetch detail to get payload
         self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.get("resource_uri"))
         self.assertEqual(set(webhook_trigger.payload.get("updated_attributes",[])), set([u"status", u"price"]))
         self.assertEqual(webhook_trigger.payload.get("status"), u"draft")
@@ -218,8 +223,9 @@ class WebhookTestCase(IcebergUnitTestCase):
 
         webhook_triggers = webhook_product.wait_for_triggers(number_of_triggers_expected=3)
         self.assertEquals(len(webhook_triggers), 3)
-        print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
+        # print "webhook_triggers = %s" % [wt.payload.get("updated_attributes") for wt in webhook_triggers]
         webhook_trigger = webhook_triggers[0]
+        webhook_trigger.fetch() ## fetch detail to get payload
         self.assertEqual(product.resource_uri, webhook_trigger.payload.get("resource_uri"))
         self.assertEqual(webhook_trigger.payload.get("updated_attributes"), [u"offers"])
 
