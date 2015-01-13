@@ -13,6 +13,7 @@ class FrontModules(IcebergRequestBase):
         super(FrontModules, self).__init__(*args, **kwargs)
         self.cache = kwargs.get('cache', None)
         self.lang = kwargs.get('lang', "en")
+        self.debug = kwargs.get('debug', False)
 
 
     def get_module_data(self, module_name):
@@ -35,7 +36,11 @@ class FrontModules(IcebergRequestBase):
                 setattr(self, '_modules_data', data)
                 return data
 
-        data = self.request(self.conf.ICEBERG_MODULES_URL) # Do to, add lang
+        data = self.request(self.conf.ICEBERG_MODULES_URL, args = {
+            "lang": self.lang,
+            "enviro": self.conf.ICEBERG_ENV,
+            "debug": self.debug
+        }) # Do to, add lang
         setattr(self, '_modules_data', data)
         if self.cache:
             self.cache.set("%s:%s" % (self.cache_key, self.lang), data, self.cache_expire)
