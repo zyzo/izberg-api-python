@@ -15,6 +15,7 @@ else:
 
 install_requires = []
 install_requires.append('requests >= 2.3.0')
+install_requires.append('algoliasearch==1.4.0')
 
 setup(
     name='icebergsdk',

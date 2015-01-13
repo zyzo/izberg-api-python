@@ -37,6 +37,7 @@ class IcebergAPI(IcebergRequestBase):
             resources.MarketPlaceTransaction,
             resources.Address,
             resources.Country,
+            resources.ProductChannel,
             resources.MerchantOrder,
             resources.Order,
             resources.ProductVariation,

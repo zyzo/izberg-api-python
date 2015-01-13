@@ -19,6 +19,7 @@ from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTrigge
 from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 from icebergsdk.resources.return_refund import Return, Refund
+from icebergsdk.resources.channels import ProductChannel
 
 
 logger = logging.getLogger('icebergsdk')
@@ -67,6 +68,7 @@ def get_class_from_resource_uri(resource_uri):
         "transaction": Transaction,
         "return": Return,
         "refund": Refund,
+        "product_channel": ProductChannel,
     }
 
     # Hack for now... Will be changed
