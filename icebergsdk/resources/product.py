@@ -63,3 +63,9 @@ class Category(IcebergObject):
 
 
 
+class ProductFamily(UpdateableIcebergObject):
+    endpoint = 'product_family'
+
+
+class ProductFamilySelector(UpdateableIcebergObject):
+    endpoint = 'product_family_selector'

@@ -6,7 +6,8 @@ from icebergsdk.resources.application import Application, ApplicationCommissionS
                                              ApplicationTransaction, ApplicationPaymentSettings, ApplicationUrls
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
-from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand
+from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand,\
+                                            ProductFamily, ProductFamilySelector
 from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount,\
                                        MerchantCommissionSettings, MerchantFeed, MerchantShippingPolicy,\
                                        MerchantTransaction
@@ -19,7 +20,7 @@ from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTrigge
 from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 from icebergsdk.resources.return_refund import Return, Refund
-from icebergsdk.resources.channels import ProductChannel
+from icebergsdk.resources.channels import ProductChannel, ChannelPropagationPolicy, ProductChannelLogEvent
 
 
 logger = logging.getLogger('icebergsdk')
@@ -69,6 +70,10 @@ def get_class_from_resource_uri(resource_uri):
         "return": Return,
         "refund": Refund,
         "product_channel": ProductChannel,
+        "product_channel_propagation_policy": ChannelPropagationPolicy,
+        "product_channel_log_event": ProductChannelLogEvent,
+        "product_family": ProductFamily,
+        "product_family_selector": ProductFamilySelector,
     }
 
     # Hack for now... Will be changed

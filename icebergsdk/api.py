@@ -37,7 +37,6 @@ class IcebergAPI(IcebergRequestBase):
             resources.MarketPlaceTransaction,
             resources.Address,
             resources.Country,
-            resources.ProductChannel,
             resources.MerchantOrder,
             resources.Order,
             resources.ProductVariation,
@@ -65,7 +64,12 @@ class IcebergAPI(IcebergRequestBase):
             resources.WebhookTriggerAttempt,
             resources.Transaction,
             resources.Return,
-            resources.Refund
+            resources.Refund,
+            resources.ProductChannel,
+            resources.ChannelPropagationPolicy,
+            resources.ProductChannelLogEvent,
+            resources.ProductFamily,
+            resources.ProductFamilySelector,
         ]
 
         for resource_class in resource_classes_list:

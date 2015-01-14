@@ -93,6 +93,24 @@ class Store(UpdateableIcebergObject):
         return active_offers
 
 
+    @property
+    def backoffice_channel(self):
+        if not hasattr(self, "_backoffice_channel"):
+            data = self.request("%s%s/" % (self.resource_uri, 'backoffice_channel'), method = "get")
+            self._backoffice_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
+        return self._backoffice_channel
+
+        
+    @property
+    def active_products_channel(self):
+        if not hasattr(self, "_active_products_channel"):
+            data = self.request("%s%s/" % (self.resource_uri, 'active_products_channel'), method = "get")
+            self._active_products_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
+        return self._active_products_channel
+
+
+
+
 class MerchantAddress(UpdateableIcebergObject):
     endpoint = 'merchant_address'
 

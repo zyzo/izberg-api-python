@@ -17,6 +17,14 @@ class Application(UpdateableIcebergObject):
         params = params or {}
         return self.get_list("%smerchants/" % self.resource_uri, args = params)
 
+    def linked_merchants(self, params = None):
+        params = params or {}
+        return self.get_list("%slinked_merchants/" % self.resource_uri, args = params)
+
+    def created_merchants(self, params = None):
+        params = params or {}
+        return self.get_list("%screated_merchants/" % self.resource_uri, args = params)
+
     def fetch_secret_key(self):
     	return self.request("%sfetchSecretKey/" % self.resource_uri)["secret_key"]
 
@@ -27,6 +35,25 @@ class Application(UpdateableIcebergObject):
         return self.request("%sauth_me/" % self.resource_uri)["access_token"]
 
 
+    def product_channels(self, params = None, limit = None, offset = 0):
+        params = params or {}
+        return self.get_list("%sproduct_channels/" % self.resource_uri, args = params)
+
+
+    @property
+    def backoffice_channel(self):
+        if not hasattr(self, "_backoffice_channel"):
+            data = self.request("%s%s/" % (self.resource_uri, 'backoffice_channel'), method = "get")
+            self._backoffice_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
+        return self._backoffice_channel
+
+        
+    @property
+    def active_products_channel(self):
+        if not hasattr(self, "_active_products_channel"):
+            data = self.request("%s%s/" % (self.resource_uri, 'active_products_channel'), method = "get")
+            self._active_products_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
+        return self._active_products_channel
 
 
 class ApplicationCommissionSettings(UpdateableIcebergObject):
