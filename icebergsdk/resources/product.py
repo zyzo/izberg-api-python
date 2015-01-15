@@ -66,6 +66,43 @@ class Category(IcebergObject):
 class ProductFamily(UpdateableIcebergObject):
     endpoint = 'product_family'
 
+    def add_selector(self, family_selector):
+        post_args = {
+            "selector_id":family_selector.id
+        }
+        data = self.request("%s%s/" % (self.resource_uri, 'selectors'), method = "post", post_args=post_args)
+
+        self.selectors = []
+        for selector in data["objects"]:
+            self.selectors.append(ProductFamilySelector.findOrCreate(self._handler,selector))
+
+        return self
+
+    def remove_selector(self, family_selector):
+        post_args = {
+            "selector_id":family_selector.id
+        }
+        data = self.request("%s%s/" % (self.resource_uri, 'selectors'), method = "delete", post_args=post_args)
+
+        self.selectors = []
+        for selector in data["objects"]:
+            self.selectors.append(ProductFamilySelector.findOrCreate(self._handler,selector))
+
+        return self
+
+
+    def get_products(self, limit=20, offset=0):
+        params = {
+            "offset":offset,
+            "limit":limit
+        }
+        return self.get_list("%s%s/" % (self.resource_uri, 'products'), args = params)
+
+
+    def get_stats(self, limit=20, offset=0):
+        return self.request("%s%s/" % (self.resource_uri, 'stats'))
+
+
 
 class ProductFamilySelector(UpdateableIcebergObject):
     endpoint = 'product_family_selector'

@@ -265,7 +265,7 @@ class ProductChannelTests(IcebergUnitTestCase):
 
 
     def test_16_test_changing_the_price_of_the_product_changes_it_on_algolia(self):
-        """ Changing the price of offer changes on algolia  """
+        """ Changing the price of offer (with no variation) changes the price on algolia """
         application = self.my_context_dict['application']
         merchant = self.my_context_dict['merchant']
         offers_with_no_variations = merchant.product_offers(params={"is_abstract":False})
@@ -277,7 +277,7 @@ class ProductChannelTests(IcebergUnitTestCase):
         backoffice_channel = application.backoffice_channel
 
         backoffice_channel._handler.lang = backoffice_channel.language
-        new_price = Decimal(random.randint(500000,100000000)/1000000.).quantize(Decimal("0.000001"))
+        new_price = Decimal(str(random.randint(500000,100000000)/1000000.))
         # if offer.variations:
         #     variation = offer.variation[0]
         #     variation.price = new_price
@@ -292,17 +292,17 @@ class ProductChannelTests(IcebergUnitTestCase):
 
         self.assertTrue(
             backoffice_channel.algolia_wait_for_value(
-                product.id, "best_offer.price_with_vat", offer.price_with_vat, process_function=Decimal
+                product.id, "best_offer.price_with_vat", offer.price_with_vat, process_functions=[str, Decimal]
             )
         )
         self.assertTrue(
             backoffice_channel.algolia_wait_for_value(
-                product.id, "best_offer.price", offer.price, process_function=Decimal
+                product.id, "best_offer.price", offer.price, process_functions=[str, Decimal]
             )
         )
         self.assertTrue(
             backoffice_channel.algolia_wait_for_value(
-                product.id, "best_offer.price_without_vat", offer.price_without_vat, process_function=Decimal
+                product.id, "best_offer.price_without_vat", offer.price_without_vat, process_functions=[str, Decimal]
             )
         )
 
