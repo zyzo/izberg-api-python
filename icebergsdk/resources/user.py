@@ -31,6 +31,9 @@ class User(IcebergObject):
     def reviews(self):
         return self.get_list('review', args = {'user': self.id})
 
+    def orders(self):
+        return self.get_list('order', args = {'user': self.id})
+
     def profile(self):
         data = self.request('%sprofile/' % self.resource_uri) 
         return Profile.findOrCreate(self._handler, data)
