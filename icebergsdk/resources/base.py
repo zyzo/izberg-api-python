@@ -24,7 +24,7 @@ class IcebergJSONEncoder(json.JSONEncoder):
             return obj.isoformat()
 
         elif isinstance(obj, Decimal):
-            return obj.to_eng_string(),
+            return obj.to_eng_string()
 
         else:
             return super(IcebergJSONEncoder, self).default(obj)
