@@ -20,9 +20,6 @@ class IcebergAPI(IcebergRequestBase):
         self._objects_store = {} # Will store the object for relationship management
 
 
-    # def __get_
-
-
     def define_resources(self):
         """
         For faster initialization, set the handler in the resources classes
