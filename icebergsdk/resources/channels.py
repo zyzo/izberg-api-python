@@ -142,25 +142,30 @@ class ProductChannel(UpdateableIcebergObject):
             return Product.findOrCreate(self._handler, data)
 
 
-    def algolia_wait_for_value(self, product_id, value_name, expected_value, max_wait=60, retry_every=5, process_function=None):
+    def algolia_wait_for_value(self, product_id, value_name, expected_value, max_wait=60, retry_every=5, process_functions=None):
         """ 
         Returns True if 'value_name' equals 'expected_value' before 'max_wait' seconds else False
         """
-        def get_value_from_path(data, path_to_value):
+        def get_value_from_path(data, path_to_value, process_functions=None):
             for path_step in path_to_value.split("."):
                 data = data.get(path_step,{})
-            return process_function(data) if process_function else data
+
+            for process_function in process_functions or []:
+                data = process_function(data)
+
+            return data
 
         data = self.algolia_find(product_id, raw_result=True)
         timeout = time.time() + max_wait
-        actual_value = get_value_from_path(data, value_name)
+        actual_value = get_value_from_path(data, value_name, process_functions)
+        logger.debug("First value for '%s'= %s" % (value_name, actual_value))
         while time.time() < timeout  and not actual_value == expected_value:
             logger.debug("Waiting %s seconds for value '%s' to change to '%s'" %
                 (retry_every, value_name, expected_value)
             )
             time.sleep(retry_every)
             data = self.algolia_find(product_id, raw_result=True)
-            actual_value = get_value_from_path(data, value_name)
+            actual_value = get_value_from_path(data, value_name, process_functions)
 
         if actual_value == expected_value:
             return True

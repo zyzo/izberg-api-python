@@ -2,8 +2,7 @@
 import warnings, sys, json, logging, time
 import weakref  # Means that if there is no other value, it will be removed
 import pytz
-
-from datetime import datetime
+from datetime import datetime, date
 from dateutil import parser as date_parser
 from decimal import Decimal
 logger = logging.getLogger('icebergsdk.resource')
@@ -22,6 +21,8 @@ class IcebergJSONEncoder(json.JSONEncoder):
     """
     def default(self, obj):
         if isinstance(obj, datetime):
+            return obj.isoformat()
+        if isinstance(obj, date):
             return obj.isoformat()
         elif isinstance(obj, Decimal):
             return obj.to_eng_string()
