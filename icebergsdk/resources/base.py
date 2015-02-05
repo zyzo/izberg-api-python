@@ -36,7 +36,7 @@ class IcebergObject(dict):
     DATETIME_FIELDS = []
     GENERIC_DATETIME_FIELDS = [
         "timestamp", "last_modified", "creation_date", 
-        "created_on", "last_updated", "last_update", "last_sync"
+        "created_on", "last_updated", "last_update", "last_sync", "updated_at", "created_at"
     ]
 
     DECIMAL_FIELDS = []
