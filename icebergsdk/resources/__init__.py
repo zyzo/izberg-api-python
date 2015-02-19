@@ -3,7 +3,7 @@
 import logging
 
 from icebergsdk.resources.application import Application, ApplicationCommissionSettings, ApplicationMerchantPolicies,\
-                                             ApplicationTransaction, ApplicationPaymentSettings, ApplicationUrls
+                                             ApplicationTransaction, ApplicationPaymentSettings, ApplicationUrls, ApplicationPermission
 from icebergsdk.resources.order import Order, MerchantOrder, OrderItem
 from icebergsdk.resources.cart import Cart, CartItem
 from icebergsdk.resources.product import Product, ProductOffer, ProductVariation, ProductOfferImage, Category, Brand,\
@@ -30,6 +30,7 @@ def get_class_from_resource_uri(resource_uri):
         "application": Application,
         "application_commission_settings": ApplicationCommissionSettings,
         "app_payment_settings": ApplicationPaymentSettings,
+        "app_permission": ApplicationPermission,
         "application_merchant_policies": ApplicationMerchantPolicies,
         "application_urls": ApplicationUrls,
         "app_transaction": ApplicationTransaction,

@@ -28,6 +28,7 @@ class IcebergAPI(IcebergRequestBase):
             resources.Application,
             resources.ApplicationCommissionSettings,
             resources.ApplicationPaymentSettings,
+            resources.ApplicationPermission,
             resources.ApplicationMerchantPolicies,
             resources.ApplicationTransaction,
             resources.ApplicationUrls,
