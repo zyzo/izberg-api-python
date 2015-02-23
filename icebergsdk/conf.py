@@ -91,6 +91,7 @@ class ConfigurationDebug(ConfigurationBase):
     ICEBERG_ENV = "prod"
     ICEBERG_CORS = "http://api.local.iceberg.technology:8000/cors/"
     ICEBERG_API_URL_FULL = "%s:%s" % (ICEBERG_API_URL, ICEBERG_API_PORT)
+    UNSECURED_LOGS = True
 
     ICEBERG_MODULES_URL = "http://connect.local.iceberg-marketplace.com:9000/modules/"
 

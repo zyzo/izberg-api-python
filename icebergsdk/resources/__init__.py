@@ -10,7 +10,7 @@ from icebergsdk.resources.product import Product, ProductOffer, ProductVariation
                                             ProductFamily, ProductFamilySelector
 from icebergsdk.resources.store import Store, MerchantImage, MerchantAddress, StoreBankAccount,\
                                        MerchantCommissionSettings, MerchantFeed, MerchantShippingPolicy,\
-                                       MerchantTransaction
+                                       MerchantTransaction, Permission
 from icebergsdk.resources.user import User, Profile, UserShoppingPreference
 from icebergsdk.resources.address import Address, Country
 from icebergsdk.resources.payment import Payment
@@ -70,6 +70,7 @@ def get_class_from_resource_uri(resource_uri):
         "transaction": Transaction,
         "return": Return,
         "refund": Refund,
+        "permission": Permission,
         "product_channel": ProductChannel,
         "product_channel_propagation_policy": ChannelPropagationPolicy,
         "product_channel_log_event": ProductChannelLogEvent,
