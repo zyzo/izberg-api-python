@@ -100,8 +100,16 @@ class IcebergAPI(IcebergRequestBase):
         timestamp = int(time.time())
         secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
 
-        to_compose = [username, email, first_name, last_name, str(is_staff), str(is_superuser), str(timestamp)]
-        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x.encode('utf-8')) for x in to_compose), digestmod = hashlib.sha1)  # Expect strings
+        to_compose = [username, email, first_name or '', last_name or '', is_staff, is_superuser, timestamp]
+        
+        to_compose_str = []
+        for elem in to_compose:
+            if type(elem) == unicode:
+                to_compose_str.append(elem.encode('utf-8'))
+            else:
+                to_compose_str.append(str(elem))
+
+        hash_obj = hmac.new(b"%s" % secret_key, b";".join(to_compose_str), digestmod = hashlib.sha1)  # Expect strings
         message_auth = hash_obj.hexdigest()
 
         data = {
