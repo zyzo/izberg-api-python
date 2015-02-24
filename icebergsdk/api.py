@@ -140,7 +140,7 @@ class IcebergAPI(IcebergRequestBase):
 
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
-        to_compose = [email, first_name, last_name, str(timestamp)]
+        to_compose = [email, first_name or "", last_name or "", str(timestamp)]
 
         if data.get('currency', None):
             to_compose.append(data.get('currency'))
@@ -154,7 +154,14 @@ class IcebergAPI(IcebergRequestBase):
         if data.get('birth_date', None):
             to_compose.append(data.get('birth_date'))
 
-        to_compose_str = ";".join(str(x.encode('utf-8')) for x in to_compose) # Expect strings
+        to_compose_str = []
+        for elem in to_compose:
+            if type(elem) == unicode:
+                to_compose_str.append(elem.encode('utf-8'))
+            else:
+                to_compose_str.append(str(elem))
+
+        to_compose_str = ";".join(to_compose_str)
 
         logger.debug("Create message_auth with %s", to_compose_str)
 
