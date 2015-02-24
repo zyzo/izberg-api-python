@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+import os
 from icebergsdk.resources.base import UpdateableIcebergObject, IcebergObject
 
 """
@@ -36,13 +36,39 @@ class ProductOffer(UpdateableIcebergObject):
 class ProductVariation(UpdateableIcebergObject):
     endpoint = 'product_variation'
 
+IMG_THUMBNAIL_WIDTH = os.getenv('ICEBERG_IMG_THUMBNAIL_WIDTH', 150)
+IMG_THUMBNAIL_HEIGHT = os.getenv('ICEBERG_IMG_THUMBNAIL_HEIGHT', 150)
+IMG_MEDIUM_WIDTH = os.getenv('ICEBERG_IMG_MEDIUM_WIDTH', 600)
+IMG_MEDIUM_HEIGHT = os.getenv('ICEBERG_IMG_MEDIUM_HEIGHT', 600)
+IMG_ZOOM_WIDTH = os.getenv('ICEBERG_IMG_ZOOM_WIDTH', 1024)
+IMG_ZOOM_HEIGHT = os.getenv('ICEBERG_IMG_ZOOM_HEIGHT', 1024)
+
 class ProductOfferImage(UpdateableIcebergObject):
     endpoint = 'offer_image'
 
     def build_resized_image_url(self, width, height, process_mode="crop"):
         from icebergsdk.utils.image_server_utils import build_resized_image_url
         image_server_url = self._handler.conf.IMAGE_SERVER_URL
-        return build_resized_image_url(image_server_url, self.image_path, width, height, process_mode)
+        return build_resized_image_url(image_server_url, self.url, width, height, process_mode)
+
+    def thumbnail_crop_url(self):
+        return self.build_resized_image_url(width=IMG_THUMBNAIL_WIDTH, height=IMG_THUMBNAIL_HEIGHT, process_mode="crop")
+
+    def thumbnail_fit_url(self):
+        return self.build_resized_image_url(width=IMG_THUMBNAIL_WIDTH, height=IMG_THUMBNAIL_HEIGHT, process_mode="fit")
+
+    def medium_crop_url(self):
+        return self.build_resized_image_url(width=IMG_MEDIUM_WIDTH, height=IMG_MEDIUM_HEIGHT, process_mode="crop")
+
+    def medium_fit_url(self):
+        return self.build_resized_image_url(width=IMG_MEDIUM_WIDTH, height=IMG_MEDIUM_HEIGHT, process_mode="fit")
+
+    def zoome_crop_url(self):
+        return self.build_resized_image_url(width=IMG_ZOOM_WIDTH, height=IMG_ZOOM_HEIGHT, process_mode="crop")
+
+    def zoome_fit_url(self):
+        return self.build_resized_image_url(width=IMG_ZOOM_WIDTH, height=IMG_ZOOM_HEIGHT, process_mode="fit")
+
 
 class Brand(UpdateableIcebergObject):
     endpoint = 'brand'

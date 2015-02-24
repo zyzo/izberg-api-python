@@ -26,7 +26,7 @@ class Configuration(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY', None)
 
-    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', "https://d2isoz0l8l3l8c.cloudfront.net")
 
 
 class ConfigurationSandbox(ConfigurationBase):
@@ -45,7 +45,7 @@ class ConfigurationSandbox(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_SANDBOX', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_SANDBOX', None)
 
-    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', "https://d2isoz0l8l3l8c.cloudfront.net")
 
 class ConfigurationSandboxStage(ConfigurationBase):
     """
@@ -62,7 +62,7 @@ class ConfigurationSandboxStage(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_SANDBOX_STAGE', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_SANDBOX_STAGE', None)
 
-    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', "https://d2isoz0l8l3l8c.cloudfront.net")
 
 
 class ConfigurationStage(ConfigurationBase):
@@ -80,7 +80,7 @@ class ConfigurationStage(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_STAGE', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_STAGE', None)
 
-    IMAGE_SERVER_URL = "https://d2isoz0l8l3l8c.cloudfront.net"
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', "https://d2isoz0l8l3l8c.cloudfront.net")
 
 ######
 ##  Development Configuration. Use for local development.
@@ -98,6 +98,8 @@ class ConfigurationDebug(ConfigurationBase):
     ICEBERG_APPLICATION_NAMESPACE = os.getenv('ICEBERG_APPLICATION_NAMESPACE_DEBUG', None)
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_DEBUG', None)
 
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', None)
+
 
 class ConfigurationDebugSandbox(ConfigurationDebug):
     ICEBERG_API_URL = "http://api.sandbox.local.iceberg.technology"
@@ -109,5 +111,5 @@ class ConfigurationDebugSandbox(ConfigurationDebug):
     ICEBERG_APPLICATION_SECRET_KEY = os.getenv('ICEBERG_APPLICATION_SECRET_KEY_DEBUG_SANDBOX', None)
 
 
-
+    IMAGE_SERVER_URL = os.getenv('ICEBERG_IMAGE_SERVER_URL', None)
 
