@@ -63,6 +63,9 @@ class ApplicationPaymentSettings(UpdateableIcebergObject):
     endpoint = 'app_payment_settings'
 
 
+class ApplicationPermission(UpdateableIcebergObject):
+    endpoint = 'app_permission'
+
 
 class ApplicationUrls(UpdateableIcebergObject):
     endpoint = 'application_urls'

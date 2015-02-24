@@ -20,9 +20,6 @@ class IcebergAPI(IcebergRequestBase):
         self._objects_store = {} # Will store the object for relationship management
 
 
-    # def __get_
-
-
     def define_resources(self):
         """
         For faster initialization, set the handler in the resources classes
@@ -31,45 +28,47 @@ class IcebergAPI(IcebergRequestBase):
             resources.Application,
             resources.ApplicationCommissionSettings,
             resources.ApplicationPaymentSettings,
+            resources.ApplicationPermission,
             resources.ApplicationMerchantPolicies,
             resources.ApplicationTransaction,
             resources.ApplicationUrls,
-            resources.MarketPlaceTransaction,
             resources.Address,
+            resources.Brand,
+            resources.ChannelPropagationPolicy,
             resources.Country,
+            resources.Category,
+            resources.MarketPlaceTransaction,
+            resources.MerchantAddress,
+            resources.MerchantCommissionSettings,
             resources.MerchantOrder,
+            resources.MerchantFeed,
+            resources.MerchantShippingPolicy,
+            resources.MerchantTransaction,
+            resources.Message,
+            resources.MerchantReview,
             resources.Order,
+            resources.UserShoppingPreference,
+            resources.Review,
+            resources.Return,
+            resources.Refund,
+            resources.Store,
+            resources.StoreBankAccount,
+            resources.Transaction,
+            resources.ProductChannel,
+            resources.ProductChannelLogEvent,
             resources.ProductVariation,
             resources.ProductOffer,
             resources.ProductOfferImage,
             resources.Product,
             resources.Profile,
             resources.Payment,
-            resources.Store,
-            resources.StoreBankAccount,
-            resources.MerchantAddress,
-            resources.MerchantCommissionSettings,
-            resources.MerchantFeed,
-            resources.MerchantShippingPolicy,
-            resources.MerchantTransaction,
-            resources.Message,
-            resources.Review,
-            resources.MerchantReview,
-            resources.UserShoppingPreference,
-            resources.Category,
-            resources.Brand,
+            resources.Permission,
+            resources.ProductFamily,
+            resources.ProductFamilySelector,
             resources.Webhook,
             resources.WebhookTrigger,
             resources.WebhookTrigger,
             resources.WebhookTriggerAttempt,
-            resources.Transaction,
-            resources.Return,
-            resources.Refund,
-            resources.ProductChannel,
-            resources.ChannelPropagationPolicy,
-            resources.ProductChannelLogEvent,
-            resources.ProductFamily,
-            resources.ProductFamilySelector,
         ]
 
         for resource_class in resource_classes_list:
@@ -101,8 +100,8 @@ class IcebergAPI(IcebergRequestBase):
         timestamp = int(time.time())
         secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
 
-        to_compose = [username, email, first_name, last_name, is_staff, is_superuser, timestamp]
-        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x) for x in to_compose), digestmod = hashlib.sha1)
+        to_compose = [username, email, first_name, last_name, str(is_staff), str(is_superuser), str(timestamp)]
+        hash_obj = hmac.new(b"%s" % secret_key, b";".join(str(x.encode('utf-8')) for x in to_compose), digestmod = hashlib.sha1)  # Expect strings
         message_auth = hash_obj.hexdigest()
 
         data = {
@@ -133,7 +132,7 @@ class IcebergAPI(IcebergRequestBase):
 
         secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
 
-        to_compose = [email, first_name, last_name, timestamp]
+        to_compose = [email, first_name, last_name, str(timestamp)]
 
         if data.get('currency', None):
             to_compose.append(data.get('currency'))
@@ -142,12 +141,12 @@ class IcebergAPI(IcebergRequestBase):
             to_compose.append(data.get('shipping_country'))
 
         if data.get('from_session_id', None):
-            to_compose.append(data.get('from_session_id'))
+            to_compose.append(str(data.get('from_session_id')))
 
         if data.get('birth_date', None):
             to_compose.append(data.get('birth_date'))
 
-        to_compose_str = ";".join(str(x) for x in to_compose)
+        to_compose_str = ";".join(str(x.encode('utf-8')) for x in to_compose) # Expect strings
 
         logger.debug("Create message_auth with %s", to_compose_str)
 

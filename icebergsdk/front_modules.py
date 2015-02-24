@@ -27,13 +27,13 @@ class FrontModules(IcebergRequestBase):
         """
         Helper to fetch Iceberg client side javascript templates
         """
-        if hasattr(self, "_modules_data"):
-            return getattr(self, "_modules_data")
+        if hasattr(self, "_modules_data_%s" % self.lang):
+            return getattr(self, "_modules_data_%s" % self.lang)
 
         if self.cache:
             data = self.cache.get("%s:%s" % (self.cache_key, self.lang), False)
             if data:
-                setattr(self, '_modules_data', data)
+                setattr(self, '_modules_data_%s' % self.lang, data)
                 return data
 
         data = self.request(self.conf.ICEBERG_MODULES_URL, args = {
@@ -41,7 +41,7 @@ class FrontModules(IcebergRequestBase):
             "enviro": self.conf.ICEBERG_ENV,
             "debug": self.debug
         }) # Do to, add lang
-        setattr(self, '_modules_data', data)
+        setattr(self, '_modules_data_%s' % self.lang, data)
         if self.cache:
             self.cache.set("%s:%s" % (self.cache_key, self.lang), data, self.cache_expire)
 

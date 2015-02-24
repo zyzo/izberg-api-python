@@ -148,3 +148,12 @@ class MerchantFeed(UpdateableIcebergObject):
 class MerchantTransaction(IcebergObject):
     endpoint = 'store_transaction'
 
+class Permission(UpdateableIcebergObject):
+    """
+    Merchant access permission
+    """
+    endpoint = 'permission'
+
+
+
+

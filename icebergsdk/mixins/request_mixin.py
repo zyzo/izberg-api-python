@@ -34,6 +34,9 @@ class IcebergRequestBase(object):
 
 
     def _safe_log(self, logger_function, message, *args):
+        if getattr(self.conf, 'UNSECURED_LOGS', False):
+            return logger_function(message, *args)
+
         KEYS_TO_HIDE = ["message_auth", "Authorization", "access_token", "password"]
         safe_args = []
         for arg in args:
