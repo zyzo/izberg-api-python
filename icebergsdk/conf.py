@@ -8,7 +8,17 @@ class ConfigurationBase(object):
     ICEBERG_DEFAULT_LANG = "en"
     ICEBERG_MODULES_URL = "http://connect.iceberg-marketplace.com/modules/"
 
-    IMAGE_SERVER_URL = ""
+    ICEBERG_API_URL = None
+    ICEBERG_API_PORT = None
+    ICEBERG_CORS = None
+    ICEBERG_API_URL_FULL = None
+    ICEBERG_ENV = None
+
+    ICEBERG_API_PRIVATE_KEY = None
+    ICEBERG_APPLICATION_NAMESPACE = None
+    ICEBERG_APPLICATION_SECRET_KEY = None
+
+    IMAGE_SERVER_URL = None
 
 
 class Configuration(ConfigurationBase):

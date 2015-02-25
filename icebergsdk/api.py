@@ -98,7 +98,7 @@ class IcebergAPI(IcebergRequestBase):
             raise IcebergMissingApplicationSettingsError()
 
         timestamp = int(time.time())
-        secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
+        secret_key = str(self.conf.ICEBERG_API_PRIVATE_KEY)
 
         to_compose = [username, email, first_name or '', last_name or '', is_staff, is_superuser, timestamp]
         
@@ -138,7 +138,7 @@ class IcebergAPI(IcebergRequestBase):
         last_name = data['last_name']
         timestamp = data['timestamp']
 
-        secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
+        secret_key = str(self.conf.ICEBERG_APPLICATION_SECRET_KEY)
 
         to_compose = [email, first_name or "", last_name or "", str(timestamp)]
 

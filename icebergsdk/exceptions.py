@@ -44,30 +44,34 @@ class IcebergMultipleObjectsReturned(IcebergError):
 
 # API
 class IcebergAPIError(IcebergError):
-    def __init__(self, response, url = None):
-        self.status_code = response.status_code
+    def __init__(self, response=None, url = None):
+        self.status_code = None
         self.error_codes = []
         self.message = ''
         self.url = url
+        self.data = None
 
-        try:
-            self.data = response.json()
-        except:
-            self.data = response
-        else:            
-            if 'errors' in self.data:
-                for error in self.data['errors']:
-                    if isinstance(error, basestring):
-                        self.message += error
+        if response is not None:
+            self.status_code = response.status_code
+
+            try:
+                self.data = response.json()
+            except:
+                self.data = response
+            else:            
+                if 'errors' in self.data:
+                    for error in self.data['errors']:
+                        if isinstance(error, basestring):
+                            self.message += error
+                        else:
+                            if 'code' in error:
+                                self.error_codes.append(error['code'])
+                            self.message += error['msg']
+                if 'error' in self.data:
+                    if isinstance(self.data['error'], basestring):
+                        self.message += self.data['error']
                     else:
-                        if 'code' in error:
-                            self.error_codes.append(error['code'])
-                        self.message += error['msg']
-            if 'error' in self.data:
-                if isinstance(self.data['error'], basestring):
-                    self.message += self.data['error']
-                else:
-                    self.message += self.data['error']['msg']
+                        self.message += self.data['error']['msg']
 
         Exception.__init__(self, self.message)
         
