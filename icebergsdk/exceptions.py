@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# import logging
+# logger = logging.getLogger('icebergsdk.exceptions')
 
 class IcebergError(Exception):
     pass
@@ -45,6 +47,7 @@ class IcebergMultipleObjectsReturned(IcebergError):
 # API
 class IcebergAPIError(IcebergError):
     def __init__(self, response, url = None):
+
         self.status_code = response.status_code
         self.error_codes = []
         self.message = ''

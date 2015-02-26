@@ -201,7 +201,7 @@ class IcebergAPI(IcebergRequestBase):
         return response
 
 
-    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", birth_date = None, include_application_data = True):
+    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", birth_date = None, include_application_data = True, from_session_id = None):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError(self.conf.ICEBERG_ENV)
 
@@ -217,6 +217,7 @@ class IcebergAPI(IcebergRequestBase):
             'first_name': first_name,
             'last_name': last_name,
             'timestamp': timestamp,
+            'from_session_id': from_session_id,
             'include_application_data': include_application_data,
             'message_auth': self.generate_messages_auth({
                 'email': email,
@@ -224,6 +225,7 @@ class IcebergAPI(IcebergRequestBase):
                 'last_name': last_name,
                 'timestamp': timestamp,
                 'currency': currency,
+                'from_session_id': from_session_id,
                 'shipping_country': shipping_country,
                 'birth_date': birth_date
             })
