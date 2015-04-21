@@ -125,7 +125,7 @@ class IcebergAPI(IcebergRequestBase):
 
         response = self.request('user/auth/', args = data)
 
-        self.username = username
+        self.username = response['username']
         self.access_token = response['access_token']
 
         self._auth_response = response
