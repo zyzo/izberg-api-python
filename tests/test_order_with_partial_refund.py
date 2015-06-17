@@ -28,7 +28,12 @@ class ClientOrder(IcebergUnitTestCase):
         """
         Full order
         """
-        self.full_order(number_of_offers=3)
+        self.direct_login_iceberg_staff()
+        application = self.api_handler.Application.findWhere({
+            "namespace":self.api_handler.conf.ICEBERG_APPLICATION_NAMESPACE
+        })
+        self.my_context_dict['application'] = application
+        self.full_order(number_of_offers=3, application=application)
 
     def test_03_confirm_merchant_order(self):
         """
@@ -46,7 +51,7 @@ class ClientOrder(IcebergUnitTestCase):
         self.login()
         merchant_order = self.my_context_dict['merchant_order']
         return_requests = []
-        items_to_return = merchant_order.items[:-1] ## we return everything except 1 item (partial refund)
+        items_to_return = merchant_order.items[:-1] ## we return everything except 1 item
         order_item_not_refunded = merchant_order.items[-1]
         for order_item in items_to_return:
             return_request = self.api_handler.Return()
@@ -72,11 +77,11 @@ class ClientOrder(IcebergUnitTestCase):
             return_request.accept()
         
         
-    def test_06_create_partial_refund(self):
+    def test_06_create_first_refund(self):
         """
-        Create Partial Refund
+        Create First Refund
         """
-        self.login()
+        self.direct_login_iceberg_staff()
         return_requests = self.my_context_dict['return_requests']
         merchant_order = self.my_context_dict['merchant_order']
         refund = self.api_handler.Refund()
@@ -84,7 +89,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.merchant_order = merchant_order
         refund.merchant = merchant_order.merchant
         refund.user = self.api_handler.User.me()
-        refund.partial_refund = True
+        refund.partial_refund = False ## total refund of n-1 items
         refund.shipping = merchant_order.shipping_vat_included
         refund.adjustment = 0
         refund.memo = u"Mémô"
@@ -197,7 +202,7 @@ class ClientOrder(IcebergUnitTestCase):
         """
         Create Partial Refund
         """
-        self.login()
+        self.direct_login_iceberg_staff()
         return_requests = self.my_context_dict['return_requests']
         merchant_order = self.my_context_dict['merchant_order']
         refund = self.api_handler.Refund()
@@ -205,7 +210,7 @@ class ClientOrder(IcebergUnitTestCase):
         refund.merchant_order = merchant_order
         refund.merchant = merchant_order.merchant
         refund.user = self.api_handler.User.me()
-        refund.partial_refund = True
+        refund.partial_refund = False
         refund.shipping = 0
         refund.adjustment = 0
         refund.memo = u"Mémô"

@@ -42,7 +42,7 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook = self.create_webhook(
                     application=application, 
                     event="new_merchant_available",
-                    url="http://api.iceberg.technology"
+                    url="http://api.iceberg.technology",
                 )
         webhook.url = webhook.get_test_endpoint_url() ## to test update
         webhook.save() 
@@ -107,19 +107,24 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_offer = self.create_webhook(
                     application=application,
                     event="product_offer_updated",
-                    url="http://api.iceberg.technology"
+                    url="http://api.iceberg.technology",
+                    active_merchant_only=False,
                 )
         webhook_offer.url = webhook_offer.get_test_endpoint_url()
         webhook_offer.save() ## update
 
+        self.assertEquals(webhook_offer.active_merchant_only, False)
+
         webhook_product = self.create_webhook(
                     application=application,
                     event="product_updated",
-                    url="http://api.iceberg.technology"
+                    url="http://api.iceberg.technology",
+                    active_merchant_only=False,
                 )
         webhook_product.url = webhook_product.get_test_endpoint_url()
         webhook_product.save() ## update
 
+        self.assertEquals(webhook_product.active_merchant_only, False)
         self.my_context_dict['webhook_offer_updated'] = webhook_offer
         self.my_context_dict['webhook_product_updated'] = webhook_product
         
@@ -156,6 +161,8 @@ class WebhookTestCase(IcebergUnitTestCase):
         self.my_context_dict['offer'] = productoffer
         productoffer.activate()
 
+        self.assertEquals(productoffer.status, "active")
+
 
         productoffer.price = 80
         productoffer.save()
@@ -180,7 +187,10 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_attempts = second_webhook_trigger.attempts(response_code__gte=200, response_code__lte=205)
         self.assertEquals(len(webhook_attempts), 1)
         self.assertEqual(productoffer.resource_uri, second_webhook_trigger.payload.get("resource_uri"))
-        self.assertEqual(second_webhook_trigger.payload.get("updated_attributes"), [u"price"])
+        self.assertEqual(
+            set(second_webhook_trigger.payload.get("updated_attributes")),
+            set([u"price", u"price_with_vat", u"price_without_vat"])
+        )
         self.assertEqual(float(second_webhook_trigger.payload.get("price")), 80.00)
 
 
@@ -216,7 +226,10 @@ class WebhookTestCase(IcebergUnitTestCase):
         webhook_trigger = webhook_triggers[0]
         webhook_trigger.fetch() ## fetch detail to get payload
         self.assertEqual(productoffer.resource_uri, webhook_trigger.payload.get("resource_uri"))
-        self.assertEqual(set(webhook_trigger.payload.get("updated_attributes",[])), set([u"status", u"price"]))
+        self.assertEqual(
+            set(webhook_trigger.payload.get("updated_attributes",[])), 
+            set([u"status", u"price", u"price_with_vat", u"price_without_vat"])
+        )
         self.assertEqual(webhook_trigger.payload.get("status"), u"draft")
         self.assertEqual(float(webhook_trigger.payload.get("price")), 0.)
 
