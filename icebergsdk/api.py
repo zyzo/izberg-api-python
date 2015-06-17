@@ -1,24 +1,29 @@
 # -*- coding: utf-8 -*-
 
 import mimetypes
-import logging, time, hashlib, hmac, datetime
+import logging
+import time
+import hashlib
+import hmac
+import datetime
 
 from icebergsdk.exceptions import IcebergMissingApplicationSettingsError
 from icebergsdk.exceptions import IcebergMissingSsoData
 
 from icebergsdk import resources
-from icebergsdk.managers import ResourceManager, UserResourceManager, CartResourceManager
+from icebergsdk.managers import ResourceManager, UserResourceManager, CartResourceManager, StoreResourceManager
 from icebergsdk.mixins.request_mixin import IcebergRequestBase
 
 logger = logging.getLogger('icebergsdk')
 
+
 class IcebergAPI(IcebergRequestBase):
+
     def __init__(self, *args, **kwargs):
         super(IcebergAPI, self).__init__(*args, **kwargs)
 
-        self.define_resources() # Resources definition
-        self._objects_store = {} # Will store the object for relationship management
-
+        self.define_resources()  # Resources definition
+        self._objects_store = {}  # Will store the object for relationship management
 
     def define_resources(self):
         """
@@ -51,7 +56,6 @@ class IcebergAPI(IcebergRequestBase):
             resources.Review,
             resources.Return,
             resources.Refund,
-            resources.Store,
             resources.StoreBankAccount,
             resources.Transaction,
             resources.ProductChannel,
@@ -74,11 +78,11 @@ class IcebergAPI(IcebergRequestBase):
         for resource_class in resource_classes_list:
             setattr(self, resource_class.__name__, ResourceManager(resource_class=resource_class, api_handler=self))
 
-
         self.Cart = CartResourceManager(resource_class=resources.Cart, api_handler=self)
         self.User = UserResourceManager(resource_class=resources.User, api_handler=self)
+        self.Store = StoreResourceManager(resource_class=resources.Store, api_handler=self)
 
-        ### Missing
+        # Missing
 
         # Return
         # Store Reviews
@@ -88,7 +92,7 @@ class IcebergAPI(IcebergRequestBase):
         # Webhooks
         # Feed Management
 
-    def auth_user(self, username, email, first_name = '', last_name = '', is_staff = False, is_superuser = False):
+    def auth_user(self, username, email, first_name='', last_name='', is_staff=False, is_superuser=False):
         """
         Method for Iceberg Staff to get or create a user into the platform and get the access_token .
 
@@ -98,10 +102,10 @@ class IcebergAPI(IcebergRequestBase):
             raise IcebergMissingApplicationSettingsError()
 
         timestamp = int(time.time())
-        secret_key = self.conf.ICEBERG_API_PRIVATE_KEY
+        secret_key = str(self.conf.ICEBERG_API_PRIVATE_KEY)
 
         to_compose = [username, email, first_name or '', last_name or '', is_staff, is_superuser, timestamp]
-        
+
         to_compose_str = []
         for elem in to_compose:
             if type(elem) == unicode:
@@ -109,7 +113,7 @@ class IcebergAPI(IcebergRequestBase):
             else:
                 to_compose_str.append(str(elem))
 
-        hash_obj = hmac.new(b"%s" % secret_key, b";".join(to_compose_str), digestmod = hashlib.sha1)  # Expect strings
+        hash_obj = hmac.new(b"%s" % secret_key, b";".join(to_compose_str), digestmod=hashlib.sha1)  # Expect strings
         message_auth = hash_obj.hexdigest()
 
         data = {
@@ -123,9 +127,9 @@ class IcebergAPI(IcebergRequestBase):
             'message_auth': message_auth
         }
 
-        response = self.request('user/auth/', args = data)
+        response = self.request('user/auth/', args=data)
 
-        self.username = username
+        self.username = response['username']
         self.access_token = response['access_token']
 
         self._auth_response = response
@@ -138,7 +142,7 @@ class IcebergAPI(IcebergRequestBase):
         last_name = data['last_name']
         timestamp = data['timestamp']
 
-        secret_key = self.conf.ICEBERG_APPLICATION_SECRET_KEY
+        secret_key = str(self.conf.ICEBERG_APPLICATION_SECRET_KEY)
 
         to_compose = [email, first_name or "", last_name or "", str(timestamp)]
 
@@ -165,7 +169,7 @@ class IcebergAPI(IcebergRequestBase):
 
         logger.debug("Create message_auth with %s", to_compose_str)
 
-        hash_obj = hmac.new(b"%s" % secret_key, b"%s" % to_compose_str, digestmod = hashlib.sha1)
+        hash_obj = hmac.new(b"%s" % secret_key, b"%s" % to_compose_str, digestmod=hashlib.sha1)
         message_auth = hash_obj.hexdigest()
         return message_auth
 
@@ -193,15 +197,14 @@ class IcebergAPI(IcebergRequestBase):
             })
         }
 
-        response = self.request('user/sso/', args = data)
+        response = self.request('user/sso/', args=data)
 
         self.username = response['username']
         self.access_token = response['access_token']
 
         return response
 
-
-    def sso_user(self, email = None, first_name = None, last_name = None, currency = "EUR", shipping_country = "FR", birth_date = None, include_application_data = True):
+    def sso_user(self, email=None, first_name=None, last_name=None, currency="EUR", shipping_country="FR", birth_date=None, include_application_data=True, from_session_id=None):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError(self.conf.ICEBERG_ENV)
 
@@ -217,6 +220,7 @@ class IcebergAPI(IcebergRequestBase):
             'first_name': first_name,
             'last_name': last_name,
             'timestamp': timestamp,
+            'from_session_id': from_session_id,
             'include_application_data': include_application_data,
             'message_auth': self.generate_messages_auth({
                 'email': email,
@@ -224,6 +228,7 @@ class IcebergAPI(IcebergRequestBase):
                 'last_name': last_name,
                 'timestamp': timestamp,
                 'currency': currency,
+                'from_session_id': from_session_id,
                 'shipping_country': shipping_country,
                 'birth_date': birth_date
             })
@@ -238,7 +243,7 @@ class IcebergAPI(IcebergRequestBase):
         if birth_date:
             data['birth_date'] = birth_date
 
-        response = self.request('user/sso/', args = data)
+        response = self.request('user/sso/', args=data)
 
         self.username = response['username']
         self.access_token = response['access_token']
@@ -248,29 +253,29 @@ class IcebergAPI(IcebergRequestBase):
         return self
         # return response
 
-
     def _sso_response():
         doc = "For compatibility matter, but now, should use _auth_response."
+
         def fget(self):
             return self._auth_response
+
         def fset(self, value):
             self._auth_response = value
+
         def fdel(self):
             del self._auth_response
         return locals()
     _sso_response = property(**_sso_response())
 
-
     def send_image(self, path, image_path, method="post"):
         mimetype, encoding = mimetypes.guess_type(image_path)
         image_name = image_path.split("/")[-1]
-        image_info = ('image', (image_name, open(image_path, 'rb'), mimetype) )
+        image_info = ('image', (image_name, open(image_path, 'rb'), mimetype))
         headers = {
             'Accept-Language': self.lang,
             'Authorization': self.get_auth_token()
         }
         return self.request(path, files=[image_info], method=method, headers=headers)
-
 
     def get_element(self, resource, object_id):
         return self.request("%s/%s/" % (resource, object_id))
@@ -282,10 +287,8 @@ class IcebergAPI(IcebergRequestBase):
         result = self.request(path, **kwargs)
         return result['objects']
 
-
     def convert_to_register_user(self):
         raise NotImplementedError()
-
 
     def me(self):
         """
@@ -293,10 +296,8 @@ class IcebergAPI(IcebergRequestBase):
         """
         if not hasattr(self, '_auth_response'):
             raise IcebergMissingSsoData()
-        
+
         return self.User.findOrCreate(self._auth_response)
-
-
 
     #####
     #
@@ -324,6 +325,3 @@ class IcebergAPI(IcebergRequestBase):
 
     def get_application(self, object_id):
         return self.get_element('application', object_id)
-
-
-

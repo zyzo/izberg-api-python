@@ -6,8 +6,7 @@ from icebergsdk.mixins.request_mixin import IcebergRequestBase
 logger = logging.getLogger('icebergsdk.frontmodules')
 
 class FrontModules(IcebergRequestBase):
-    cache_key = "icebergsdk:frontmodule:data"
-    cache_expire = 60*60 # one hour
+    cache_expire = 60*20 # 20 minutes
 
     def __init__(self, *args, **kwargs):
         super(FrontModules, self).__init__(*args, **kwargs)
@@ -23,17 +22,25 @@ class FrontModules(IcebergRequestBase):
     #   Loader
     ####
     @property
+    def cache_key(self):
+        return "icebergsdk:frontmodule:data:%s:%s:%s" % (
+            self.lang,
+            self.conf.ICEBERG_ENV,
+            self.debug,
+        )
+
+    @property
     def modules_data(self):
         """
         Helper to fetch Iceberg client side javascript templates
         """
-        if hasattr(self, "_modules_data_%s" % self.lang):
-            return getattr(self, "_modules_data_%s" % self.lang)
+        # if hasattr(self, "_modules_data_%s" % self.lang):
+        #     return getattr(self, "_modules_data_%s" % self.lang)
 
         if self.cache:
-            data = self.cache.get("%s:%s" % (self.cache_key, self.lang), False)
+            data = self.cache.get(self.cache_key, False)
             if data:
-                setattr(self, '_modules_data_%s' % self.lang, data)
+                # setattr(self, '_modules_data_%s' % self.lang, data)
                 return data
 
         data = self.request(self.conf.ICEBERG_MODULES_URL, args = {
@@ -41,9 +48,9 @@ class FrontModules(IcebergRequestBase):
             "enviro": self.conf.ICEBERG_ENV,
             "debug": self.debug
         }) # Do to, add lang
-        setattr(self, '_modules_data_%s' % self.lang, data)
+        # setattr(self, '_modules_data_%s' % self.lang, data)
         if self.cache:
-            self.cache.set("%s:%s" % (self.cache_key, self.lang), data, self.cache_expire)
+            self.cache.set(self.cache_key, data, self.cache_expire)
 
         return data
 

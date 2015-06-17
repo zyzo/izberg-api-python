@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-def build_resized_image_url(image_server_url, original_url, width, height, process_mode="crop"):
+def build_resized_image_url(image_server_url, original_url, width, height, process_mode="fitfill"):
     """
     Convert an image url to the appropriate image server format to get a resized version of the image.
     Needs attributes : width, height and process_mode.
     NB: the original_url needs to be publicly accessible (as it will be downloaded by the image server).
     """
-    SUPPORTED_MODES = ["crop", "fit"]
+    SUPPORTED_MODES = ["crop", "fit", "fitfill"]
 
     if process_mode not in SUPPORTED_MODES:
         raise Exception("unkwnown process mode '%s'. should be one of %s" % (process_mode, SUPPORTED_MODES))

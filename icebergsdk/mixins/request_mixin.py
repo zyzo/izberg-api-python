@@ -3,7 +3,7 @@
 import logging, requests, json
 
 from icebergsdk.conf import Configuration
-from icebergsdk.exceptions import IcebergAPIError, IcebergServerError, IcebergClientError
+from icebergsdk.exceptions import IcebergError, IcebergAPIError, IcebergServerError, IcebergClientError
 from icebergsdk.exceptions import IcebergClientUnauthorizedError, IcebergObjectNotFound
 
 from icebergsdk.json_utils import DateTimeAwareJSONEncoder
@@ -31,6 +31,14 @@ class IcebergRequestBase(object):
             return '%s %s:%s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.conf.ICEBERG_APPLICATION_NAMESPACE, self.access_token)
         else:
             return '%s %s:%s' % (self.conf.ICEBERG_AUTH_HEADER, self.username, self.access_token)
+
+    def get_anonymous_session_id(self):
+        """
+        Used for anonymous convertion to user
+        """
+        if self.username != "Anonymous":
+            raise IcebergError('User is not anonymous')
+        return self.access_token
 
 
     def _safe_log(self, logger_function, message, *args):
@@ -107,6 +115,7 @@ class IcebergRequestBase(object):
                                         files=files,
                                         headers=headers)
         except requests.HTTPError as e:
+            self._safe_log(logger.debug, 'RESPONSE %s - %s -  %s', method, url, e.read())
             response = json.loads(e.read())
             raise IcebergAPIError(response)
 
