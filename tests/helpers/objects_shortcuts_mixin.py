@@ -92,7 +92,7 @@ class IcebergObjectCreateMixin(object):
 
         test_store = None
         for store in stores:
-            product_offers = store.product_offers(params = {'availability': 'in_stock'})
+            product_offers = store.product_offers(params = {'availability': 'in_stock', 'status': 'active'})
             if len(product_offers) > 0:
                 test_store = store
                 product_offers = product_offers

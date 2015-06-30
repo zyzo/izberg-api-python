@@ -21,6 +21,7 @@ from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 from icebergsdk.resources.return_refund import Return, Refund
 from icebergsdk.resources.channels import ProductChannel, ChannelPropagationPolicy, ProductChannelLogEvent
+from icebergsdk.resources.service import ServiceOffer
 
 
 logger = logging.getLogger('icebergsdk')
@@ -45,7 +46,7 @@ def get_class_from_resource_uri(resource_uri):
         "address": Address,
         "country": Country,
         "profile": Profile,
-        "user_shopping_prefs": UserShoppingPreference, 
+        "user_shopping_prefs": UserShoppingPreference,
         "payment": Payment,
         "merchant": Store,
         "store_bank_account": StoreBankAccount,
@@ -76,6 +77,7 @@ def get_class_from_resource_uri(resource_uri):
         "product_channel_log_event": ProductChannelLogEvent,
         "product_family": ProductFamily,
         "product_family_selector": ProductFamilySelector,
+        "service_offer": ServiceOffer,
     }
 
     # Hack for now... Will be changed
