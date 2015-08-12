@@ -74,6 +74,7 @@ class IcebergAPI(IcebergRequestBase):
             resources.WebhookTrigger,
             resources.WebhookTriggerAttempt,
             resources.ServiceOffer,
+            resources.ServiceOption,
         ]
 
         for resource_class in resource_classes_list:
