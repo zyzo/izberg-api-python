@@ -84,7 +84,7 @@ class Brand(UpdateableIcebergObject):
 class Category(IcebergObject):
     endpoint = 'category'
 
-    def children(self, params=None, limit=None, offset=0):
+    def fetch_children(self, params=None, limit=None, offset=0):
         params = params or {}
         params.update({
             'parents': self.id,
