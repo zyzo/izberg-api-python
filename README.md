@@ -1,11 +1,11 @@
-#Iceberg Python API
+#Izberg Python API
 
-[![Build Status](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON.png)](https://travis-ci.org/Iceberg-Marketplace/Iceberg-API-PYTHON) [![Coverage Status](https://coveralls.io/repos/Iceberg-Marketplace/Iceberg-API-PYTHON/badge.png)](https://coveralls.io/r/Iceberg-Marketplace/Iceberg-API-PYTHON)
+[![Build Status](https://travis-ci.org/izberg-marketplace/izberg-api-python.png)](https://travis-ci.org/izberg-marketplace/izberg-api-python) [![Coverage Status](https://coveralls.io/repos/izberg-marketplace/izberg-api-python/badge.png)](https://coveralls.io/r/izberg-marketplace/izberg-api-python)
 
 
-The Iceberg API provides an entire set of functions and classes to access and edit Iceberg data.
+The Izberg API provides an entire set of functions and classes to access and edit Iceberg data.
 
-[You can also check our PHP wrapper.](https://github.com/Modizy/Iceberg-API-PHP/)
+[You can also check our PHP wrapper.](https://github.com/izberg-marketplace/izberg-api-php/)
 
 
 Table of Content
@@ -27,7 +27,7 @@ Setup
 
 ### Env variables
 
-As you may have seen in the conf.py file, 2 environment variables are needed to use the Iceberg python API: the Iceberg secret key and the application namespace. These variables must be initiated as environment variables.
+As you may have seen in the conf.py file, 2 environment variables are needed to use the Izeberg python API: the Izberg secret key and the application namespace. These variables must be initiated as environment variables.
 
 ```python
 export ICEBERG_APPLICATION_NAMESPACE=my_app
