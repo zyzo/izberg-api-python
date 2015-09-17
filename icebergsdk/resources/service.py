@@ -3,6 +3,10 @@
 from icebergsdk.resources.base import UpdateableIcebergObject
 
 
+class ServiceOfferVariation(UpdateableIcebergObject):
+    endpoint = 'service_offer_variation'
+
+
 class ServiceOffer(UpdateableIcebergObject):
     endpoint = 'service_offer'
 

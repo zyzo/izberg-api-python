@@ -21,7 +21,9 @@ from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 from icebergsdk.resources.return_refund import Return, Refund
 from icebergsdk.resources.channels import ProductChannel, ChannelPropagationPolicy, ProductChannelLogEvent
-from icebergsdk.resources.service import ServiceOffer, ServiceOption
+from icebergsdk.resources.service import ServiceOffer, ServiceOfferVariation, ServiceOption
+from icebergsdk.resources.timeslots import AvailabilityCalendar, AvailabilityTimeSlot
+from icebergsdk.resources.options import Option, OptionAnswer
 
 
 logger = logging.getLogger('icebergsdk')
@@ -80,7 +82,12 @@ def get_class_from_resource_uri(resource_uri):
         "product_family": ProductFamily,
         "product_family_selector": ProductFamilySelector,
         "service_offer": ServiceOffer,
-        "service_option": ServiceOption
+        "service_option": ServiceOption,
+        "service_offer_variation": ServiceOfferVariation,
+        "availability_calendar": AvailabilityCalendar,
+        "availability_timeslot": AvailabilityTimeSlot,
+        "option": Option,
+        "option_answer": OptionAnswer,
     }
 
     # Hack for now... Will be changed
