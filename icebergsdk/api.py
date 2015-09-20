@@ -173,8 +173,7 @@ class IcebergAPI(IcebergRequestBase):
                 to_compose_str.append(str(elem))
 
         to_compose_str = ";".join(to_compose_str)
-
-        logger.debug("Create message_auth with %s", to_compose_str)
+        logger.debug(u"Create ffmessage_auth with %s", to_compose_str)
 
         hash_obj = hmac.new(b"%s" % secret_key, b"%s" % to_compose_str, digestmod=hashlib.sha1)
         message_auth = hash_obj.hexdigest()
@@ -215,7 +214,7 @@ class IcebergAPI(IcebergRequestBase):
         if not self.conf.ICEBERG_APPLICATION_NAMESPACE or not self.conf.ICEBERG_APPLICATION_SECRET_KEY:
             raise IcebergMissingApplicationSettingsError(self.conf.ICEBERG_ENV)
 
-        logger.debug("sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE))
+        logger.debug(u"sso_user %s on application %s" % (email, self.conf.ICEBERG_APPLICATION_NAMESPACE))
         timestamp = int(time.time())
 
         if birth_date and isinstance(birth_date, datetime.date):

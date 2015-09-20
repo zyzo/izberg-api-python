@@ -257,7 +257,9 @@ class IcebergObject(dict):
                 self.__dict__[key] = res
 
             elif type(value) == dict:
-                if key in self.raw_fields:
+                if len(value) == 0:
+                    self.__dict__[key] = None
+                elif key in self.raw_fields:
                     self.__dict__[key] = value ## keep this field as raw
                 elif 'resource_uri' in value: # Try to match a relation
                     try:

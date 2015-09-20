@@ -21,3 +21,7 @@ class ServiceOffer(UpdateableIcebergObject):
 
 class ServiceOption(UpdateableIcebergObject):
     endpoint = 'service_option'
+
+
+class ServiceOfferVariation(UpdateableIcebergObject):
+    endpoint = 'service_offer_variation'

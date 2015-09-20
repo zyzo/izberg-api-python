@@ -87,7 +87,7 @@ def get_class_from_resource_uri(resource_uri):
         "availability_calendar": AvailabilityCalendar,
         "availability_timeslot": AvailabilityTimeSlot,
         "option": Option,
-        "option_answer": OptionAnswer,
+        "option_answer": OptionAnswer
     }
 
     # Hack for now... Will be changed
