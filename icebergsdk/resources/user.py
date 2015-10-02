@@ -3,6 +3,7 @@
 from icebergsdk.resources.base import IcebergObject, UpdateableIcebergObject
 from icebergsdk.exceptions import IcebergNoHandlerError
 
+
 class User(IcebergObject):
     endpoint = 'user'
 
@@ -13,7 +14,7 @@ class User(IcebergObject):
 
     #     data = cls._handler.request("%s/me/" % (cls.endpoint))
     #     return cls.findOrCreate(data)
-    
+
     @classmethod
     def me(cls, handler):
         if not handler:
@@ -22,20 +23,64 @@ class User(IcebergObject):
         data = handler.request("%s/me/" % (cls.endpoint))
         return cls.findOrCreate(handler, data)
 
-    def addresses(self):
-        return self.get_list('address', args = {'user': self.id})
+    def addresses(self, args=None):
+        """
+        Get the user's addresses
 
-    def applications(self):
-        return self.get_list('application', args = {'contact_user': self.id})
+        Parameters:
+            - args: Optional dict of args to restrict search
+        Returns:
+            - List of results
+        """
+        if not args:
+            args = {}
+        args['user'] = self.id
+        return self.get_list('address', args=args)
 
-    def reviews(self):
-        return self.get_list('review', args = {'user': self.id})
+    def applications(self, args=None):
+        """
+        Get the user's applications
 
-    def orders(self):
-        return self.get_list('order', args = {'user': self.id})
+        Parameters:
+            - args: Optional dict of args to restrict search
+        Returns:
+            - List of results
+        """
+        if not args:
+            args = {}
+        args['contact_user'] = self.id
+        return self.get_list('application', args=args)
+
+    def reviews(self, args=None):
+        """
+        Get the user's reviews
+
+        Parameters:
+            - args: Optional dict of args to restrict search
+        Returns:
+            - List of results
+        """
+        if not args:
+            args = {}
+        args['user'] = self.id
+        return self.get_list('review', args=args)
+
+    def orders(self, args=None):
+        """
+        Get the user's orders
+
+        Parameters:
+            - args: Optional dict of args to restrict search
+        Returns:
+            - List of results
+        """
+        if not args:
+            args = {}
+        args['user'] = self.id
+        return self.get_list('order', args=args)
 
     def profile(self):
-        data = self.request('%sprofile/' % self.resource_uri) 
+        data = self.request('%sprofile/' % self.resource_uri)
         return Profile.findOrCreate(self._handler, data)
 
     # Messages
@@ -52,5 +97,3 @@ class Profile(UpdateableIcebergObject):
 
 class UserShoppingPreference(UpdateableIcebergObject):
     endpoint = 'user_shopping_prefs'
-
-
