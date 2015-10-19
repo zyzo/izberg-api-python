@@ -49,7 +49,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
 
         merchant_address = cls.api_handler.MerchantAddress()
         merchant_address.merchant = merchant
-        merchant_address.contact_email = "contact+api-test-merchant@iceberg-marketplace.com"
+        merchant_address.contact_email = "contact+api-test-merchant@izberg-marketplace.com"
         merchant_address.address = "325 random street"
         merchant_address.city = "Paris"
         merchant_address.zipcode = "75012"
@@ -75,7 +75,7 @@ class CommissionsTestCase(IcebergUnitTestCase):
         cls.my_context_dict['commission_settings'] = commission_settings
         cls._objects_to_delete.append(commission_settings)
 
-        cls.api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True) # Connect as staff
+        cls.api_handler.auth_user(username="staff_iceberg", email="staff@izberg-marketplace.com", is_staff = True) # Connect as staff
         application_commission_settings = cls.api_handler.ApplicationCommissionSettings()
         application_commission_settings.application = application
         application_commission_settings.merchant = merchant

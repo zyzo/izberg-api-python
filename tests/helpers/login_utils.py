@@ -22,26 +22,26 @@ class IcebergLoginUtils(object):
     # User 2
     @classmethod
     def login_user_2(cls, handler):
-        handler.sso_user(email = "user2@iceberg-marketplace.com", first_name = "Sara", last_name = "Crôche")
+        handler.sso_user(email = "user2@izberg-marketplace.com", first_name = "Sara", last_name = "Crôche")
 
     @classmethod
     def direct_login_user_2(cls, handler):
-        handler.auth_user(username="saracroche", email="user2@iceberg-marketplace.com")
+        handler.auth_user(username="saracroche", email="user2@izberg-marketplace.com")
 
     # User        
     @classmethod
     def login_user_1(cls, handler):
-        handler.sso_user(email = "user1@iceberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
+        handler.sso_user(email = "user1@izberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
 
     @classmethod
     def direct_login_user_1(cls, handler):
-        handler.auth_user(username="jeffstrongman", email="user1@iceberg-marketplace.com")
+        handler.auth_user(username="jeffstrongman", email="user1@izberg-marketplace.com")
 
 
     # Staff
     @classmethod
     def direct_login_iceberg_staff(cls, handler):
-        handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
+        handler.auth_user(username="staff_iceberg", email="staff@izberg-marketplace.com", is_staff = True)
 
 
 

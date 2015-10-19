@@ -91,7 +91,7 @@ class TestApplication(IcebergUnitTestCase):
     def tearDownClass(cls):
         if hasattr(cls, "_objects_to_delete"):
             api_handler = get_api_handler()
-            api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
+            api_handler.auth_user(username="staff_iceberg", email="staff@izberg-marketplace.com", is_staff = True)
 
             for obj in cls._objects_to_delete:
                 try:

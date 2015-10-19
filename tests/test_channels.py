@@ -42,7 +42,7 @@ class ProductChannelTests(IcebergUnitTestCase):
 
         merchant_address = cls.api_handler.MerchantAddress()
         merchant_address.merchant = merchant
-        merchant_address.contact_email = "contact+api-test-product-channel@iceberg-marketplace.com"
+        merchant_address.contact_email = "contact+api-test-product-channel@izberg-marketplace.com"
         merchant_address.address = "325 random street"
         merchant_address.city = "Paris"
         merchant_address.zipcode = "75012"

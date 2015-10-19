@@ -38,7 +38,7 @@ class IcebergUnitTestCase(unittest.TestCase, IcebergObjectCreateMixin):
         """
         if hasattr(cls, "_objects_to_delete"):
             api_handler = get_api_handler()
-            api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True) # Connect as staff
+            api_handler.auth_user(username="staff_iceberg", email="staff@izberg-marketplace.com", is_staff = True) # Connect as staff
             fail_silently = True
             for obj in cls._objects_to_delete:
                 try:
@@ -69,22 +69,22 @@ class IcebergUnitTestCase(unittest.TestCase, IcebergObjectCreateMixin):
         self.api_handler.sso_user()
 
     def login_user_1(self):
-        self.api_handler.sso_user(email = "user1@iceberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
+        self.api_handler.sso_user(email = "user1@izberg-marketplace.com", first_name = "Jeff", last_name = "Strongman")
 
     def login_user_2(self):
-        self.api_handler.sso_user(email = "user2@iceberg-marketplace.com", first_name = "Sara", last_name = "Crôche")
+        self.api_handler.sso_user(email = "user2@izberg-marketplace.com", first_name = "Sara", last_name = "Crôche")
 
     def direct_login(self):
         self.api_handler.auth_user(username="yvesdurand5269004", email="lol@lol.fr")
 
     def direct_login_user_1(self):
-        self.api_handler.auth_user(username="jeffstrongman", email="user1@iceberg-marketplace.com")
+        self.api_handler.auth_user(username="jeffstrongman", email="user1@izberg-marketplace.com")
 
     def direct_login_user_2(self):
-        self.api_handler.auth_user(username="saracroche", email="user2@iceberg-marketplace.com")
+        self.api_handler.auth_user(username="saracroche", email="user2@izberg-marketplace.com")
 
     def direct_login_iceberg_staff(self):
-        self.api_handler.auth_user(username="staff_iceberg", email="staff@iceberg-marketplace.com", is_staff = True)
+        self.api_handler.auth_user(username="staff_iceberg", email="staff@izberg-marketplace.com", is_staff = True)
 
 
 

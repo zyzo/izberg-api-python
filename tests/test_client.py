@@ -23,9 +23,9 @@ class ClientTest(IcebergUnitTestCase):
         Direct Login
         """
         self.login_user_1()
-        self.assertEqual(self.api_handler.User.me().email, 'user1@iceberg-marketplace.com')
+        self.assertEqual(self.api_handler.User.me().email, 'user1@izberg-marketplace.com')
         # self.direct_login_iceberg_staff()
-        # self.assertEqual(self.api_handler.User.me().email, 'staff@iceberg-marketplace.com')
+        # self.assertEqual(self.api_handler.User.me().email, 'staff@izberg-marketplace.com')
 
 
     def test_login_getCart(self):

@@ -24,7 +24,7 @@ setup(
     version=VERSION,
     description='Iceberg Marketplace API Client for Python',
     author='Iceberg',
-    author_email='florian@iceberg-marketplace.com',
+    author_email='florian@izberg-marketplace.com',
     url='https://github.com/Iceberg-Marketplace/Iceberg-API-PYTHON',
     packages = ["icebergsdk", 'icebergsdk.resources', 'icebergsdk.mixins', 'icebergsdk.utils'],
     install_requires = install_requires,
