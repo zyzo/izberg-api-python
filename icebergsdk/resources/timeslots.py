@@ -8,3 +8,6 @@ class AvailabilityCalendar(UpdateableIcebergObject):
 
 class AvailabilityTimeSlot(UpdateableIcebergObject):
     endpoint = 'availability_timeslot'
+
+class Reservation(UpdateableIcebergObject):
+    endpoint = 'reservation'
