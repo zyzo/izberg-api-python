@@ -65,9 +65,9 @@ class ConfigurationSandboxStage(ConfigurationBase):
     """
     Sandbox Configuration. Isolated from Production.
     """
-    ICEBERG_API_URL = "https://api.sandbox.stage.iceberg.technology"
-    ICEBERG_API_PORT = 443
-    ICEBERG_CORS = "https://api.sandbox.stage.iceberg.technology/cors/"
+    ICEBERG_API_URL = "http://api.sandbox.stage.iceberg.technology"
+    ICEBERG_API_PORT = 80
+    ICEBERG_CORS = "http://api.sandbox.stage.iceberg.technology/cors/"
     ICEBERG_API_URL_FULL = "%s:%s" % (ICEBERG_API_URL, ICEBERG_API_PORT)
     ICEBERG_ENV = "sandbox_stage"
 
