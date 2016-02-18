@@ -26,7 +26,7 @@ class Application(UpdateableIcebergObject):
         return self.get_list("%screated_merchants/" % self.resource_uri, args = params)
 
     def fetch_secret_key(self):
-    	return self.request("%sfetchSecretKey/" % self.resource_uri)["secret_key"]
+        return self.request("%sfetchSecretKey/" % self.resource_uri)["secret_key"]
 
     def auth_me(self):
         """
@@ -46,14 +46,52 @@ class Application(UpdateableIcebergObject):
             data = self.request("%s%s/" % (self.resource_uri, 'backoffice_channel'), method = "get")
             self._backoffice_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
         return self._backoffice_channel
-
-        
+ 
     @property
     def active_products_channel(self):
         if not hasattr(self, "_active_products_channel"):
             data = self.request("%s%s/" % (self.resource_uri, 'active_products_channel'), method = "get")
             self._active_products_channel = UpdateableIcebergObject.findOrCreate(self._handler, data)
         return self._active_products_channel
+
+    def filter_channels(self, data, language, fallback, fallback_language):
+            res = []
+            fallback_channel = []
+            for channel in data['objects']:
+                if channel['language'] == language:
+                    res.append(channel)
+                elif fallback and channel['language'] == fallback_language:
+                    fallback_channel.append(channel)
+            return res if res else fallback_channel
+
+    def get_active_products_channel(self, language=None, fallback=True, fallback_language='en'):
+        cache_key = '_active_products_channel_%s_%s' % (language, fallback)
+        if not hasattr(self, cache_key):
+            url = "%s%s/" % (self.resource_uri, 'active_products_channels')
+            if language and not fallback:
+                url += '?language=%s' % language
+            data = self.request(url, method="get")
+            data.update({
+                'objects': self.filter_channels(data, language, fallback, fallback_language)
+            })
+            if data['meta']['total_count']:
+                channel = UpdateableIcebergObject.findOrCreate(self._handler, data['objects'][0])
+                setattr(self, cache_key, channel)
+        return getattr(self, cache_key)
+
+    def get_active_products_channels(self, language=None, fallback=True, fallback_language='en'):
+        cache_key = '_active_products_channels_%s_%s' % (language, fallback)
+        if not hasattr(self, cache_key) or 1 == 1:
+            url = "%s%s/" % (self.resource_uri, 'active_products_channels')
+            if language and not fallback:
+                url += '?language=%s' % language
+            data = self.request(url, method="get")
+            data.update({
+                'objects': self.filter_channels(data, language, fallback, fallback_language)
+            })
+            channels = UpdateableIcebergObject.findOrCreate(self._handler, data)
+            setattr(self, cache_key, channels)
+        return getattr(self, cache_key)
 
 
 class ApplicationCommissionSettings(UpdateableIcebergObject):

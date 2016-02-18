@@ -28,7 +28,12 @@ class ClientOrder(IcebergUnitTestCase):
         """
         Full order
         """
-        self.full_order(number_of_offers=3)
+        self.direct_login_iceberg_staff()
+        application = self.api_handler.Application.findWhere({
+            "namespace":self.api_handler.conf.ICEBERG_APPLICATION_NAMESPACE
+        })
+        self.my_context_dict['application'] = application
+        self.full_order(number_of_offers=1, application=application)
 
     def test_03_confirm_merchant_order(self):
         """
@@ -73,7 +78,7 @@ class ClientOrder(IcebergUnitTestCase):
         """
         Create Full Refund
         """
-        self.login()
+        self.direct_login_iceberg_staff()
         return_requests = self.my_context_dict['return_requests']
         merchant_order = self.my_context_dict['merchant_order']
         refund = self.api_handler.Refund()

@@ -79,15 +79,20 @@ class IcebergObjectCreateMixin(object):
         return store
 
 
-    def get_random_offer(self):
+    def get_random_offer(self, application=None):
         """
-        Will return a randow active offer
+        Will return a random active offer
         """
-        stores, meta = self.api_handler.Store.search({'status': "10"})
+        store_search_params = {'status': "10"} ## active stores
+        if application:
+            store_search_params['application'] = application.id ## limited to stores of given application
+        print "store_search_params=%s" % store_search_params
+        stores, meta = self.api_handler.Store.search(store_search_params)
+        print "stores, meta=%s, %s" % (stores, meta)
 
         test_store = None
         for store in stores:
-            product_offers = store.product_offers(params = {'availability': 'in_stock'})
+            product_offers = store.product_offers(params = {'availability': 'in_stock', 'status': 'active'})
             if len(product_offers) > 0:
                 test_store = store
                 product_offers = product_offers
@@ -109,12 +114,14 @@ class IcebergObjectCreateMixin(object):
         return "test-sku-%s" % random.randint(0, 1000000000)
 
 
-    def create_webhook(self, application, event, url, delete_at_the_end=True):
+    def create_webhook(self, application, event, url, delete_at_the_end=True, active_merchant_only=True):
         webhook = self.api_handler.Webhook()
         webhook.application = application
         webhook.event = event
         webhook.url = url
+        webhook.active_merchant_only = active_merchant_only
         webhook.save()
+        print "webhook=%s" % webhook.__dict__
 
         if delete_at_the_end:
             self.delete_at_the_end(webhook)

@@ -88,9 +88,9 @@ class IcebergUnitTestCase(unittest.TestCase, IcebergObjectCreateMixin):
 
 
 
-    def full_order(self, offer_ids=None, number_of_offers=1):
+    def full_order(self, application=None, offer_ids=None, number_of_offers=1):
         """
-        Full order
+        Full order.
         """
         self.login()
 
@@ -105,7 +105,7 @@ class IcebergUnitTestCase(unittest.TestCase, IcebergObjectCreateMixin):
         else:
 
             for i in xrange(number_of_offers):
-                offers.append(self.get_random_offer())
+                offers.append(self.get_random_offer(application=application))
             
 
         for offer in offers:

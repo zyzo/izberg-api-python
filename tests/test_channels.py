@@ -33,7 +33,7 @@ class ProductChannelTests(IcebergUnitTestCase):
 
         # Create a merchant
         merchant = cls.api_handler.Store()
-        merchant.name = "Test Product Channel"
+        merchant.name = "Test Product Channel Merchant"
         merchant.application = application
         merchant.save()
         merchant.reactivate()
