@@ -20,7 +20,7 @@ from icebergsdk.resources.webhooks import Webhook, WebhookTrigger, WebhookTrigge
 from icebergsdk.resources.currency import Currency
 from icebergsdk.resources.mp_admin import Transaction, MarketPlaceTransaction
 from icebergsdk.resources.return_refund import Return, Refund
-from icebergsdk.resources.channels import ProductChannel, ChannelPropagationPolicy, ProductChannelLogEvents
+from icebergsdk.resources.channels import ProductChannel, ChannelPropagationPolicy, ProductChannelLogEvent
 from icebergsdk.resources.service import ServiceOffer, ServiceOfferVariation, ServiceOption
 from icebergsdk.resources.timeslots import (
     AvailabilityCalendar, AvailabilityTimeSlot, Reservation)
