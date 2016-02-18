@@ -1,0 +1,4 @@
+requests>=2.3.0
+algoliasearch>=1.7.1
+python-dateutil>=2.4.0
+pytz

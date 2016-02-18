@@ -1,34 +1,32 @@
 #!/usr/bin/env python
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
-import os
-import sys
+version = __import__('icebergsdk').__version__
 
-if sys.version < '3':
-    execfile(os.path.join('icebergsdk', 'version.py'))
-else:
-    exec(open("icebergsdk/version.py").read())
 
-install_requires = []
-install_requires.append('requests >= 2.3.0')
-install_requires.append('algoliasearch>=1.7.1')
-install_requires.append('python-dateutil>=2.4.0')
-install_requires.append('pytz')
+def load_requirements(*filepaths):
+    requirements = []
+    for filepath in filepaths:
+        with open(filepath, 'r') as requirements_file:
+            requirements += [
+                requirement.split(" #")[0]
+                for requirement in requirements_file.read().splitlines()
+                if not requirement.startswith('#')
+            ]
+
+    return requirements
 
 setup(
     name='icebergsdk',
-    version=VERSION,
-    description='Iceberg Marketplace API Client for Python',
-    author='Iceberg',
+    version=version,
+    description='IZBERG Marketplace API Client for Python',
+    author='IZBERG',
     author_email='florian@izberg-marketplace.com',
-    url='https://github.com/Iceberg-Marketplace/Iceberg-API-PYTHON',
-    packages=["icebergsdk", 'icebergsdk.resources', 'icebergsdk.mixins', 'icebergsdk.utils'],
-    install_requires=install_requires,
-    keywords=['iceberg', 'modizy', 'marketplace', 'saas'],
+    url='https://github.com/izberg-marketplace/izberg-api-python',
+    packages=find_packages(),
+    install_requires=load_requirements("requirements/base.txt"),
+    keywords=['izberg', 'marketplace', 'saas', 'api', 'python'],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         'Intended Audience :: Developers',
@@ -36,5 +34,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ],
+    ]
 )
