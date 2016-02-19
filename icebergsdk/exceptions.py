@@ -3,6 +3,7 @@
 # import logging
 # logger = logging.getLogger('icebergsdk.exceptions')
 
+
 class IcebergError(Exception):
     pass
 
@@ -97,4 +98,5 @@ class IcebergClientUnauthorizedError(IcebergError):
     pass
 
 
-
+class ApplicationNotFound(Exception):
+    pass

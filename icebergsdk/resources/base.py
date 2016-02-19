@@ -335,7 +335,6 @@ class IcebergObject(dict):
     def find(cls, handler, object_id):
         if not handler:
             raise IcebergNoHandlerError()
-
         data = handler.get_element(cls.endpoint, object_id)
         return cls.findOrCreate(handler, data)
 
