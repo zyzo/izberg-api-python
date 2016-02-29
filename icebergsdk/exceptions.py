@@ -7,20 +7,26 @@
 class IcebergError(Exception):
     pass
 
+
 class IcebergMissingApplicationSettingsError(IcebergError):
     pass
+
 
 class IcebergNoHandlerError(IcebergError):
     pass
 
+
 class IcebergConnectionError(IcebergError):
     pass
+
 
 class IcebergAuthenticationError(IcebergError):
     pass
 
+
 class IcebergBadRequestError(IcebergError):
     pass
+
 
 class IcebergTransitionError(IcebergError):
     pass
@@ -29,17 +35,22 @@ class IcebergTransitionError(IcebergError):
 class IcebergInternalServerError(IcebergError):
     pass
 
+
 class IcebergRateLimitExceeded(IcebergError):
     pass
+
 
 class IcebergNotAuthorized(IcebergError):
     pass
 
+
 class IcebergReadOnlyError(IcebergError):
     pass
 
+
 class IcebergMissingSsoData(IcebergError):
     pass
+
 
 class IcebergMultipleObjectsReturned(IcebergError):
     pass
@@ -47,7 +58,7 @@ class IcebergMultipleObjectsReturned(IcebergError):
 
 # API
 class IcebergAPIError(IcebergError):
-    def __init__(self, response=None, url = None):
+    def __init__(self, response=None, url=None):
         self.status_code = None
         self.error_codes = []
         self.message = ''
@@ -61,7 +72,7 @@ class IcebergAPIError(IcebergError):
                 self.data = response.json()
             except:
                 self.data = response
-            else:            
+            else:
                 if 'errors' in self.data:
                     for error in self.data['errors']:
                         if isinstance(error, basestring):
@@ -77,7 +88,7 @@ class IcebergAPIError(IcebergError):
                         self.message += self.data['error']['msg']
 
         Exception.__init__(self, self.message)
-        
+
     def __str__(self):
         if len(self.message) > 0:
             message = self.message
@@ -85,18 +96,22 @@ class IcebergAPIError(IcebergError):
             message = self.data
         return "Error in %s! %s : %s: %s" % (self.url, self.status_code, self.error_codes, message)
 
+
 class IcebergObjectNotFound(IcebergAPIError):
     pass
+
 
 class IcebergServerError(IcebergAPIError):
     pass
 
+
 class IcebergClientError(IcebergAPIError):
     pass
+
 
 class IcebergClientUnauthorizedError(IcebergError):
     pass
 
 
-class ApplicationNotFound(Exception):
+class ApplicationNotFound(IcebergError):
     pass
