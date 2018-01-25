@@ -90,7 +90,7 @@ class IcebergAPIError(IcebergError):
                     else:
                         self.message += self.data['error']['msg']
 
-        Exception.__init__(self, self.message)
+        super(IcebergAPIError, self).__init__(self.message, self.status_code)
 
     def __str__(self):
         if len(self.message) > 0:
