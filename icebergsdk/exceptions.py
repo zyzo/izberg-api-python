@@ -80,14 +80,17 @@ class IcebergAPIError(IcebergError):
                         else:
                             if 'code' in error:
                                 self.error_codes.append(error['code'])
-                            self.message += error['msg']
+                            msg = error['msg']
+                            if type(msg) == list:
+                                msg = msg[0]
+                            self.message += msg
                 if 'error' in self.data:
                     if isinstance(self.data['error'], basestring):
                         self.message += self.data['error']
                     else:
                         self.message += self.data['error']['msg']
 
-        Exception.__init__(self, self.message)
+        super(IcebergAPIError, self).__init__(self.message, self.status_code)
 
     def __str__(self):
         if len(self.message) > 0:
