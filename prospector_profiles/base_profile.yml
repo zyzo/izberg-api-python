@@ -1,0 +1,25 @@
+output-format: text
+
+test-warnings: true
+doc-warnings: false
+
+autodetect: false
+
+pyflakes:
+  run: true
+mccabe:
+  run: true
+dodgy:
+  run: true
+frosted:
+  run: true
+pyroma:
+  run: true
+pep8:
+  run: true
+
+# disable all other tools
+pylint:
+  run: false
+vulture:
+  run: false

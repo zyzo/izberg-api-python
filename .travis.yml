@@ -1,0 +1,23 @@
+sudo: false
+language: python
+cache: pip
+jobs:
+  include:
+  - stage: Deploy
+    if: type = push
+    install: pip install invoke bumpr configparser
+    script: invoke currentBranchAsTag
+    deploy:
+    - provider: pypi
+      server: http://pypi.izberg-marketplace.com/simple/
+      on:
+        all_branches: true
+      user: $PYPI_USER
+      password: $PYPI_PASSWORD
+      skip_cleanup: true
+    - provider: pypi
+      server: http://pypi.izberg-marketplace.com/simple/
+      on:
+        tags: true
+      user: $PYPI_USER
+      password: $PYPI_PASSWORD
