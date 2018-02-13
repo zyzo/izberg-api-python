@@ -1,0 +1,9 @@
+[bumpr]
+file = icebergsdk/__init__.py
+vcs = git
+
+files = README.md
+tag_format = {version}
+
+[bump]
+message = Bump version to {version}

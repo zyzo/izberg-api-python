@@ -18,7 +18,7 @@ def load_requirements(*filepaths):
     return requirements
 
 setup(
-    name='icebergsdk',
+    name='izberg-sdk',
     version=version,
     description='IZBERG Marketplace API Client for Python',
     author='IZBERG',
@@ -34,5 +34,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ]
+    ],
+    data_files=['requirements/base.txt'],
 )

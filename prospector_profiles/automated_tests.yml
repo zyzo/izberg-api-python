@@ -1,0 +1,8 @@
+inherits:
+  - base_profile
+  - strictness_high
+
+
+pyroma:
+  disable:
+    - PYR13  # no licence
