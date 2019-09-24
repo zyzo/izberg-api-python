@@ -488,7 +488,10 @@ class UpdateableIcebergObject(IcebergObject):
         else:
             method = "PUT"
             path = self.resource_uri
-
+        if "?" in path:
+            path += "&return_data=1"
+        else:
+            path += "?return_data=1"
         res = handler.request(path, post_args = self.serialize(self), method = method)
         self._load_attributes_from_response(**res)
 
@@ -509,5 +512,3 @@ class UpdateableIcebergObject(IcebergObject):
         # Clean
         self.__dict__ = {}
         self._unsaved_values = set()
-
-
